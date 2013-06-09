@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Intern | ForgeBrain's Blog]]></title>
+  <title><![CDATA[Category: Intern | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/intern/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-06-09T22:10:32+08:00</updated>
+  <updated>2013-06-09T22:37:47+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
-    <name><![CDATA[CoolBrain]]></name>
+    <name><![CDATA[ForgeBrain]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
