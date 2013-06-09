@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>MonetDB Architecture overview - ForgeBrain's Blog</title>
+  <meta name="author" content="CoolBrain">
+
+  
+  <meta name="description" content="总体概览
+MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/03/22/monetdb-architecture-overview/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="ForgeBrain's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39361176-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:coolbrain.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            ForgeBrain's Blog
+        </span>
+       
+           <span class="blue_dark">
+             Paradox.
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">MonetDB Architecture Overview</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-22T20:04:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p><p><strong>总体概览</strong></p>
+<p>MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。设计的目的反应在架构的各个层次和提供给用户的功能。尽管MonetDB/SQL提供了完善的SQL接口，但是在大容量，且需要保存不同层次的ACID属性的事务处理能力有点欠缺。</p>
+<!-- more -->
+<p><strong>存储模型</strong></p>
+<p>MonetDB的存储模型与传统的数据库截然不同。它表示关系表使用垂直存储，每一列以｛（surrogate，value）｝这样的表存储，称为BAT(Binary Association Table).左边的列，代理数字或对象id,称为头；右边的列为尾。MonetDB执行一种低级的被称为BAT代数的关系代数。在执行的时候，数据常存储在(intermediate中间）BAT,就算是查询的结果也是BAT的集合。BAT存储采用方式是两个简单的内存数组，一个数组是头，另一个是尾（列）.对不同长度的类型我们把数组分成两段。一段with concatenated data values and 另一段with offsets into the former.对于小字符串值表来说，组合就实现了值字典了。</p>
+<p>MonetDB在内部实现存储列是使用内存文件映射。它们被优化到特有的情况就是代理的列是一些升序的阿拉伯数字（0，1，2&#8230;);在某些情况下代理列是可以保持模糊的。代理列查询成为一种以快速数组下标读取尾的方式。实际上，这种在虚拟内存使用数组利用MMU快速把硬件地址映射为磁盘地址的机制去给数据库提供O（1）效率的数据库寻找机制。</p>
+<p>从CPU开销的角度看，这种方法优于B-tree  into slotted pages&#8211;这是传统数据库实现记录快速查找的方法。</p>
+<p><strong>运行模型</strong></p>
+<p>MonetDB的内核是一台抽象的机器，用MonetDB的汇编语言，也称为MAL。每一个关系代数运算对应一个MAL指令。每一个BAT代数运算映射一条简单的MAL指令，这具有零的自由度：它不会采用复杂的表达式作为参数。反而，复杂的表达式会被拆分成一系列的BAT代数运算，每一条都对整个列的值执行一个简单的操作（&#8221;bulk processing&#8221;)。这样就容许BAT代数的解析实现中忽略表达式解析引擎的实现。反而所有的BAT代数运算在实现的时候都会映射成一个简单的数组操作。比如，BAT代数表达是</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">R</span><span class="p">:</span><span class="n">bat</span><span class="p">[:</span><span class="n">oid</span><span class="p">,:</span><span class="n">oid</span><span class="p">]</span> <span class="p">:</span><span class="o">=</span> <span class="k">select</span><span class="p">(</span><span class="n">B</span><span class="p">:</span><span class="n">bat</span><span class="p">[:</span><span class="n">oid</span><span class="p">,:</span><span class="nb">int</span><span class="p">],</span> <span class="n">V</span><span class="p">:</span><span class="nb">int</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>在C语言实现会像：</p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span> <span class="n">B</span><span class="p">.</span><span class="n">tail</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">V</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">R</span><span class="p">.</span><span class="n">tail</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>BAT代数运算具有的优势：紧凑的for-loops创造了指令的局部性，从而消除了指令在缓存miss的问题。这样简单的循环经得起编译器优化（循环流水线，阻塞，强度减少）和CPU无序的可能 。
+<p><strong>软件架构</strong></p>
+<p>MonetDB 查询处理的方案分为三个软件层。   顶层是由查询语言解析器和一个启发式，language-and data model-specific 优化器组成。优化器主要是用来减少中间生成的数据和利用catalogue 知识 on join-indices。输出是一个用MAL表达的逻辑计划。</p>
+<p>第二梯队包括一组优化的模块，这些模块组装成优化的管道。这些模块提供优化从符号处理到即时数据分布和执行。MAL程序被转化为更加有效的代码和加入资源管理指令。这种认识到不是所有的决定都可以组合在一起然后得出一个代价公式方法，突破了至今无处不在的基于代价的优化器。操作在普通的二维关系后端代数，这些优化模块共享所有的前端数据模型和查询语言。</p>
+<p>第三梯度是MAL解析器，包含高度优化实现的二维关系代数运算的库。它们维持对象的属性是为了以后的算法能访问得到。举个例子，选择操作可以从sorted-nest of BAT的基础上提高效率。
+<p><strong>SQL 前端</strong></p>
+<p>BAT 存储层次结合MAL代数提供了一个灵活的架构适应广泛的查询语言。关系表的列在前端被分解，BAT 头TID，尾values。对于每一个表，一个BAT被删除的地方被保留。三角的BAT被设计用来延迟更新到主列和允许相对廉价的快照隔离机制(只有三角BATs被赋值）。MonetDB/SQL为join indices 保留另外的BATs和value indices 是动态创建的。</p></p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">CoolBrain</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-22T20:04:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/monetdb/'>MonetDB</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+</div>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/21/monetdbs-debugging/" title="Previous Post: MonetDB's Debugging">&laquo; MonetDB's Debugging</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/22/monetdb-main-features/" title="Next Post: MonetDB Main Features">MonetDB Main Features &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Blind,Deaf,Facioplegia,Ugly</p>
+  <p>Stupid,Irrational,Emotional</p>
+  <p>Email:juda-zhida@qq.com</p>
+</section>
+
+<section>
+<h1>Tags</h1>
+<span class='categories_tag'> <a href='/blog/categories/entertain' style='font-size: 112.0%'>Entertain</a>  <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 106.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 112.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
+</section>
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/entertain/'>Entertain (2)</a></li>
+<li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (1)</a></li>
+<li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
+<li class='category'><a href='/blog/categories/psychology/'>psychology (2)</a></li>
+
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/09/procrastination/">Procrastination</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/23/goal-setting-process/">Goal-Setting Process</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/08/interprocess-communications/">Interprocess Communications</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/06/places-of-historical-interest/">Places of Historical Interest</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/28/sql-proccessing/">SQL Proccessing</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Neighbour</h1>
+  <ul>
+	<li><a href="http://www.everet.org">EverET |</a><a href="http://coolshell.cn/"> CoolShell</a></li>
+	<li><a href="http://www.kidsang.com">KidSang |</a><a href="http://jiafei.org/"> JiaFei</a></li>
+	<li><a href="http://xuyufish.com">Fish |</a><a href="http://rdc.taobao.com/blog/cs/"> Taobao</a></li>
+  </ul>
+</section>
+<section>
+    <h1>Recent Comments</h1>
+    <script type="text/javascript" src="http://coolbrain.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - CoolBrain -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'coolbrain';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/03/22/monetdb-architecture-overview/';
+        var disqus_url = 'http://coolbrain.github.com/blog/2013/03/22/monetdb-architecture-overview/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,497 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>MonetDB's Mmap - ForgeBrain's Blog</title>
+  <meta name="author" content="CoolBrain">
+
+  
+  <meta name="description" content="在学计算机组成原理时，了解到为了平衡CPU的高速与内存慢速，在CPU与内存之间增加了L1 cache，L2 cache，以加快CPU对内存数据的访问。但同时了解到进程可以使用一系列相邻的虚拟地址来访问物理内存中不相邻的大内存缓冲区和访问大于可用物理内存地址的缓冲区（可与磁盘之间切换）。 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="ForgeBrain's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39361176-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:coolbrain.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            ForgeBrain's Blog
+        </span>
+       
+           <span class="blue_dark">
+             Paradox.
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">MonetDB's Mmap</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-29T23:47:00+08:00" pubdate data-updated="true">Mar 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p><p>在学计算机组成原理时，了解到为了平衡CPU的高速与内存慢速，在CPU与内存之间增加了L1 cache，L2 cache，以加快CPU对内存数据的访问。但同时了解到进程可以使用一系列相邻的虚拟地址来访问物理内存中不相邻的大内存缓冲区和访问大于可用物理内存地址的缓冲区（可与磁盘之间切换）。虚拟地址通过TLB转化为物理地址，若物理地址属于内存空间，即直接访问，若不在，即需要进行磁盘切换。层级的内存架构图：</p>
+<!-- more -->
+<img src="/assets/images/memory.jpg" alt="&quot;memory&quot;" />
+mmap将文件或者其它对象映射到内存。当从内存中读写时，就相当于读写文件中相应的字节。</p></blockquote>
+
+<figure class='code'><figcaption><span>mmap函数声明  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>   <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">sys</span><span class="o">/</span><span class="n">mman</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
+</span><span class='line'>   <span class="kt">void</span> <span class="o">*</span><span class="n">mmap</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">addr</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prot</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flag</span><span class="p">,</span><span class="kt">int</span> <span class="n">fileds</span><span class="p">,</span> <span class="kt">off_t</span> <span class="n">off</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>图示说明mmap：
+<img src="/assets/images/mmap.png" alt="&quot;mmap&quot;" />
+MonetDB使用mmap实现大内存块的分配和大文件的内存映射,这样有利于数据的快速查找。因为数据不在内存，直接进行磁盘切换（虚拟地址->物理地址）。</p></blockquote>
+
+<figure class='code'><figcaption><span>Linux大内存的分配  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>  <span class="kt">void</span> <span class="o">*</span><span class="nf">MT_vmalloc</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">MMAP_OPEN_DEV_ZERO</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="o">*</span><span class="n">q</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span><span class="mi">1L</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">size</span> <span class="o">=</span> <span class="n">MT_PAGESIZE</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span><span class='line'>  <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">MT_PAGESIZE</span><span class="p">(</span><span class="o">*</span><span class="n">maxsize</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">PROT_NONE</span><span class="p">,</span>
+</span><span class='line'>                          <span class="n">MMAP_FLAGS</span><span class="p">(</span><span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_NORESERVE</span><span class="p">),</span> <span class="n">MMAP_FD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span><span class="mi">1L</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">PROT_WRITE</span><span class="p">,</span>
+</span><span class='line'>                          <span class="n">MMAP_FLAGS</span><span class="p">(</span><span class="n">MAP_PRIVATE</span><span class="p">),</span> <span class="n">MMAP_FD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">mmap</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">PROT_WRITE</span><span class="p">,</span>
+</span><span class='line'>                          <span class="n">MMAP_FLAGS</span><span class="p">(</span><span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_FIXED</span><span class="p">),</span> <span class="n">MMAP_FD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">MMAP_CLOSE_DEV_ZERO</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">((</span><span class="n">q</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span><span class="mi">1L</span><span class="p">)</span> <span class="o">?</span> <span class="nb">NULL</span> <span class="o">:</span> <span class="n">q</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote></blockquote>
+
+<figure class='code'><figcaption><span>Windows大内存的分配  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'> <span class="kt">void</span> <span class="o">*</span><span class="nf">MT_vmalloc</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">mode</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">size</span> <span class="o">=</span> <span class="n">MT_PAGESIZE</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">MT_SEGSIZE</span><span class="p">(</span><span class="o">*</span><span class="n">maxsize</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&lt;</span> <span class="mi">1000000</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">mode</span> <span class="o">=</span> <span class="n">MEM_TOP_DOWN</span><span class="p">;</span>    <span class="cm">/* help NT in keeping memory defragmented */</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">MT_mmap_lock</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="n">VirtualAlloc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">MEM_RESERVE</span> <span class="o">|</span> <span class="n">mode</span><span class="p">,</span> <span class="n">PAGE_NOACCESS</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">MEM_COMMIT</span> <span class="o">|</span> <span class="n">mode</span><span class="p">,</span> <span class="n">PAGE_READWRITE</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">MT_mmap_lock</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">mnstr_printf</span><span class="p">(</span><span class="n">GDKstdout</span><span class="p">,</span> <span class="s">&quot;#VirtualAlloc(&quot;</span> <span class="n">PTRFMT</span> <span class="s">&quot;,&quot;</span> <span class="n">SZFMT</span> <span class="s">&quot;,MEM_COMMIT,PAGE_READWRITE): failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">PTRFMTCAST</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>MonetDB直接使用系统的mmap，由它来进行内存与磁盘的交互。而在这基础上，在进行内存分配管理。譬如在MonetDB中有使用sql_allocator建立内存缓冲区，当缓冲区内存不够时，才向系统申请。这样能加快内存申请速度和方便管理。此种方式是使用指针数组的管理内存，而没有使用链表。这与C++STL库的空间分配器类似，对于MonetDB内部数据结构，如list，hashtable，都是使用sql_allocator来管理其申请的内存。</p></blockquote>
+
+<figure class='code'><figcaption><span>sql_allocator结构体  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'>   <span class="k">typedef</span> <span class="k">struct</span> <span class="n">sql_allocator</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">size_t</span> <span class="n">size</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">size_t</span> <span class="n">nr</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="o">**</span><span class="n">blks</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">size_t</span> <span class="n">used</span><span class="p">;</span>  <span class="cm">/* memory used in last block */</span>
+</span><span class='line'>  <span class="kt">size_t</span> <span class="n">usedmem</span><span class="p">;</span>   <span class="cm">/* used memory */</span>
+</span><span class='line'><span class="p">}</span> <span class="n">sql_allocator</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>具体的分配分三种情况处理，一：大于sz > SA_BLOCK,直接调用系统的GDKmalloc来分配；二：剩下来的内存不够分配sz > (SA_BLOCK-sa->used) 三：内存足够，只需进行必要的处理。</p></blockquote>
+
+<figure class='code'><figcaption><span>sa_alloc函数  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'> <span class="err">#</span><span class="n">define</span> <span class="n">round16</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span> <span class="p">((</span><span class="n">sz</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span><span class="o">&amp;~</span><span class="mi">15</span><span class="p">)</span>
+</span><span class='line'><span class="kt">char</span> <span class="o">*</span><span class="n">sa_alloc</span><span class="p">(</span> <span class="n">sql_allocator</span> <span class="o">*</span><span class="n">sa</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">sz</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="o">*</span><span class="n">r</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sz</span> <span class="o">=</span> <span class="n">round16</span><span class="p">(</span><span class="n">sz</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sz</span> <span class="o">&gt;</span> <span class="n">SA_BLOCK</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">r</span> <span class="o">=</span> <span class="n">GDKmalloc</span><span class="p">(</span><span class="n">sz</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">&gt;=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">*=</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span> <span class="o">=</span> <span class="n">RENEW_ARRAY</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">t</span> <span class="o">=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sz</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">SA_BLOCK</span><span class="o">-</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">r</span> <span class="o">=</span> <span class="n">GDKmalloc</span><span class="p">(</span><span class="n">SA_BLOCK</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">&gt;=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">*=</span><span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span> <span class="o">=</span> <span class="n">RENEW_ARRAY</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span> <span class="o">=</span> <span class="n">sz</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">r</span> <span class="o">=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span> <span class="o">+=</span> <span class="n">sz</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sa</span><span class="o">-&gt;</span><span class="n">usedmem</span> <span class="o">+=</span> <span class="n">sz</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">CoolBrain</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-29T23:47:00+08:00" pubdate data-updated="true">Mar 29<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/monetdb/'>MonetDB</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+</div>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/28/catch-signal-in-monetdb/" title="Previous Post: Catch Signal in MonetDB">&laquo; Catch Signal in MonetDB</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/04/10/bugs/" title="Next Post: Bugs">Bugs &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Blind,Deaf,Facioplegia,Ugly</p>
+  <p>Stupid,Irrational,Emotional</p>
+  <p>Email:juda-zhida@qq.com</p>
+</section>
+
+<section>
+<h1>Tags</h1>
+<span class='categories_tag'> <a href='/blog/categories/entertain' style='font-size: 112.0%'>Entertain</a>  <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 106.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 112.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
+</section>
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/entertain/'>Entertain (2)</a></li>
+<li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (1)</a></li>
+<li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
+<li class='category'><a href='/blog/categories/psychology/'>psychology (2)</a></li>
+
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/06/09/procrastination/">Procrastination</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/23/goal-setting-process/">Goal-Setting Process</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/08/interprocess-communications/">Interprocess Communications</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/06/places-of-historical-interest/">Places of Historical Interest</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/04/28/sql-proccessing/">SQL Proccessing</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Neighbour</h1>
+  <ul>
+	<li><a href="http://www.everet.org">EverET |</a><a href="http://coolshell.cn/"> CoolShell</a></li>
+	<li><a href="http://www.kidsang.com">KidSang |</a><a href="http://jiafei.org/"> JiaFei</a></li>
+	<li><a href="http://xuyufish.com">Fish |</a><a href="http://rdc.taobao.com/blog/cs/"> Taobao</a></li>
+  </ul>
+</section>
+<section>
+    <h1>Recent Comments</h1>
+    <script type="text/javascript" src="http://coolbrain.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - CoolBrain -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'coolbrain';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory/';
+        var disqus_url = 'http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
