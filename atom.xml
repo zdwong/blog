@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-04T22:42:32+08:00</updated>
+  <updated>2013-07-04T23:06:42+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,6 +14,17 @@
 
   
   <entry>
+    <title type="html"><![CDATA[3D Movie]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/04/3d-movie/"/>
+    <updated>2013-07-04T23:01:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/04/3d-movie</id>
+    <content type="html"><![CDATA[<blockquote><p><p>所谓孤独终老，就是自己不敢向前迈出一步。今天，可以说是得偿所愿，看了一部3D电影《钢铁之躯》。</p>
+<!-- more -->
+<p>当舍友说去玩，去看一部3D电影时，我心理就其实有些不怎么看好。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Tv Series And Movies]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/03/tv-series-and-movies/"/>
     <updated>2013-07-03T00:00:00+08:00</updated>
@@ -21,7 +32,7 @@
     <content type="html"><![CDATA[<blockquote><p><p>大学里面的最后一年半的时间是在看电视剧过来的。为什么浪费“一寸光阴一寸金”的时间来看电视剧？是遭受了挫折后的堕落，是心智的幼稚，还是思路的混乱和目标的迷失？人生不如意之事十有八九。在遇到挫折时，我显得脆弱不堪，悠游寡断，自暴自弃。就大学那么的一个挫折，就把自己的人生搞得乱七八糟，不堪回首，如同烂泥。那么，以后面对大风大浪，岂不是毫无抵抗地沉入大海？人要自个儿成全自个儿。</p>
 <!-- more -->
 <p>稍微总结一下，一年半所看的电视剧和电影。因为这是一种经历，不论是好还是坏，都需要思考和总结。杜绝人生如流水账那样，走马观花，得过且过。</p>
-<p>《越狱》说的是主人公为了救自己无辜入狱的哥哥，亲自犯罪入监狱救出他。他们被追捕，之后它们逃到巴拿马；最后，返回美国，帮助寻找所谓的“黑名单”，其实高科技能源技术。剧中，主人公利用自己专业————土木工程的知识来进行越狱，并且之前早构思好一个相对完美的越狱计划。《越狱》体现了主人公的兄弟情，爱情和友情，并放映了社会和政治的勾心斗角。</p>
+<p>&lt;&lt;越狱>>说的是主人公为了救自己无辜入狱的哥哥，亲自犯罪入监狱救出他。他们被追捕，之后它们逃到巴拿马;最后，返回美国，帮助寻找所谓的&#8221;黑名单&#8221;，其实高科技能源技术。剧中，主人公利用自己专业————土木工程的知识来进行越狱，并且之前早构思好一个相对完美的越狱计划。《越狱》体现了主人公的兄弟情，爱情和友情，并放映了社会和政治的勾心斗角。</p>
 <p>《迷失》我并没有完整看完，但我觉得主人公是一个名副其实，有魄力的医生。如同《越狱》中的主人公一样，都是自己专业中的佼佼者。每一个人都有自己的迷失的时候，在这个孤岛上逐渐都找回了自己，《迷失》通过时间的穿越来体现。</p>
 <p>《三国》是三国演义的电视剧版本，曹丕是一个奸诈狡猾之人，曹操也知道其为了帝位，不惜杀害自己的弟弟，但曹操也意识到为了保住自己打下来的江山，非大奸大诈，心机重重的人不可。刘备是一个深藏不露，哀乐不显于脸色和有情有义的人，其三顾茅庐，精神所至，金石为开。刘备是从祧园三结义兴起，也由这个终结，可谓成也萧何败也萧何。</p>
 <p>《寻秦记》主人公通过穿越时空来到战国时期，主要任务是帮助嬴政顺利登基。主人公是一个有情有义，乐于助人的人。</p>
@@ -9422,44 +9433,6 @@ MALBLK is used as the MonetDB Assembly language Block which store the instructio
 </span><span class='line'>  <span class="p">}</span><span class="o">*</span><span class="n">Symbol</span><span class="p">,</span><span class="n">SymRecord</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Commemorate]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/03/15/commemorate/"/>
-    <updated>2013-03-15T23:10:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/03/15/commemorate</id>
-    <content type="html"><![CDATA[<blockquote><p><p>Today is a good beginning because I spare the time not watching TV but constructing my own blog.Eventually, I can almost control everything in my field. There is no useless links,no disgusting advertisements, no boring replies.The things existing in blog is very fantastic,invaluable and wonderful.Every time I see them,my mind becomes clear.</p>
-<!-- more -->
-<p> I am willing to share a saying:&#8221;yesterday is history,tomorrow is mystery,but today is gift.&#8221; So Today is precious  because it would be yesterday&#8217;s result and decides the tomorrow.Don&#8217;t let myself be addicted in guilty of yesterday&#8217;s mistakes.In the meantime, don&#8217;t let tomorrow&#8217;s uncertainty upset me.</p>
-<p><strong>Because I am a programmer, this blog is used as the analysis of monetdb,including source code and design architecture.</strong>this is the example of highlighting the code</p></p></blockquote>
-
-<figure class='code'><figcaption><span>example  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Action speak louder than Voice!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;This could work elegant!&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>Ok, the things I should have been done will be finished now!</p>
-<p>Luckily, I would show some pictures when were token in climbing Baiyun mountain with brothers.</p>
-<img src="http://coolbrain.github.com/assets/images/mountain.jpg" alt="&quot;BAT&quot;" />
-<p>Wo! I am climbing a tree,but I want to tell you a secret,It&#8217;s hard to climb and I feel horrible and painful after it.</p>
-<img src="http://coolbrain.github.com/assets/images/tree.jpg" alt="&quot;tree&quot;" />
-<p>I can&#8217;t show the pictures anymore because they slow down my website and I can&#8217;t bear low velocity,that will kill myself.Maybe there are effective methods to solve this problem which I will find out in next day.</p>
-<p>Even though the blog can run normally,but there are many things waitting me to do.It&#8217;s just a beginning,not an end.</p></p></blockquote>
 ]]></content>
   </entry>
   

@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>MonetDB's Debugging - ForgeBrain</title>
+  <title>3D Movie - ForgeBrain</title>
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="MonetDB can run in different platform,including linux&#8217;s and window&#8217;s series.Because I want to learn how to use gdb to debug,thus, MonetDB &hellip;">
+  <meta name="description" content="所谓孤独终老，就是自己不敢向前迈出一步。今天，可以说是得偿所愿，看了一部3D电影《钢铁之躯》。 当舍友说去玩，去看一部3D电影时，我心理就其实有些不怎么看好。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/03/21/monetdbs-debugging/">
+  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/07/04/3d-movie/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">MonetDB's Debugging</h1>
+      <h1 class="entry-title">3D Movie</h1>
     
     
       <p class="meta">
@@ -98,24 +99,16 @@
   
 
 
-<time datetime="2013-03-21T21:39:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
+<time datetime="2013-07-04T23:01:00+08:00" pubdate data-updated="true">Jul 4<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><blockquote><p><p>MonetDB can run in different platform,including linux&#8217;s  and window&#8217;s series.Because I want to learn how to use gdb to debug,thus, MonetDB&#8217;s installed on Unbuntu12.10 and &#8211;debug&#8211;init set on true</p>
+<div class="entry-content"><blockquote><p><p>所谓孤独终老，就是自己不敢向前迈出一步。今天，可以说是得偿所愿，看了一部3D电影《钢铁之躯》。</p>
 <!-- more -->
-<p>Now,use command &#8221; gdb mserver5&#8221; to debug, or use command &#8220;ps -aux | grep mserver&#8221; to find pid,thus, &#8220;gdb pid&#8221;</p>
-<p>MonetDB is a multiprocess and multithread program, and has a daemon process &#8220;monetdbd&#8221; listen on 5000. when mclient connect the server, based on which database will be accessed, if no process is processing the database,the daemon process fork a process to process the request.otherwise,the daemon process doesn&#8217;t fork a process and use lock to contorl simultaneous access.</p>
-<p>If we want to use gdb to debug such complicated program. we should get familar with gdb.</p>
-<p>use comand &#8220;help&#8221; in gdb. it will list the classes of command.</p>
-<p>breakpoints   &#8211;Making program stop at certain point.</p>
-<p>data    &#8211;Examining data</p>
-<p>running &#8211;Running the program</p>
-<p>stack  &#8211;Examing the stack</p>
-在调试MonetDB的时候，学会使用gdb去调试比较关键。譬如，要看函数的调用关系，用bt；输出某结构，set print pretty on, print <em>struct,动态数组还需print </em>struct@max_index。使用了gdb调试，觉得gdb比有界面的调试器强大好多。</p></blockquote>
+<p>当舍友说去玩，去看一部3D电影时，我心理就其实有些不怎么看好。</p></p></blockquote>
 </div>
 
 
@@ -138,12 +131,12 @@
   
 
 
-<time datetime="2013-03-21T21:39:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
+<time datetime="2013-07-04T23:01:00+08:00" pubdate data-updated="true">Jul 4<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/monetdb/'>MonetDB</a>
+    <a class='category' href='/blog/categories/psychology/'>psychology</a>
   
 </span>
 
@@ -159,10 +152,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/03/16/monetdbs-structure-analysis/" title="Previous Post: MonetDB's Structure Analysis">&laquo; MonetDB's Structure Analysis</a>
+        <a class="basic-alignment left" href="/blog/2013/07/03/tv-series-and-movies/" title="Previous Post: Tv Series And Movies">&laquo; Tv Series And Movies</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/03/22/monetdb-architecture-overview/" title="Next Post: MonetDB Architecture overview">MonetDB Architecture overview &raquo;</a>
       
     </p>
   </footer>
@@ -257,8 +248,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/03/21/monetdbs-debugging/';
-        var disqus_url = 'http://coolbrain.github.com/blog/2013/03/21/monetdbs-debugging/';
+        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/07/04/3d-movie/';
+        var disqus_url = 'http://coolbrain.github.com/blog/2013/07/04/3d-movie/';
         var disqus_script = 'embed.js';
       
     (function () {
