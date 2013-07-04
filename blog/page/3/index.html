@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>MonetDB Main Features - ForgeBrain</title>
+  <title>ForgeBrain</title>
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="以列存储数据库内核
-MonetDB是建立在规范的以列存储的数据库关系表示。它们是相当大的实体，达到几百兆，通过操作系统交换到内存，实现的时候使用的mmap文件内存映射，这对于一个内存能装满整个数据库的系统来说，速度非常地快，如果数据库非常的庞大，那就会导致系统不断地换页，甚至抖动。有必要时， &hellip;">
+  <meta name="description" content="Today is a good beginning because I spare the time not watching TV but constructing my own blog.Eventually, I can almost control everything in my &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ MonetDB是建立在规范的以列存储的数据库关系表示。它们是相�
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/03/22/monetdb-main-features/">
+  <link rel="canonical" href="http://coolbrain.github.com/blog/page/3/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,12 +77,15 @@ MonetDB是建立在规范的以列存储的数据库关系表示。它们是相�
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">MonetDB Main Features</h1>
+      <h1 class="entry-title"><a href="/blog/2013/03/15/commemorate/">Commemorate</a></h1>
     
     
       <p class="meta">
@@ -99,83 +101,33 @@ MonetDB是建立在规范的以列存储的数据库关系表示。它们是相�
   
 
 
-<time datetime="2013-03-22T22:37:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
+<time datetime="2013-03-15T23:10:00+08:00" pubdate data-updated="true">Mar 15<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><blockquote><p><p><strong>以列存储数据库内核</strong></p>
-<p>MonetDB是建立在规范的以列存储的数据库关系表示。它们是相当大的实体，达到几百兆，通过操作系统交换到内存，实现的时候使用的mmap文件内存映射，这对于一个内存能装满整个数据库的系统来说，速度非常地快，如果数据库非常的庞大，那就会导致系统不断地换页，甚至抖动。有必要时，压缩存回磁盘，压缩的效率也很好，因为以列存储，相似程度很高，压缩率自然会高，这需要CPU的时间，但同时节省磁盘的空间，时间换空间，<strong>这有待商议</strong>。</p>
-<!-- more -->
-<p><strong>高性能的系统</strong></p>
-<p>MonetDB擅长于数据库是热启动的应用，其实是数据库被用到的部分，大部分都可以存储在内存或者几个表的几个列就足够处理个别的请求。深入地利用cache-conscious 算法证明了这些设计决策的有效性。</p>
-<p><strong>接下来关注的MonetDB是以下的创新：</strong></p>
-<p>列存储：在传统中，关系数据库系统以行存储数据，方便整条记录的查询，而MonetDB使用的列存储，更好地利用CPU缓冲线去支持分析查询.</p>
-<P>批量查询代数：如CISC对抗RISC思想应用于CPU的设计中，MonetDB的代数在传统关系集代数上尽可能简化，允许在现代硬件上有更加快速的实现。</p>
-<p>有意识缓冲算法：这关键的一面，在于恰好地利用CPU缓冲和最优的内存访问模式，去突破内存瓶颈的限制。这叫做查询处理算法的一个新品种，我们将在根分区的散列连接中有详细的描述。</p>
-<p>内存访问代价模型：因为优化的查询工作在有意识缓冲算法的环境下，我们发展了一个构建代价模型，把内存访问代价都考虑进来的方法学。为了工作在不同的计算机，使用自动校准技术，这些模型在运行时被参数化。</p></p></blockquote>
+  <div class="entry-content"><blockquote><p><p>Today is a good beginning because I spare the time not watching TV but constructing my own blog.Eventually, I can almost control everything in my field. There is no useless links,no disgusting advertisements, no boring replies.The things existing in blog is very fantastic,invaluable and wonderful.Every time I see them,my mind becomes clear.</p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">ForgeBrain</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/15/commemorate/">Read on &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2013-03-22T22:37:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/monetdb/'>MonetDB</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  
-  
-  
-</div>
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/03/22/monetdb-architecture-overview/" title="Previous Post: MonetDB Architecture overview">&laquo; MonetDB Architecture overview</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/03/27/sip-introduction/" title="Next Post: SIP Application">SIP Application &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
 </div>
-  </section>
-
-</div>
-
 <aside class="sidebar">
   
     <section>
@@ -241,7 +193,6 @@ MonetDB是建立在规范的以列存储的数据库关系表示。它们是相�
   
 </aside>
 
-
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -256,10 +207,7 @@ MonetDB是建立在规范的以列存储的数据库关系表示。它们是相�
       var disqus_shortname = 'coolbrain';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/03/22/monetdb-main-features/';
-        var disqus_url = 'http://coolbrain.github.com/blog/2013/03/22/monetdb-main-features/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
