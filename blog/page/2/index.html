@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="如果编译原理学得不错的话，根据sql的文法就可以写个程序来解析了,最简单的莫过于自顶向下递归解析。
-sql数据定义:表定义，更改语句，删除语句和模式定义
+  <meta name="description" content="现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。
 ">
   
 
@@ -81,6 +80,46 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/26/memo-based-query-execution/">Memo-based Query Execution</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-26T22:57:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/26/memo-based-query-execution/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -446,46 +485,6 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/21/monetdbs-debugging/">MonetDB&#8217;s Debugging</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-21T21:39:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB can run in different platform,including linux&#8217;s  and window&#8217;s series.Because I want to learn how to use gdb to debug,thus, MonetDB&#8217;s installed on Unbuntu12.10 and &#8211;debug&#8211;init set on true</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/21/monetdbs-debugging/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -507,14 +506,14 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 106.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 142.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 112.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 142.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
 </section>
 
 <section>
   <h1>Categories</h1>
   <ul id="categories">
     <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (1)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (2)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (7)</a></li>
@@ -523,6 +522,10 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/07/i-slash-o-multiplexing/">I/O Multiplexing</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/05/movies/">Movies</a>
@@ -538,10 +541,6 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
     
       <li class="post">
         <a href="/blog/2013/06/09/procrastination/">Procrastination</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/05/23/goal-setting-process/">Goal-Setting Process</a>
       </li>
     
   </ul>
