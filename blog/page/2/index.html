@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。
-">
+  <meta name="description" content="linux系统下每个进程都有自己独立的内存空间，但实际应用却需要它们互相的通信去完成某项复杂的任务，这与面向对象程序的设计思想：高内聚，低耦合的思想一脉相承。linux下进程通信的方式：1.管道 2.有名管道（FIFO) 3.消息队列 4.共享内存 5.UNIX套接字。管道主要用于父子进程中， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,127 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/08/interprocess-communications/">Interprocess Communications</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-08T21:08:00+08:00" pubdate data-updated="true">May 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>linux系统下每个进程都有自己独立的内存空间，但实际应用却需要它们互相的通信去完成某项复杂的任务，这与面向对象程序的设计思想：高内聚，低耦合的思想一脉相承。linux下进程通信的方式：1.管道 2.有名管道（FIFO) 3.消息队列 4.共享内存 5.UNIX套接字。管道主要用于父子进程中，而有名管道是用于无亲缘关系的进程中。管道在linux命令很常见，如 who | sort | lp ，who的进程的输出是sort进程的输入，sort进程的输出又是lp进程的输入。共享内存是最快的一种通信方式。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/08/interprocess-communications/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/06/places-of-historical-interest/">Places of Historical Interest</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-06T20:14:00+08:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>If I have a dream, I should keep and protect it. Don&#8217;t let myself down. The outside world is beatiful, wonderful and unbelievable. Could I always keep hope in my heart? It&#8217;s easy to give up, to walk away; but it&#8217;s hard to stay, live and make things better. Don&#8217;t think about myself. Think about my parents, the people around me. Am I worthy? </p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/06/places-of-historical-interest/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/sql-proccessing/">SQL Proccessing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T23:45:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>查询处理步骤：1.语法分析与翻译 2.优化  3.执行 如图：</p>
+<p>用于执行一个查询的原语的操作序列称为<strong>查询执行计划</strong>（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划，。执行该计划并把结果返回给查询。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/28/sql-proccessing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -363,127 +483,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/28/catch-signal-in-monetdb/">Catch Signal in MonetDB</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-28T23:24:00+08:00" pubdate data-updated="true">Mar 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB运行在Unix系统上，就需要进行一些系统的捕捉和处理。下列是常见的几种信号：</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/28/catch-signal-in-monetdb/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/27/sip-introduction/">SIP Application</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-27T23:58:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>实习期间，接触到SIP，对其略有所闻。SIP（Session Initiation Protocol) 协议是类似于http的基于文本的协议，应用层的信令控制协议。用于创建，修改和释放一个或多个参与者的会话。主要用于IP电话,视频等。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/27/sip-introduction/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-main-features/">MonetDB Main Features</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-22T22:37:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p><strong>以列存储数据库内核</strong></p>
-<p>MonetDB是建立在规范的以列存储的数据库关系表示。它们是相当大的实体，达到几百兆，通过操作系统交换到内存，实现的时候使用的mmap文件内存映射，这对于一个内存能装满整个数据库的系统来说，速度非常地快，如果数据库非常的庞大，那就会导致系统不断地换页，甚至抖动。有必要时，压缩存回磁盘，压缩的效率也很好，因为以列存储，相似程度很高，压缩率自然会高，这需要CPU的时间，但同时节省磁盘的空间，时间换空间，<strong>这有待商议</strong>。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/22/monetdb-main-features/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -505,17 +504,17 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 118.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 142.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 124.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 154.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
 </section>
 
 <section>
   <h1>Categories</h1>
   <ul id="categories">
     <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (3)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (4)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
-<li class='category'><a href='/blog/categories/psychology/'>psychology (7)</a></li>
+<li class='category'><a href='/blog/categories/psychology/'>psychology (9)</a></li>
 
   </ul>
 </section><section>
@@ -523,23 +522,23 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/09/new-concept-english/">New Concept English</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/09/literature/">literature</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/09/traceroute/">Traceroute</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/07/09/ping/">Ping</a>
       </li>
     
       <li class="post">
         <a href="/blog/2013/07/07/i-slash-o-multiplexing/">I/O Multiplexing</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/05/movies/">Movies</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/04/tv-series/">TV Series</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/04/3d-movie/">3D Movie</a>
       </li>
     
   </ul>

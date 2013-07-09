@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-09T12:08:20+08:00</updated>
+  <updated>2013-07-09T12:38:59+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Traceroute]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/09/traceroute/"/>
+    <updated>2013-07-09T12:31:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/09/traceroute</id>
+    <content type="html"><![CDATA[<blockquote><p><p>Traceroute程序是检测经过的路由器</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ping]]></title>
