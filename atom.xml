@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-08T00:50:28+08:00</updated>
+  <updated>2013-07-09T12:04:28+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,826 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ping]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/09/ping/"/>
+    <updated>2013-07-09T11:57:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/09/ping</id>
+    <content type="html"><![CDATA[<blockquote><p><p>ping程序操作非常简单，往某个IP地址发送一个ICMP回射请求，该节点则以一个ICMP回射应答响应。此程序用到原始套接字。</p>
+<!-- more --></p></blockquote>
+
+<figure class='code'><figcaption><span>ping  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+<span class='line-number'>215</span>
+<span class='line-number'>216</span>
+<span class='line-number'>217</span>
+<span class='line-number'>218</span>
+<span class='line-number'>219</span>
+<span class='line-number'>220</span>
+<span class='line-number'>221</span>
+<span class='line-number'>222</span>
+<span class='line-number'>223</span>
+<span class='line-number'>224</span>
+<span class='line-number'>225</span>
+<span class='line-number'>226</span>
+<span class='line-number'>227</span>
+<span class='line-number'>228</span>
+<span class='line-number'>229</span>
+<span class='line-number'>230</span>
+<span class='line-number'>231</span>
+<span class='line-number'>232</span>
+<span class='line-number'>233</span>
+<span class='line-number'>234</span>
+<span class='line-number'>235</span>
+<span class='line-number'>236</span>
+<span class='line-number'>237</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+<span class='line-number'>241</span>
+<span class='line-number'>242</span>
+<span class='line-number'>243</span>
+<span class='line-number'>244</span>
+<span class='line-number'>245</span>
+<span class='line-number'>246</span>
+<span class='line-number'>247</span>
+<span class='line-number'>248</span>
+<span class='line-number'>249</span>
+<span class='line-number'>250</span>
+<span class='line-number'>251</span>
+<span class='line-number'>252</span>
+<span class='line-number'>253</span>
+<span class='line-number'>254</span>
+<span class='line-number'>255</span>
+<span class='line-number'>256</span>
+<span class='line-number'>257</span>
+<span class='line-number'>258</span>
+<span class='line-number'>259</span>
+<span class='line-number'>260</span>
+<span class='line-number'>261</span>
+<span class='line-number'>262</span>
+<span class='line-number'>263</span>
+<span class='line-number'>264</span>
+<span class='line-number'>265</span>
+<span class='line-number'>266</span>
+<span class='line-number'>267</span>
+<span class='line-number'>268</span>
+<span class='line-number'>269</span>
+<span class='line-number'>270</span>
+<span class='line-number'>271</span>
+<span class='line-number'>272</span>
+<span class='line-number'>273</span>
+<span class='line-number'>274</span>
+<span class='line-number'>275</span>
+<span class='line-number'>276</span>
+<span class='line-number'>277</span>
+<span class='line-number'>278</span>
+<span class='line-number'>279</span>
+<span class='line-number'>280</span>
+<span class='line-number'>281</span>
+<span class='line-number'>282</span>
+<span class='line-number'>283</span>
+<span class='line-number'>284</span>
+<span class='line-number'>285</span>
+<span class='line-number'>286</span>
+<span class='line-number'>287</span>
+<span class='line-number'>288</span>
+<span class='line-number'>289</span>
+<span class='line-number'>290</span>
+<span class='line-number'>291</span>
+<span class='line-number'>292</span>
+<span class='line-number'>293</span>
+<span class='line-number'>294</span>
+<span class='line-number'>295</span>
+<span class='line-number'>296</span>
+<span class='line-number'>297</span>
+<span class='line-number'>298</span>
+<span class='line-number'>299</span>
+<span class='line-number'>300</span>
+<span class='line-number'>301</span>
+<span class='line-number'>302</span>
+<span class='line-number'>303</span>
+<span class='line-number'>304</span>
+<span class='line-number'>305</span>
+<span class='line-number'>306</span>
+<span class='line-number'>307</span>
+<span class='line-number'>308</span>
+<span class='line-number'>309</span>
+<span class='line-number'>310</span>
+<span class='line-number'>311</span>
+<span class='line-number'>312</span>
+<span class='line-number'>313</span>
+<span class='line-number'>314</span>
+<span class='line-number'>315</span>
+<span class='line-number'>316</span>
+<span class='line-number'>317</span>
+<span class='line-number'>318</span>
+<span class='line-number'>319</span>
+<span class='line-number'>320</span>
+<span class='line-number'>321</span>
+<span class='line-number'>322</span>
+<span class='line-number'>323</span>
+<span class='line-number'>324</span>
+<span class='line-number'>325</span>
+<span class='line-number'>326</span>
+<span class='line-number'>327</span>
+<span class='line-number'>328</span>
+<span class='line-number'>329</span>
+<span class='line-number'>330</span>
+<span class='line-number'>331</span>
+<span class='line-number'>332</span>
+<span class='line-number'>333</span>
+<span class='line-number'>334</span>
+<span class='line-number'>335</span>
+<span class='line-number'>336</span>
+<span class='line-number'>337</span>
+<span class='line-number'>338</span>
+<span class='line-number'>339</span>
+<span class='line-number'>340</span>
+<span class='line-number'>341</span>
+<span class='line-number'>342</span>
+<span class='line-number'>343</span>
+<span class='line-number'>344</span>
+<span class='line-number'>345</span>
+<span class='line-number'>346</span>
+<span class='line-number'>347</span>
+<span class='line-number'>348</span>
+<span class='line-number'>349</span>
+<span class='line-number'>350</span>
+<span class='line-number'>351</span>
+<span class='line-number'>352</span>
+<span class='line-number'>353</span>
+<span class='line-number'>354</span>
+<span class='line-number'>355</span>
+<span class='line-number'>356</span>
+<span class='line-number'>357</span>
+<span class='line-number'>358</span>
+<span class='line-number'>359</span>
+<span class='line-number'>360</span>
+<span class='line-number'>361</span>
+<span class='line-number'>362</span>
+<span class='line-number'>363</span>
+<span class='line-number'>364</span>
+<span class='line-number'>365</span>
+<span class='line-number'>366</span>
+<span class='line-number'>367</span>
+<span class='line-number'>368</span>
+<span class='line-number'>369</span>
+<span class='line-number'>370</span>
+<span class='line-number'>371</span>
+<span class='line-number'>372</span>
+<span class='line-number'>373</span>
+<span class='line-number'>374</span>
+<span class='line-number'>375</span>
+<span class='line-number'>376</span>
+<span class='line-number'>377</span>
+<span class='line-number'>378</span>
+<span class='line-number'>379</span>
+<span class='line-number'>380</span>
+<span class='line-number'>381</span>
+<span class='line-number'>382</span>
+<span class='line-number'>383</span>
+<span class='line-number'>384</span>
+<span class='line-number'>385</span>
+<span class='line-number'>386</span>
+<span class='line-number'>387</span>
+<span class='line-number'>388</span>
+<span class='line-number'>389</span>
+<span class='line-number'>390</span>
+<span class='line-number'>391</span>
+<span class='line-number'>392</span>
+<span class='line-number'>393</span>
+<span class='line-number'>394</span>
+<span class='line-number'>395</span>
+<span class='line-number'>396</span>
+<span class='line-number'>397</span>
+<span class='line-number'>398</span>
+<span class='line-number'>399</span>
+<span class='line-number'>400</span>
+<span class='line-number'>401</span>
+<span class='line-number'>402</span>
+<span class='line-number'>403</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;netinet/in_systm.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;netinet/ip.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;netinet/ip_icmp.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;netdb.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/socket.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;arpa/inet.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;errno.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/types.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/time.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;signal.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#define  BUFSIZE  1500</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">char</span>  <span class="n">sendbuf</span><span class="p">[</span><span class="n">BUFSIZE</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">char</span>    <span class="o">*</span><span class="n">host</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span>     <span class="n">nsent</span><span class="p">;</span>
+</span><span class='line'><span class="n">pid_t</span>   <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span>     <span class="n">sockfd</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span>     <span class="n">verbose</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">init_v6</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">proc_v4</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">ssize_t</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">proc_v6</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">ssize_t</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">send_v4</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">send_v6</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">readloop</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">sig_alrm</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+</span><span class='line'><span class="kt">void</span>    <span class="nf">tv_sub</span><span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">struct</span>   <span class="n">proto</span><span class="p">{</span>
+</span><span class='line'>    <span class="kt">void</span>    <span class="p">(</span><span class="o">*</span><span class="n">fproc</span><span class="p">)(</span><span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">ssize_t</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">void</span>    <span class="p">(</span><span class="o">*</span><span class="n">fsend</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">void</span>    <span class="p">(</span><span class="o">*</span><span class="n">finit</span><span class="p">)(</span><span class="kt">void</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">struct</span>  <span class="n">sockaddr</span> <span class="o">*</span><span class="n">sasend</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span>  <span class="n">sockaddr</span> <span class="o">*</span><span class="n">sarecv</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">socklen_t</span>   <span class="n">salen</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span>     <span class="n">icmpproto</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="o">*</span><span class="n">pr</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#ifdef IPV6</span>
+</span><span class='line'><span class="cp">#include    &lt;netinet/ip6.h&gt;</span>
+</span><span class='line'><span class="cp">#include    &lt;netinet/icmp6.h&gt;</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*定义IPv4和IPv6的proto结构*/</span>
+</span><span class='line'><span class="k">struct</span> <span class="n">proto</span> <span class="n">proto_v4</span> <span class="o">=</span>
+</span><span class='line'>    <span class="p">{</span><span class="n">proc_v4</span><span class="p">,</span> <span class="n">send_v4</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">IPPROTO_ICMP</span><span class="p">};</span>
+</span><span class='line'><span class="cp">#ifdef  IPV6</span>
+</span><span class='line'><span class="k">struct</span> <span class="n">proto</span> <span class="n">proto_v6</span> <span class="o">=</span>
+</span><span class='line'>    <span class="p">{</span><span class="n">proc_v6</span><span class="p">,</span> <span class="n">send_v6</span><span class="p">,</span> <span class="n">init_v6</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">IPPROTO_ICMP6</span><span class="p">};</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">datalen</span> <span class="o">=</span><span class="mi">56</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*获取主机和相关信息*/</span>
+</span><span class='line'><span class="k">struct</span> <span class="n">addrinfo</span> <span class="o">*</span><span class="nf">host_serv</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">host</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">serv</span><span class="p">,</span> <span class="kt">int</span> <span class="n">family</span><span class="p">,</span> <span class="kt">int</span> <span class="n">socktype</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span>  <span class="n">n</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">addrinfo</span> <span class="n">hints</span><span class="p">,</span> <span class="o">*</span><span class="n">res</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">bzero</span><span class="p">(</span><span class="o">&amp;</span><span class="n">hints</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">addrinfo</span><span class="p">));</span>
+</span><span class='line'>    <span class="n">hints</span><span class="p">.</span><span class="n">ai_flags</span> <span class="o">=</span> <span class="n">AI_CANONNAME</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">hints</span><span class="p">.</span><span class="n">ai_family</span> <span class="o">=</span> <span class="n">family</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">hints</span><span class="p">.</span><span class="n">ai_socktype</span> <span class="o">=</span> <span class="n">socktype</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="p">(</span> <span class="n">n</span> <span class="o">=</span> <span class="n">getaddrinfo</span><span class="p">(</span> <span class="n">host</span><span class="p">,</span> <span class="n">serv</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">hints</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">res</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">res</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*将ip地址值形式转变为表达形式*/</span>
+</span><span class='line'><span class="kt">char</span> <span class="o">*</span><span class="nf">sock_ntop_host</span><span class="p">(</span><span class="k">const</span> <span class="k">struct</span> <span class="n">sockaddr</span> <span class="o">*</span><span class="n">sa</span><span class="p">,</span> <span class="n">socklen_t</span> <span class="n">salen</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">portstr</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">static</span> <span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">switch</span><span class="p">(</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">sa_family</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">case</span> <span class="n">AF_INET</span>:
+</span><span class='line'>                 <span class="p">{</span>
+</span><span class='line'>                        <span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="o">*</span><span class="n">sin</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr_in</span> <span class="o">*</span><span class="p">)</span><span class="n">sa</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>                        <span class="k">if</span><span class="p">(</span><span class="n">inet_ntop</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sin</span><span class="o">-&gt;</span><span class="n">sin_addr</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">str</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>                            <span class="k">return</span> <span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>                        <span class="k">if</span><span class="p">(</span><span class="n">ntohs</span><span class="p">(</span><span class="n">sin</span><span class="o">-&gt;</span><span class="n">sin_port</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                            <span class="p">{</span>
+</span><span class='line'>                                <span class="n">snprintf</span><span class="p">(</span><span class="n">portstr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">portstr</span><span class="p">),</span> <span class="s">&quot;:%d&quot;</span><span class="p">,</span> <span class="n">ntohs</span><span class="p">(</span><span class="n">sin</span><span class="o">-&gt;</span><span class="n">sin_port</span><span class="p">));</span>
+</span><span class='line'>                                <span class="n">strcat</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">portstr</span><span class="p">);</span>
+</span><span class='line'>                            <span class="p">}</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="p">(</span><span class="n">str</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="k">case</span> <span class="n">AF_INET6</span>:
+</span><span class='line'>                    <span class="p">{</span>
+</span><span class='line'>                        <span class="k">struct</span> <span class="n">sockaddr_in6</span> <span class="o">*</span><span class="n">sin6</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">sockaddr_in6</span> <span class="o">*</span><span class="p">)</span><span class="n">sa</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>                        <span class="k">if</span><span class="p">(</span><span class="n">inet_ntop</span><span class="p">(</span><span class="n">AF_INET6</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sin6</span><span class="o">-&gt;</span><span class="n">sin6_addr</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">str</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>                            <span class="k">return</span> <span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>                        <span class="k">if</span><span class="p">(</span><span class="n">ntohs</span><span class="p">(</span><span class="n">sin6</span><span class="o">-&gt;</span><span class="n">sin6_port</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                            <span class="p">{</span>
+</span><span class='line'>                                <span class="n">snprintf</span><span class="p">(</span><span class="n">portstr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">portstr</span><span class="p">),</span> <span class="s">&quot;:%d&quot;</span><span class="p">,</span> <span class="n">ntohs</span><span class="p">(</span><span class="n">sin6</span><span class="o">-&gt;</span><span class="n">sin6_port</span><span class="p">));</span>
+</span><span class='line'>                                <span class="n">strcat</span><span class="p">(</span><span class="n">str</span><span class="p">,</span> <span class="n">portstr</span><span class="p">);</span>
+</span><span class='line'>                            <span class="p">}</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="p">(</span><span class="n">str</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">c</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">addrinfo</span> <span class="o">*</span><span class="n">ai</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">h</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">opterr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span> <span class="p">(</span> <span class="n">c</span> <span class="o">=</span> <span class="n">getopt</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="s">&quot;v&quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>           <span class="cm">/*处理命令行选项*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">switch</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">case</span> <span class="sc">&#39;v&#39;</span>:
+</span><span class='line'>                        <span class="n">verbose</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>                        <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">case</span> <span class="sc">&#39;?&#39;</span>:
+</span><span class='line'>                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;unrecognized option:%c&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">optind</span> <span class="o">!=</span> <span class="n">argc</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;usage:ping [ -v ] &lt;hostname&gt;&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">host</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">optind</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">pid</span> <span class="o">=</span> <span class="n">getpid</span><span class="p">()</span><span class="o">&amp;</span><span class="mh">0xffff</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">signal</span><span class="p">(</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">sig_alrm</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">ai</span> <span class="o">=</span> <span class="n">host_serv</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>                            <span class="cm">/*处理主机名参数*/</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">h</span> <span class="o">=</span> <span class="n">sock_ntop_host</span><span class="p">(</span><span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_addr</span><span class="p">,</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_addrlen</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;PING %s (%s): %d data bytes </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_canonname</span><span class="o">?</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_canonname</span><span class="o">:</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">datalen</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_family</span> <span class="o">==</span> <span class="n">AF_INET</span>  <span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">pr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">proto_v4</span><span class="p">;</span>
+</span><span class='line'><span class="cp">#ifdef  IPV6</span>
+</span><span class='line'>         <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_family</span> <span class="o">==</span> <span class="n">AF_INET6</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">pr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">proto_v6</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">IN6_IS_ADDR_V4MAPPED</span><span class="p">(</span><span class="o">&amp;</span><span class="p">(((</span><span class="k">struct</span> <span class="n">sockaddr_in6</span> <span class="o">*</span><span class="p">)</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_addr</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">sin6_addr</span><span class="p">)))</span>
+</span><span class='line'>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;cannot ping IPV4-mapped IPV6 address&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="cp">#endif  </span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;unknown address family  %d&quot;</span><span class="p">,</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_family</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">pr</span><span class="o">-&gt;</span><span class="n">sasend</span> <span class="o">=</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_addr</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pr</span><span class="o">-&gt;</span><span class="n">sarecv</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_addrlen</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span> <span class="o">=</span> <span class="n">ai</span><span class="o">-&gt;</span><span class="n">ai_addrlen</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">readloop</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">readloop</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">recvbuf</span><span class="p">[</span><span class="n">BUFSIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="n">controlbuf</span><span class="p">[</span><span class="n">BUFSIZE</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">msghdr</span> <span class="n">msg</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">iovec</span>    <span class="n">iov</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">ssize_t</span> <span class="n">n</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">tval</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">sockfd</span> <span class="o">=</span> <span class="n">socket</span><span class="p">(</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">sasend</span><span class="o">-&gt;</span><span class="n">sa_family</span><span class="p">,</span> <span class="n">SOCK_RAW</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">icmpproto</span><span class="p">);</span>  <span class="cm">/*创建原始的套接字*/</span>
+</span><span class='line'>    <span class="n">setuid</span><span class="p">(</span><span class="n">getuid</span><span class="p">());</span>                                       <span class="cm">/*不需要特殊的允许*/</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">finit</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">(</span><span class="o">*</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">finit</span><span class="p">)();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">size</span> <span class="o">=</span> <span class="mi">60</span><span class="o">*</span><span class="mi">1024</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">setsockopt</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_RCVBUF</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">size</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">size</span><span class="p">));</span>  <span class="cm">/*设置套接字接受缓冲区的大小*/</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">sig_alrm</span><span class="p">(</span><span class="n">SIGALRM</span><span class="p">);</span>                                  <span class="cm">/*发送第一个分组*/</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">iov</span><span class="p">.</span><span class="n">iov_base</span> <span class="o">=</span> <span class="n">recvbuf</span><span class="p">;</span>                               <span class="cm">/*为recvmsg设置msghdr结构*/</span>
+</span><span class='line'>    <span class="n">iov</span><span class="p">.</span><span class="n">iov_len</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">recvbuf</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">msg</span><span class="p">.</span><span class="n">msg_name</span> <span class="o">=</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">sarecv</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">msg</span><span class="p">.</span><span class="n">msg_iov</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">iov</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">msg</span><span class="p">.</span><span class="n">msg_iovlen</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">msg</span><span class="p">.</span><span class="n">msg_control</span> <span class="o">=</span> <span class="n">controlbuf</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span> <span class="p">;</span> <span class="p">;)</span>                                                    <span class="cm">/*读取 所有ICMP消息的无限循环*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">msg</span><span class="p">.</span><span class="n">msg_namelen</span> <span class="o">=</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">msg</span><span class="p">.</span><span class="n">msg_controllen</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">controlbuf</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">n</span> <span class="o">=</span> <span class="n">recvmsg</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">if</span><span class="p">(</span> <span class="n">errno</span> <span class="o">==</span> <span class="n">EINTR</span><span class="p">)</span>
+</span><span class='line'>                        <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">else</span>
+</span><span class='line'>                        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;recvmsg error&quot;</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tval</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">(</span><span class="o">*</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">fproc</span><span class="p">)(</span><span class="n">recvbuf</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tval</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">tv_sub</span><span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">out</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">in</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="p">(</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">tv_usec</span> <span class="o">-=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">tv_usec</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="cm">/*out -=in*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="o">--</span><span class="n">out</span><span class="o">-&gt;</span><span class="n">tv_sec</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">out</span><span class="o">-&gt;</span><span class="n">tv_usec</span> <span class="o">+=</span> <span class="mi">1000000</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="n">out</span><span class="o">-&gt;</span><span class="n">tv_sec</span> <span class="o">-=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">tv_sec</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">proc_v4</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="kt">ssize_t</span> <span class="n">len</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tvrecv</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">hlen1</span><span class="p">,</span> <span class="n">icmplen</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">double</span>  <span class="n">rtt</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">ip</span> <span class="o">*</span><span class="n">ip</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">icmp</span> <span class="o">*</span><span class="n">icmp</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tvsend</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">ip</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">ip</span><span class="o">*</span><span class="p">)</span><span class="n">ptr</span><span class="p">;</span>                 <span class="cm">/*IP节的头*/</span>
+</span><span class='line'>    <span class="n">hlen1</span> <span class="o">=</span> <span class="n">ip</span><span class="o">-&gt;</span><span class="n">ip_hl</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">;</span>            <span class="cm">/*IP节的长度*/</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">ip</span><span class="o">-&gt;</span><span class="n">ip_p</span> <span class="o">!=</span> <span class="n">IPPROTO_ICMP</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>                                 <span class="cm">/*没有ICMP*/</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">icmp</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">icmp</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">+</span> <span class="n">hlen1</span><span class="p">);</span>   <span class="cm">/*ICMP节的头*/</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">icmplen</span> <span class="o">=</span> <span class="n">len</span> <span class="o">-</span><span class="n">hlen1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_type</span> <span class="o">==</span> <span class="n">ICMP_ECHOREPLY</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_id</span> <span class="o">!=</span> <span class="n">pid</span><span class="p">)</span>          <span class="cm">/*不是对我们的ECHO_REQUEST进行回复*/</span>
+</span><span class='line'>                <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">icmplen</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'>                <span class="k">return</span><span class="p">;</span>                                 <span class="cm">/*没有足够数据可用*/</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">tvsend</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">)</span><span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_data</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">tv_sub</span><span class="p">(</span><span class="n">tvrecv</span><span class="p">,</span> <span class="n">tvsend</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">rtt</span> <span class="o">=</span> <span class="n">tvrecv</span><span class="o">-&gt;</span><span class="n">tv_sec</span><span class="o">*</span><span class="mf">1000.0</span> <span class="o">+</span> <span class="n">tvrecv</span><span class="o">-&gt;</span><span class="n">tv_usec</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d bytes from %s: seq=%u, ttl=%d, rtt=%.3f ms</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">icmplen</span><span class="p">,</span> <span class="n">sock_ntop_host</span><span class="p">(</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">sarecv</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">),</span>
+</span><span class='line'>                <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_seq</span><span class="p">,</span> <span class="n">ip</span><span class="o">-&gt;</span><span class="n">ip_ttl</span><span class="p">,</span> <span class="n">rtt</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">verbose</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d bytes from %s: type = %d, code = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">icmplen</span><span class="p">,</span> <span class="n">sock_ntop_host</span><span class="p">(</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">sarecv</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">),</span>
+</span><span class='line'>                <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_type</span><span class="p">,</span> <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_code</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">init_v6</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="cp">#ifdef  IPV6</span>
+</span><span class='line'>    <span class="kt">int</span>     <span class="n">on</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="n">verbose</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>              <span class="cm">/*设置ICMPv6接收过滤器*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">struct</span> <span class="n">icmp6_filter</span> <span class="n">myfilt</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">ICMP6_FILTER_SETBLOCKALL</span><span class="p">(</span><span class="o">&amp;</span><span class="n">myflit</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">ICMP6_FILTER_SETPASS</span><span class="p">(</span><span class="n">ICMP6_ECHO_REPLY</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">myflit</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">setsockopt</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">IPPROTO_IPV6</span><span class="p">,</span> <span class="n">ICMP6_FILTER</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">myflit</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">myflit</span><span class="p">));</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="cp">#ifdef IPV6_RECVHOPLIMIT</span>
+</span><span class='line'>    <span class="n">setsockopt</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">IPPROTO_IPV6</span><span class="p">,</span> <span class="n">IPV6_RECVHOPLIMIT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">on</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">on</span><span class="p">));</span>
+</span><span class='line'><span class="cp">#else</span>
+</span><span class='line'>    <span class="n">setsockopt</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">IPPROTO_IPV6</span><span class="p">,</span> <span class="n">IPV6_HOPLIMIT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">on</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">on</span><span class="p">));</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">proc_v6</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">ptr</span><span class="p">,</span> <span class="kt">ssize_t</span> <span class="n">len</span><span class="p">,</span> <span class="k">struct</span> <span class="n">msghdr</span> <span class="o">*</span><span class="n">msg</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="n">tvrecv</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="cp">#ifdef  IPV6</span>
+</span><span class='line'>    <span class="kt">double</span> <span class="n">rtt</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">icmp6_hdr</span><span class="o">*</span> <span class="n">icmp6</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span> <span class="n">tvsend</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">cmsghdr</span> <span class="o">*</span><span class="n">cmsg</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">hlim</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">icmp6</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">icmp6_hdr</span> <span class="o">*</span><span class="p">)</span><span class="n">ptr</span><span class="p">;</span>                 <span class="cm">/*获取ICMPV6首部的指针*/</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">len</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_type</span> <span class="o">==</span> <span class="n">ICMP6_ECHO_REPLY</span><span class="p">)</span>  <span class="cm">/*检查ICMP回射应答*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_id</span> <span class="o">!=</span> <span class="n">pid</span><span class="p">)</span>     <span class="cm">/*不是对我们的ECHO_REQUEST进行回复*/</span>
+</span><span class='line'>                <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">)</span>
+</span><span class='line'>                <span class="k">return</span><span class="p">;</span>                                <span class="cm">/*没有足够数据可用*/</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">tvsend</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">)(</span><span class="n">icmp6</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">tv_sub</span><span class="p">(</span><span class="n">tvrecv</span><span class="p">,</span> <span class="n">tvsend</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">rtt</span> <span class="o">=</span> <span class="n">tvrecv</span><span class="o">-&gt;</span><span class="n">tv_sec</span><span class="o">*</span><span class="mf">1000.0</span> <span class="o">+</span> <span class="n">tvrecv</span><span class="o">-&gt;</span><span class="n">tv_usec</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">hlim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">for</span><span class="p">(</span><span class="n">cmsg</span> <span class="o">=</span> <span class="n">CMSG_FIRSTHDR</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span> <span class="n">cmsg</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">cmsg</span> <span class="o">=</span> <span class="n">CMSG_NXTHDR</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="n">cmsg</span><span class="p">))</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">if</span><span class="p">(</span><span class="n">cmsg</span><span class="o">-&gt;</span><span class="n">cmsg_level</span> <span class="o">==</span> <span class="n">IPPROTO_IPv6</span> <span class="o">&amp;&amp;</span> <span class="n">cmsg</span><span class="o">-&gt;</span><span class="n">cmsg_type</span> <span class="o">==</span> <span class="n">IPV6_HOPLIMIT</span><span class="p">)</span>
+</span><span class='line'>                        <span class="p">{</span>
+</span><span class='line'>                            <span class="n">hlim</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">u_int32_t</span><span class="o">*</span><span class="p">)</span><span class="n">CMSG_DATA</span><span class="p">(</span><span class="n">cmsg</span><span class="p">);</span>
+</span><span class='line'>                            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>                        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d bytes from %s:seq = %u, hlim =&quot;</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span><span class="n">sock_ntop_host</span><span class="p">(</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">sarecv</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">),</span> <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_seq</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">hlim</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;???&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">else</span>
+</span><span class='line'>                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">hlim</span><span class="p">);</span>
+</span><span class='line'>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;, rtt=%.3f ms</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">rtt</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">verbose</span><span class="p">)</span>     <span class="cm">/*若指定-v则显示所有接收ICMP消息*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d bytes from %s: type = %d, code = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="n">sock_ntop_host</span><span class="p">(</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">sarecv</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">),</span>
+</span><span class='line'>                    <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_type</span><span class="p">,</span> <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_code</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">sig_alrm</span><span class="p">(</span><span class="kt">int</span>   <span class="n">signo</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">(</span><span class="o">*</span><span class="n">pr</span><span class="o">-&gt;</span><span class="n">fsend</span><span class="p">)();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">alarm</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">uint16_t</span> <span class="nf">in_cksum</span><span class="p">(</span><span class="kt">uint16_t</span> <span class="o">*</span><span class="n">addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">nleft</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">uint32_t</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">uint16_t</span> <span class="o">*</span><span class="n">w</span> <span class="o">=</span> <span class="n">addr</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">uint16_t</span> <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span> <span class="n">nleft</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">sum</span><span class="o">+=*</span><span class="n">w</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">nleft</span> <span class="o">-=</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">nleft</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="o">*</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)(</span><span class="o">&amp;</span><span class="n">answer</span><span class="p">)</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">w</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">sum</span> <span class="o">+=</span> <span class="n">answer</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">sum</span><span class="o">&amp;</span><span class="mh">0xffff</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">answer</span> <span class="o">=</span> <span class="o">~</span><span class="n">sum</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">answer</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">send_v4</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">icmp</span> <span class="o">*</span><span class="n">icmp</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">icmp</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">icmp</span> <span class="o">*</span><span class="p">)</span><span class="n">sendbuf</span><span class="p">;</span>                   <span class="cm">/*构造ICMPV4消息*/</span>
+</span><span class='line'>    <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_type</span> <span class="o">=</span> <span class="n">ICMP_ECHO</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_code</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_id</span>  <span class="o">=</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_seq</span> <span class="o">=</span> <span class="n">nsent</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">(</span><span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_data</span><span class="p">,</span> <span class="mh">0xa5</span><span class="p">,</span> <span class="n">datalen</span><span class="p">);</span>    <span class="cm">/*按照icmp模式来填写*/</span>
+</span><span class='line'>    <span class="n">gettimeofday</span><span class="p">(</span> <span class="p">(</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">)</span> <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_data</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">len</span> <span class="o">=</span> <span class="mi">8</span><span class="o">+</span> <span class="n">datalen</span><span class="p">;</span>                                       <span class="cm">/*校验ICMP 节和数据*/</span>
+</span><span class='line'>    <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_cksum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp</span><span class="o">-&gt;</span><span class="n">icmp_cksum</span> <span class="o">=</span> <span class="n">in_cksum</span><span class="p">((</span> <span class="n">u_short</span> <span class="o">*</span><span class="p">)</span><span class="n">icmp</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">sendto</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">sendbuf</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">sasend</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">);</span>  <span class="cm">/*发送数据报*/</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">send_v6</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="cp">#ifdef  IPV6</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">icmp6_hdr</span>  <span class="o">*</span><span class="n">icmp6</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">icmp6</span> <span class="o">=</span> <span class="p">(</span><span class="k">struct</span> <span class="n">icmp6_hdr</span> <span class="o">*</span><span class="p">)</span><span class="n">sendbuf</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_type</span> <span class="o">=</span> <span class="n">ICMP6_ECHO_REQUEST</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_code</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_id</span>  <span class="o">=</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">icmp6</span><span class="o">-&gt;</span><span class="n">icmp6_seq</span> <span class="o">=</span> <span class="n">nsent</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">memset</span><span class="p">((</span><span class="n">icmp6</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="mh">0xa5</span><span class="p">,</span> <span class="n">datalen</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">gettimeofday</span><span class="p">(</span> <span class="p">(</span> <span class="k">struct</span> <span class="n">timeval</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">icmp6</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">len</span> <span class="o">=</span> <span class="mi">8</span><span class="o">+</span> <span class="n">datalen</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">sendto</span><span class="p">(</span><span class="n">sockfd</span><span class="p">,</span> <span class="n">sendbuf</span><span class="p">,</span> <span class="n">len</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">sasend</span><span class="p">,</span> <span class="n">pr</span><span class="o">-&gt;</span><span class="n">salen</span><span class="p">);</span>
+</span><span class='line'><span class="cp">#endif</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[I/O Multiplexing]]></title>
@@ -741,7 +1561,7 @@
     <content type="html"><![CDATA[<blockquote><p><p>大学里面的最后一年半的时间是在看电视剧过来的。为什么浪费“一寸光阴一寸金”的时间来看电视剧？是遭受了挫折后的堕落，是心智的幼稚，还是思路的混乱和目标的迷失？人生不如意之事十有八九。在遇到挫折时，我显得脆弱不堪，悠游寡断，自暴自弃。就大学那么的一个挫折，就把自己的人生搞得乱七八糟，不堪回首，如同烂泥。那么，以后面对大风大浪，岂不是毫无抵抗地沉入大海？人要自个儿成全自个儿。</p>
 <!-- more -->
 <p>稍微总结一下，一年半所看的电视剧和电影。因为这是一种经历，不论是好还是坏，都需要思考和总结。杜绝人生如流水账那样，走马观花，得过且过。</p>
-<p>《越狱》说的是主人公为了救自己无辜入狱的哥哥，亲自犯罪入监狱救出他。他们被追捕，之后它们逃到巴拿马;最后，返回美国，帮助寻找所谓的&#8221;黑名单&#8221;，其实高科技能源技术。剧中，主人公利用自己专业————土木工程的知识来进行越狱，并且之前早构思好一个相对完美的越狱计划。《越狱》体现了主人公的兄弟情，爱情和友情，并放映了社会和政治的勾心斗角。</p>
+<p>《越狱》说的是主人公为了救自己无辜入狱的哥哥，亲自犯罪入监狱救出他。他们被追捕，之后它们逃到巴拿马;最后，返回美国，帮助寻找所谓的&#8221;黑名单&#8221;，其实高科技能源技术。剧中，主人公利用自己专业————土木工程的知识来进行越狱，并且之前早构思好一个相对完美的越狱计划。《越狱》体现了主人公的兄弟情，爱情和友情，并反应了社会和政治的勾心斗角。</p>
 <p>《迷失》我并没有完整看完，但我觉得主人公是一个名副其实，有魄力的医生。如同《越狱》中的主人公一样，都是自己专业中的佼佼者。每一个人都有自己的迷失的时候，在这个孤岛上逐渐都找回了自己，《迷失》通过时间的穿越来体现。</p>
 <p>《三国》是三国演义的电视剧版本，曹丕是一个奸诈狡猾之人，曹操也知道其为了帝位，不惜杀害自己的弟弟，但曹操也意识到为了保住自己打下来的江山，非大奸大诈，心机重重的人不可。刘备是一个深藏不露，哀乐不显于脸色和有情有义的人，其三顾茅庐，精神所至，金石为开。刘备是从祧园三结义兴起，也由这个终结，可谓成也萧何败也萧何。</p>
 <p>《寻秦记》主人公通过穿越时空来到战国时期，主要任务是帮助嬴政顺利登基。主人公是一个有情有义，乐于助人的人。</p>
@@ -9743,47 +10563,6 @@ osip比较重要的一个数据结构osip_message,用于封装发送和接受的
 <P>批量查询代数：如CISC对抗RISC思想应用于CPU的设计中，MonetDB的代数在传统关系集代数上尽可能简化，允许在现代硬件上有更加快速的实现。</p>
 <p>有意识缓冲算法：这关键的一面，在于恰好地利用CPU缓冲和最优的内存访问模式，去突破内存瓶颈的限制。这叫做查询处理算法的一个新品种，我们将在根分区的散列连接中有详细的描述。</p>
 <p>内存访问代价模型：因为优化的查询工作在有意识缓冲算法的环境下，我们发展了一个构建代价模型，把内存访问代价都考虑进来的方法学。为了工作在不同的计算机，使用自动校准技术，这些模型在运行时被参数化。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MonetDB Architecture overview]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/03/22/monetdb-architecture-overview/"/>
-    <updated>2013-03-22T20:04:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/03/22/monetdb-architecture-overview</id>
-    <content type="html"><![CDATA[<blockquote><p><p><strong>总体概览</strong></p>
-<p>MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。设计的目的反应在架构的各个层次和提供给用户的功能。尽管MonetDB/SQL提供了完善的SQL接口，但是在大容量，且需要保存不同层次的ACID属性的事务处理能力有点欠缺。</p>
-<!-- more -->
-<p><strong>存储模型</strong></p>
-<p>MonetDB的存储模型与传统的数据库截然不同。它表示关系表使用垂直存储，每一列以｛（surrogate，value）｝这样的表存储，称为BAT(Binary Association Table).左边的列，代理数字或对象id,称为头；右边的列为尾。MonetDB执行一种低级的被称为BAT代数的关系代数。在执行的时候，数据常存储在(intermediate中间）BAT,就算是查询的结果也是BAT的集合。BAT存储采用方式是两个简单的内存数组，一个数组是头，另一个是尾（列）.对不同长度的类型我们把数组分成两段。一段with concatenated data values and 另一段with offsets into the former.对于小字符串值表来说，组合就实现了值字典了。</p>
-<p>MonetDB在内部实现存储列是使用内存文件映射。它们被优化到特有的情况就是代理的列是一些升序的阿拉伯数字（0，1，2&#8230;);在某些情况下代理列是可以保持模糊的。代理列查询成为一种以快速数组下标读取尾的方式。实际上，这种在虚拟内存使用数组利用MMU快速把硬件地址映射为磁盘地址的机制去给数据库提供O（1）效率的数据库寻找机制。</p>
-<p>从CPU开销的角度看，这种方法优于B-tree  into slotted pages&#8211;这是传统数据库实现记录快速查找的方法。</p>
-<p><strong>运行模型</strong></p>
-<p>MonetDB的内核是一台抽象的机器，用MonetDB的汇编语言，也称为MAL。每一个关系代数运算对应一个MAL指令。每一个BAT代数运算映射一条简单的MAL指令，这具有零的自由度：它不会采用复杂的表达式作为参数。反而，复杂的表达式会被拆分成一系列的BAT代数运算，每一条都对整个列的值执行一个简单的操作（&#8221;bulk processing&#8221;)。这样就容许BAT代数的解析实现中忽略表达式解析引擎的实现。反而所有的BAT代数运算在实现的时候都会映射成一个简单的数组操作。比如，BAT代数表达是</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">R</span><span class="p">:</span><span class="n">bat</span><span class="p">[:</span><span class="n">oid</span><span class="p">,:</span><span class="n">oid</span><span class="p">]</span> <span class="p">:</span><span class="o">=</span> <span class="k">select</span><span class="p">(</span><span class="n">B</span><span class="p">:</span><span class="n">bat</span><span class="p">[:</span><span class="n">oid</span><span class="p">,:</span><span class="nb">int</span><span class="p">],</span> <span class="n">V</span><span class="p">:</span><span class="nb">int</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>在C语言实现会像：</p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span> <span class="n">B</span><span class="p">.</span><span class="n">tail</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">V</span><span class="p">)</span>
-</span><span class='line'>          <span class="n">R</span><span class="p">.</span><span class="n">tail</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>BAT代数运算具有的优势：紧凑的for-loops创造了指令的局部性，从而消除了指令在缓存miss的问题。这样简单的循环经得起编译器优化（循环流水线，阻塞，强度减少）和CPU无序的可能 。
-<p><strong>软件架构</strong></p>
-<p>MonetDB 查询处理的方案分为三个软件层。   顶层是由查询语言解析器和一个启发式，language-and data model-specific 优化器组成。优化器主要是用来减少中间生成的数据和利用catalogue 知识 on join-indices。输出是一个用MAL表达的逻辑计划。</p>
-<p>第二梯队包括一组优化的模块，这些模块组装成优化的管道。这些模块提供优化从符号处理到即时数据分布和执行。MAL程序被转化为更加有效的代码和加入资源管理指令。这种认识到不是所有的决定都可以组合在一起然后得出一个代价公式方法，突破了至今无处不在的基于代价的优化器。操作在普通的二维关系后端代数，这些优化模块共享所有的前端数据模型和查询语言。</p>
-<p>第三梯度是MAL解析器，包含高度优化实现的二维关系代数运算的库。它们维持对象的属性是为了以后的算法能访问得到。举个例子，选择操作可以从sorted-nest of BAT的基础上提高效率。
-<p><strong>SQL 前端</strong></p>
-<p>BAT 存储层次结合MAL代数提供了一个灵活的架构适应广泛的查询语言。关系表的列在前端被分解，BAT 头TID，尾values。对于每一个表，一个BAT被删除的地方被保留。三角的BAT被设计用来延迟更新到主列和允许相对廉价的快照隔离机制(只有三角BATs被赋值）。MonetDB/SQL为join indices 保留另外的BATs和value indices 是动态创建的。</p></p></blockquote>
 ]]></content>
   </entry>
   
