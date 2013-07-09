@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="Traceroute程序是检测经过的路由器
-">
+  <meta name="description" content="Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,7 +105,20 @@
   </header>
 
 
-<div class="entry-content"><blockquote><p><p>Traceroute程序是检测经过的路由器</p></p></blockquote>
+<div class="entry-content"><blockquote><p><p>Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in transmit&#8221;(传输中超时）错误。接着它递增TTL一次发送一个UDP数据报，从而逐步确定下一跳路由器。当某个UDP数据报到达最终目的地时，目标是由这个主机返送一个ICMP“port unreachable(端口不可达）“错误。这个目标通过向一个随机选取的（但愿）未被目的主机使用的端口发送UDP数据报得以实现。</p>
+<!-- more --></p></blockquote>
+
+<figure class='code'><figcaption><span>traceroute  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;netinet/in_systm.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;netinet/ip.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;netinet/ip_icmp.h&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
 
 
