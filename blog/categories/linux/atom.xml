@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-11T00:29:20+08:00</updated>
+  <updated>2013-07-11T00:33:25+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -21,15 +21,15 @@
     <content type="html"><![CDATA[<blockquote><p><p>线程包含了表示进程内执行环境必需的信息，其中包含进程中标识线程的线程ID、一组寄存器、栈、调度优先级和策略、信号屏蔽字、errno变量以及线程私有数据。进程的所有信息对该进程的所有线程都是共享的，包括可执行的程序文本、程序的全局内存和堆内存、栈以及文件描述符。</p>
 <!-- more -->
 <p>进程原语和线程原语的比较:</p>
-<table border="1">
-<tr><th>进程原语       |</th><th>线程原语      |</th><th>描述        </th></tr>
+<p><table border="1">
+<tr><th>进程原语       |</th><th>  线程原语        |</th><th>描述        </th></tr>
 <tr><td>fork       |</td><td>pthread_create    |</td><td>创建新的控制流 </td></tr>
 <tr><td>exit       |</td><td>pthread_exit      |</td><td>从现有的控制流退出   </td></tr>
 <tr><td>waitpid        |</td><td>pthread_join  |</td><td>从控制流中得到退出的状态  </td></tr>
 <tr><td>atexit     |</td><td>pthread_cleanup_push|</td><td>注册在退出控制流时调用的函数  </td></tr>
 <tr><td>getpid     |</td><td>pthread_self      |</td><td>获取控制流的ID  </td></tr>
 <tr><td>abort      |</td><td>pthread_cancel    |</td><td>请求控制流的非正常退出 </td></tr>
-</table>
+</table></p>
 <p>当多个控制进程共享相同的内存时，就需要线程同步机制，以保证它们在访问变量的存储内容时不会访问到无效的数值。线程同步机制：</p>
 <p><strong>1.互斥量</strong>,互斥量从本质上来说是一把锁，在访问共享资源前对互斥量进行加锁，在访问完成后释放互斥量上的锁。</p>
 <div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>互斥量  </span></figcaption>
