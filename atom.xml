@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-10T11:37:16+08:00</updated>
+  <updated>2013-07-11T00:29:20+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,266 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thread]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/10/thread/"/>
+    <updated>2013-07-10T15:53:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/10/thread</id>
+    <content type="html"><![CDATA[<blockquote><p><p>线程包含了表示进程内执行环境必需的信息，其中包含进程中标识线程的线程ID、一组寄存器、栈、调度优先级和策略、信号屏蔽字、errno变量以及线程私有数据。进程的所有信息对该进程的所有线程都是共享的，包括可执行的程序文本、程序的全局内存和堆内存、栈以及文件描述符。</p>
+<!-- more -->
+<p>进程原语和线程原语的比较:</p>
+<table border="1">
+<tr><th>进程原语       |</th><th>线程原语      |</th><th>描述        </th></tr>
+<tr><td>fork       |</td><td>pthread_create    |</td><td>创建新的控制流 </td></tr>
+<tr><td>exit       |</td><td>pthread_exit      |</td><td>从现有的控制流退出   </td></tr>
+<tr><td>waitpid        |</td><td>pthread_join  |</td><td>从控制流中得到退出的状态  </td></tr>
+<tr><td>atexit     |</td><td>pthread_cleanup_push|</td><td>注册在退出控制流时调用的函数  </td></tr>
+<tr><td>getpid     |</td><td>pthread_self      |</td><td>获取控制流的ID  </td></tr>
+<tr><td>abort      |</td><td>pthread_cancel    |</td><td>请求控制流的非正常退出 </td></tr>
+</table>
+<p>当多个控制进程共享相同的内存时，就需要线程同步机制，以保证它们在访问变量的存储内容时不会访问到无效的数值。线程同步机制：</p>
+<p><strong>1.互斥量</strong>,互斥量从本质上来说是一把锁，在访问共享资源前对互斥量进行加锁，在访问完成后释放互斥量上的锁。</p></p></blockquote>
+
+<figure class='code'><figcaption><span>互斥量  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;pthread.h&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_mutex_init</span><span class="p">(</span><span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">mutex</span><span class="p">,</span>
+</span><span class='line'>              <span class="k">const</span> <span class="n">pthread_mutexattr_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">attr</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_mutex_destroy</span><span class="p">(</span><span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="n">mutex</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_mutex_lock</span><span class="p">(</span><span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="n">mutex</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_mutex_trylock</span><span class="p">(</span><span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="n">mutex</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_mutex_unlock</span><span class="p">(</span><span class="n">pthread_mutex_t</span>  <span class="o">*</span><span class="n">mutex</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p><strong>2.读写锁</strong>,当读操作比较频繁时，读写锁可以改善性能。 </p></p></blockquote>
+
+<figure class='code'><figcaption><span>读写锁例子  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;pthread.h&gt;</span>
+</span><span class='line'><span class="k">struct</span> <span class="n">job</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">j_next</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">j_prev</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pthread_t</span>    <span class="n">j_id</span><span class="p">;</span>          <span class="cm">/*告诉哪条线程在操作任务*/</span>
+</span><span class='line'>    <span class="cm">/*...更多的定义在后面*/</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">struct</span> <span class="n">queue</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">q_head</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">q_tail</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pthread_rwlock_t</span> <span class="n">q_lock</span><span class="p">;</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*初始化队列*/</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">queue_init</span><span class="p">(</span><span class="k">struct</span> <span class="n">queue</span> <span class="o">*</span><span class="n">qp</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">err</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span> <span class="o">=</span>  <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">err</span> <span class="o">=</span> <span class="n">pthread_rwlock_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="n">err</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">(</span><span class="n">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="cm">/*...继续初始化*/</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*在队列的前面插入一个任务*/</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">job_insert</span><span class="p">(</span> <span class="k">struct</span> <span class="n">queue</span> <span class="o">*</span><span class="n">qp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">jp</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pthread_rwlock_wrlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_next</span> <span class="o">=</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_prev</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span><span class="o">-&gt;</span><span class="n">j_prev</span> <span class="o">=</span> <span class="n">jp</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span> <span class="o">=</span> <span class="n">jp</span><span class="p">;</span>     <span class="cm">/*队列是空的*/</span>
+</span><span class='line'>    <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">=</span> <span class="n">jp</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pthread_rwlock_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*在队列的尾部添加一个任务*/</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">job_append</span><span class="p">(</span><span class="k">struct</span> <span class="n">queue</span> <span class="o">*</span><span class="n">qp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">jp</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pthread_rwlock_wrlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_next</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_prev</span> <span class="o">=</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span><span class="o">-&gt;</span><span class="n">j_next</span> <span class="o">=</span> <span class="n">jp</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">=</span> <span class="n">jp</span><span class="p">;</span>   <span class="cm">/*队列是空的*/</span>
+</span><span class='line'>    <span class="n">qp</span><span class="o">-&gt;</span><span class="n">tail</span> <span class="o">=</span> <span class="n">jp</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pthread_rwlock_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*在队列中删除一个任务*/</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">job_remove</span><span class="p">(</span><span class="k">struct</span> <span class="n">queue</span> <span class="o">*</span><span class="n">qp</span><span class="p">,</span> <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">jp</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pthead_rwlock_wrlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">jp</span> <span class="o">==</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">=</span> <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_next</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">tail</span> <span class="o">==</span> <span class="n">jp</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="n">jp</span> <span class="o">==</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_tail</span> <span class="o">=</span> <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_prev</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">==</span> <span class="n">jp</span><span class="p">)</span>
+</span><span class='line'>                <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_prev</span><span class="o">-&gt;</span><span class="n">j_next</span> <span class="o">=</span> <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_next</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_next</span><span class="o">-&gt;</span><span class="n">j_prev</span> <span class="o">=</span> <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_prev</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>       <span class="n">pthread_rwlock_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*在队列中根据线程找到任务*/</span>
+</span><span class='line'><span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="nf">job_find</span><span class="p">(</span> <span class="k">struct</span> <span class="n">queue</span> <span class="o">*</span><span class="n">qp</span><span class="p">,</span> <span class="n">pthread_t</span> <span class="n">id</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">job</span> <span class="o">*</span><span class="n">jp</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="n">pthread_rwlock_rdlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span> <span class="n">jp</span> <span class="o">=</span> <span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_head</span><span class="p">;</span> <span class="n">jp</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">jp</span> <span class="o">=</span> <span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_next</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span> <span class="n">pthread_equal</span><span class="p">(</span><span class="n">jp</span><span class="o">-&gt;</span><span class="n">j_id</span><span class="p">,</span> <span class="n">id</span><span class="p">))</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">pthread_rwlock_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">qp</span><span class="o">-&gt;</span><span class="n">q_lock</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">(</span><span class="n">jp</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p><strong>3.条件变量</strong>，条件变量与互斥量一起使用，允许线程以无竞争的方式等待特定的条件发生。</p></p></blockquote>
+
+<figure class='code'><figcaption><span>互斥量  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;pthread.h&gt;</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_cond_init</span><span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">cond</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">pthread_condattr_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">attr</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_cond_destroy</span><span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_cond_wait</span><span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">cond</span><span class="p">,</span> <span class="n">pthread_mutex_t</span> <span class="o">*</span><span class="kr">restrict</span> <span class="n">mutex</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_cond_signal</span><span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">);</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pthread_cond_broadcast</span><span class="p">(</span><span class="n">pthread_cond_t</span> <span class="o">*</span><span class="n">cond</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>线程的基本的同步机制：互斥、读写锁及条件变量,了解如何使用它们保护共享资源。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[New Concept English]]></title>
@@ -10495,240 +10755,6 @@ would you think so
 <p>12.5排查的工具：gdb（调试器），Purify，Valgrind，Insure++,AddressSanitizer</p>
 <p>13.程序中出现：glibc detected * free(): invalid pointer，原来是sip库里函数实现有free，但却无知地传入个数组。应该动态申请内存。</p>
 <p><a href="http://en.wikipedia.org/wiki/Memory_corruption">Reference wiki：memory corruption</a></p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MonetDB's Mmap]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory/"/>
-    <updated>2013-03-29T23:47:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory</id>
-    <content type="html"><![CDATA[<blockquote><p><p>在学计算机组成原理时，了解到为了平衡CPU的高速与内存慢速，在CPU与内存之间增加了L1 cache，L2 cache，以加快CPU对内存数据的访问。但同时了解到进程可以使用一系列相邻的虚拟地址来访问物理内存中不相邻的大内存缓冲区和访问大于可用物理内存地址的缓冲区（可与磁盘之间切换）。虚拟地址通过TLB转化为物理地址，若物理地址属于内存空间，即直接访问，若不在，即需要进行磁盘切换。层级的内存架构图：</p>
-<!-- more -->
-<img src="http://coolbrain.github.com/assets/images/memory.jpg" alt="&quot;memory&quot;" />
-mmap将文件或者其它对象映射到内存。当从内存中读写时，就相当于读写文件中相应的字节。</p></blockquote>
-
-<figure class='code'><figcaption><span>mmap函数声明  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'>   <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">sys</span><span class="o">/</span><span class="n">mman</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;</span>
-</span><span class='line'>   <span class="kt">void</span> <span class="o">*</span><span class="n">mmap</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">addr</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prot</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flag</span><span class="p">,</span><span class="kt">int</span> <span class="n">fileds</span><span class="p">,</span> <span class="kt">off_t</span> <span class="n">off</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>图示说明mmap：
-<img src="http://coolbrain.github.com/assets/images/mmap.png" alt="&quot;mmap&quot;" />
-MonetDB使用mmap实现大内存块的分配和大文件的内存映射,这样有利于数据的快速查找。因为数据不在内存，直接进行磁盘切换（虚拟地址->物理地址）。</p></blockquote>
-
-<figure class='code'><figcaption><span>Linux大内存的分配  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'>  <span class="kt">void</span> <span class="o">*</span><span class="nf">MT_vmalloc</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="n">MMAP_OPEN_DEV_ZERO</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="o">*</span><span class="n">q</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span><span class="mi">1L</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">fd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">size</span> <span class="o">=</span> <span class="n">MT_PAGESIZE</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-</span><span class='line'>  <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">MT_PAGESIZE</span><span class="p">(</span><span class="o">*</span><span class="n">maxsize</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">PROT_NONE</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">MMAP_FLAGS</span><span class="p">(</span><span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_NORESERVE</span><span class="p">),</span> <span class="n">MMAP_FD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span><span class="mi">1L</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">PROT_WRITE</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">MMAP_FLAGS</span><span class="p">(</span><span class="n">MAP_PRIVATE</span><span class="p">),</span> <span class="n">MMAP_FD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">mmap</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">PROT_READ</span> <span class="o">|</span> <span class="n">PROT_WRITE</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">MMAP_FLAGS</span><span class="p">(</span><span class="n">MAP_PRIVATE</span> <span class="o">|</span> <span class="n">MAP_FIXED</span><span class="p">),</span> <span class="n">MMAP_FD</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">MMAP_CLOSE_DEV_ZERO</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">((</span><span class="n">q</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span><span class="mi">1L</span><span class="p">)</span> <span class="o">?</span> <span class="nb">NULL</span> <span class="o">:</span> <span class="n">q</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote></blockquote>
-
-<figure class='code'><figcaption><span>Windows大内存的分配  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'> <span class="kt">void</span> <span class="o">*</span><span class="nf">MT_vmalloc</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">size</span><span class="p">,</span> <span class="kt">size_t</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="kt">void</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">a</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">mode</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">size</span> <span class="o">=</span> <span class="n">MT_PAGESIZE</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">MT_SEGSIZE</span><span class="p">(</span><span class="o">*</span><span class="n">maxsize</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&lt;</span> <span class="mi">1000000</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">mode</span> <span class="o">=</span> <span class="n">MEM_TOP_DOWN</span><span class="p">;</span>    <span class="cm">/* help NT in keeping memory defragmented */</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">MT_mmap_lock</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">maxsize</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="n">VirtualAlloc</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="o">*</span><span class="n">maxsize</span><span class="p">,</span> <span class="n">MEM_RESERVE</span> <span class="o">|</span> <span class="n">mode</span><span class="p">,</span> <span class="n">PAGE_NOACCESS</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="o">*</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">size</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="n">VirtualAlloc</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">MEM_COMMIT</span> <span class="o">|</span> <span class="n">mode</span><span class="p">,</span> <span class="n">PAGE_READWRITE</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">MT_mmap_lock</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">mnstr_printf</span><span class="p">(</span><span class="n">GDKstdout</span><span class="p">,</span> <span class="s">&quot;#VirtualAlloc(&quot;</span> <span class="n">PTRFMT</span> <span class="s">&quot;,&quot;</span> <span class="n">SZFMT</span> <span class="s">&quot;,MEM_COMMIT,PAGE_READWRITE): failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">PTRFMTCAST</span> <span class="n">a</span><span class="p">,</span> <span class="n">size</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>MonetDB直接使用系统的mmap，由它来进行内存与磁盘的交互。而在这基础上，在进行内存分配管理。譬如在MonetDB中有使用sql_allocator建立内存缓冲区，当缓冲区内存不够时，才向系统申请。这样能加快内存申请速度和方便管理。此种方式是使用指针数组的管理内存，而没有使用链表。这与C++STL库的空间分配器类似，对于MonetDB内部数据结构，如list，hashtable，都是使用sql_allocator来管理其申请的内存。</p></blockquote>
-
-<figure class='code'><figcaption><span>sql_allocator结构体  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'>   <span class="k">typedef</span> <span class="k">struct</span> <span class="n">sql_allocator</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kt">size_t</span> <span class="n">size</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">size_t</span> <span class="n">nr</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="o">**</span><span class="n">blks</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">size_t</span> <span class="n">used</span><span class="p">;</span>  <span class="cm">/* memory used in last block */</span>
-</span><span class='line'>  <span class="kt">size_t</span> <span class="n">usedmem</span><span class="p">;</span>   <span class="cm">/* used memory */</span>
-</span><span class='line'><span class="p">}</span> <span class="n">sql_allocator</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>具体的分配分三种情况处理，一：大于sz > SA_BLOCK,直接调用系统的GDKmalloc来分配；二：剩下来的内存不够分配sz > (SA_BLOCK-sa->used) 三：内存足够，只需进行必要的处理。</p></blockquote>
-
-<figure class='code'><figcaption><span>sa_alloc函数  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'> <span class="err">#</span><span class="n">define</span> <span class="n">round16</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span> <span class="p">((</span><span class="n">sz</span><span class="o">+</span><span class="mi">15</span><span class="p">)</span><span class="o">&amp;~</span><span class="mi">15</span><span class="p">)</span>
-</span><span class='line'><span class="kt">char</span> <span class="o">*</span><span class="n">sa_alloc</span><span class="p">(</span> <span class="n">sql_allocator</span> <span class="o">*</span><span class="n">sa</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">sz</span> <span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="kt">char</span> <span class="o">*</span><span class="n">r</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">sz</span> <span class="o">=</span> <span class="n">round16</span><span class="p">(</span><span class="n">sz</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sz</span> <span class="o">&gt;</span> <span class="n">SA_BLOCK</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="kt">char</span> <span class="o">*</span><span class="n">t</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">r</span> <span class="o">=</span> <span class="n">GDKmalloc</span><span class="p">(</span><span class="n">sz</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">&gt;=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">*=</span><span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span> <span class="o">=</span> <span class="n">RENEW_ARRAY</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="n">t</span> <span class="o">=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">++</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sz</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">SA_BLOCK</span><span class="o">-</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">r</span> <span class="o">=</span> <span class="n">GDKmalloc</span><span class="p">(</span><span class="n">SA_BLOCK</span><span class="p">);</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">&gt;=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">*=</span><span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>          <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span> <span class="o">=</span> <span class="n">RENEW_ARRAY</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">,</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span> <span class="o">++</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span> <span class="o">=</span> <span class="n">sz</span><span class="p">;</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">r</span> <span class="o">=</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">blks</span><span class="p">[</span><span class="n">sa</span><span class="o">-&gt;</span><span class="n">nr</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">sa</span><span class="o">-&gt;</span><span class="n">used</span> <span class="o">+=</span> <span class="n">sz</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">sa</span><span class="o">-&gt;</span><span class="n">usedmem</span> <span class="o">+=</span> <span class="n">sz</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
 ]]></content>
   </entry>
   
