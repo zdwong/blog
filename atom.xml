@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-11T00:33:25+08:00</updated>
+  <updated>2013-07-11T11:00:33+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Linux Command]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/11/linux-command/"/>
+    <updated>2013-07-11T00:39:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/11/linux-command</id>
+    <content type="html"><![CDATA[<blockquote><p><p>linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。</p>
+<p>1.解压.tar.xz:        tar Jxvf xxx.tar.xz</p>
+<p>2.解压7z：       7z x filename.7z</p>
+<p>3.统计源代码的行数：
+<p>find . -name &#8217;<em>.c&#8217; -o -name &#8217;</em>.h&#8217; | xargs wc -l</p>
+<p>find . -name &#8217;<em>.c&#8217; -o -name &#8217;</em>.h&#8217; | xargs cat | sed &#8216;/<sup>\s*$/d&#8217;</sup> | wc -l</p>
+<p>cloc ./</p>
+<!-- more -->
+<p>4.grep命令：grep (regular pattern) (input file)</p>
+<p>使用 grep 抓取匹配关键字附近的行, 有时我们会对 grep 匹配关键字附近的行感兴趣（这有点上下文的味道），使用 -A、-B、以及 -C 选项可以满足我们的愿望。</p>
+<p>grep -A <n> &#8216;keyword&#8217; file # 匹配 keyword 的下 n 行</p>
+<p>grep -B <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行</p>
+<p>grep -C <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行及下 n 行</p>
+<p>5.apt-get命令</p>
+<p>apt-cache search ‹name› # find package ‹name› for install by “apt-get”</p>
+<p>apt-cache show ‹name›   # describe package ‹name›</p>
+<p>apt-get install ‹name›  # install a new program. (usually used with sudo in front)</p>
+<p>apt-get remove ‹name›   # remove (un-install) a program.</p>
+<p>apt-get purge ‹name›    # remove a program and its config files.</p>
+<p>dpkg -l # list all installed packages</p>
+<p>6.反向解析域名:host 0.0.0.0</p>
+<p>7.得到本机ip:</p>
+<p>ifconfig | awk &#8216;/inet addr:/ {print $2}&#8217; | awk -F: &#8216;{if ($2 != &#8220;127.0.0.1&#8221;) print $2}&#8217;</p>
+<p>ifconfig | sed -rn &#8216;s/.<em>r:([^ ]+) .</em>/\1/p&#8217;</p>
+<p>8.创建目录：mkdir {1..50}；创建文件：touch {1..50}；</p>
+<p>9.对打开端口进行检查：netstat -an | grep &#8211;color -i -E &#8216;listen|listening&#8217;</p>
+<p>netstat -tlnp</p>
+<p>10.找到超过100M的文件：find . -type f -size +100M</p>
+<p>11.删除文件：rm !(<em>.foo|</em>.bar|*.baz)</p>
+<p>12.快速重命名：mv filename.{old,new} </p>
+<p>13.终止进程：killall -KILL 进程名称 | killall -signal process | kill -SIGKILL processID</p>
+<p>14.成为Ubuntu超级用户：sudo passwd root 新建root用户</p>
+<p>15.寻找文件：find 路径名（path） 参数（根据文件名称-name、类型-type、权限-perm、修改世间-atime） 模式匹配</p>
+<p>16.使某个配置文件立即生效：source /etc/profile</p>
+<p>17.打开或关闭某项服务:service 某项服务（iptables） on|stop</p>
+<p>18.查看系统进程占用资源的工具：top,ps,free,vmstat,iostat,pmap</p>
+<p>19.找到某个进程的ID：ps -aux | grep processname </p>
+<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thread]]></title>
@@ -10707,54 +10753,6 @@ would you think so
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Bugs]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/04/10/bugs/"/>
-    <updated>2013-04-10T21:36:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/04/10/bugs</id>
-    <content type="html"><![CDATA[<blockquote><p><p>写完程序，接下来测试，尽可能地去发现程序中的bugs。我负责一个解析终端协议模块，与同事的业务模块合并在一起。之前，我们就进行过不少的测试，出现最多的的是段错误，SIGSEGV信号，即无效的内存引用。</p>
-<!-- more -->
-<p>1.由于同事改了之前我定义数组的长度，导致程序中的数组越界，同时我也没有进行越界检测，程序被迫退出。</p>
-<p>2.当只声明对象指针，却没有给予分配内存，引用对象指针内容或对其里面内容赋值时，也出现段错误。</p>
-<p>3.由于自己编程习惯不是很好，调用close函数关闭socket文件描述符的时候，我在不同的地方调用了两次释放同样一个描述符，导致内部调用两次free()函数出错</p>
-<p>4.客户端在传送数据时突然关闭，服务端就突然无故退出。后来用gdb调试，才发现SIGPIPE信号，因为在客户端关闭后，服务端还在给客户端在send（）数据，当管道已经破坏。当时解决是：忽略SIGPIPE信号，调用signal(SIGPIPE,SIG_IGN),且检测管道损坏后，不再往管道发送数据。</p>
-<p>5.本来是浮点型，直接乘以1000，转换为长整型，数值失真。后来通过floor函数来解决</p>
-对函数的使用不太熟悉，如recv函数</p></blockquote>
-
-<figure class='code'><figcaption><span>recv函数  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'>    <span class="kt">ssize_t</span> <span class="nf">recv</span><span class="p">(</span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">nbytes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>6.recv的返回值有正数，0，-1，-2，每一种返回都有其含义，整数代表接收到数据的长度，0代表断开连接，-1代表超时，-2代表错误。对于每一种的返回有其相应的处理。因为当时有个线程没有退出，是因为少考虑了一种情况。其实这个函数有更多的返回。</p>
-<p>7.网络上传输的数据不能用strlen函数来得出长度，而应该根据recv函数返回的长度.</p>
-<p>8.使用inet_addr()函数是把IP地址转化为网络序，而不是主机序长整形。自己实现函数转换，熟悉位操作。</p>
-<p>9.strcpy函数是已经对目标字符串加了&#8217;\0&#8217;,与字符相关的函数操作strlen，strcmp，strcpy都会用到&#8217;\0&#8217;判断字符的结束。同时memcpy函数是不加&#8217;\0&#8217;的，这个是通用的数据复制函数。不单单支持char类型。</p>
-<p>10.使用osip库中的API的时候，当出现问题时，要懂得看源码，弄懂它的实现机制。如用两个线程绑定不同的IP的5060端口，在eXosip库是不可以的，因为它的实现里用到一个全局的结构体，后面的会覆盖前面的设置，只有一个IP的5060有效。可能需要两个进程解决，但同时又要解决两个进程的通信问题了。</p>
-<p>11.eXosip_call_ack函数发送的ack总是收不到，用wireshark抓包也抓不到，仔细检查过代码后，还是觉得没问题，后来百度了一下，有人提到是网络不通，后来同事辛辛苦苦弄出来了，原来同事的虚拟机安装了virbird的服务，导致网络不通。具体的原因我现在还没清楚，可能同事也是看源码弄清楚,还是挺欣赏同事从库的源代码找思路解决问题的。</p>
-<p>12.1 这两天我们的程序又出现破坏堆中内存分配的信息数据的信息：</p>
-<p>    glibc detected * free(): invalid pointer: </p>
-<p>    glibc detected * malloc(): memory corruption:</p>
-<p>    glibc detected * double free or corruption (out): 0x005c18a0 <em>**</p>
-<p>    glibc detected * corrupted double-linked list: 0x005ab150 </em></p>
-<p>12.2 如果破坏了自己的其它对象的内存空间，就可能诱发coredump的错误。</p>
-<p>12.3一般出现这些内存问题的原因：</p>
-<p> a.使用未初始化的内存（using uninitialized memory.未初始化的内存的垃圾值可能会导致不可预测的错误）</p>
-<p> b.内存泄漏，分配的内存忘了释放 ；内存重复释放，出现double free；（faulty heap memory management：内存泄漏，释放空指针或释放未分配的内存）</p>
-<p> c.内存越界使用，使用了不该使用的内存（Using beyond allocated memory缓冲溢出，栈保护）</p>
-<p> d.使用了无效的指针 （Using un-owned memory，null指针和悬挂或野指针。如多线程中某一动态分配的对象同时被两个线程使用。一个线程释放了该对象，而另一线程还对该对象进行操作）</p>
-<p> e.空指针，对一个空指针进行操作 </p>
-<p>12.4 排查的原则，首先保证能重现错误。根据错误估计可能的环节，逐步裁剪代码，缩小排查空间检查所有的内存操作函数，检查内存越界的可能性。常用的内存操作函数：</p>
-<p>字符串输出：sprintf snprintf vsprintf vsnprintf </p>
-<p>字符串操作：strcpy strncpy strcat </p>
-<p>内存操作：memcpy memmove memset bcopy</p>
-<p>12.5排查的工具：gdb（调试器），Purify，Valgrind，Insure++,AddressSanitizer</p>
-<p>13.程序中出现：glibc detected * free(): invalid pointer，原来是sip库里函数实现有free，但却无知地传入个数组。应该动态申请内存。</p>
-<p><a href="http://en.wikipedia.org/wiki/Memory_corruption">Reference wiki：memory corruption</a></p></p></blockquote>
 ]]></content>
   </entry>
   
