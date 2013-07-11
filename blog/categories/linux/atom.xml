@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-11T11:00:33+08:00</updated>
+  <updated>2013-07-11T11:08:05+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -21,11 +21,11 @@
     <content type="html"><![CDATA[<blockquote><p><p>linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。</p>
 <p>1.解压.tar.xz:        tar Jxvf xxx.tar.xz</p>
 <p>2.解压7z：       7z x filename.7z</p>
+<!-- more -->
 <p>3.统计源代码的行数：
 <p>find . -name '<em>.c' -o -name '</em>.h' | xargs wc -l</p>
 <p>find . -name '<em>.c' -o -name '</em>.h' | xargs cat | sed '/<sup>\s*$/d'</sup> | wc -l</p>
 <p>cloc ./</p>
-<!-- more -->
 <p>4.grep命令：grep (regular pattern) (input file)</p>
 <p>使用 grep 抓取匹配关键字附近的行, 有时我们会对 grep 匹配关键字附近的行感兴趣（这有点上下文的味道），使用 -A、-B、以及 -C 选项可以满足我们的愿望。</p>
 <p>grep -A <n> 'keyword' file # 匹配 keyword 的下 n 行</p>
