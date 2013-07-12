@@ -1,0 +1,467 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Malloc - ForgeBrain</title>
+  <meta name="author" content="ForgeBrain">
+
+  
+  <meta name="description" content="malloc并不是从一个编译时就确定的固定大小的数组中分配空间，而是在需要的时向操作系统申请空间。因为程序中的某些地方可能不通过malloc调用申请空间（通过其它方式申请空间），因此，malloc管理的空间不一定是连续的。这样空闲存储空间以空闲块链表的方式组织，每个块包含一个长度、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/07/12/malloc/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="ForgeBrain" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-39361176-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:coolbrain.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+    <li><a href="/">
+        <span class="blue_light">
+            ForgeBrain
+        </span>
+       
+           <span class="blue_dark">
+             Hardworking.
+           </span>
+       
+    </a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About me</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Malloc</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-12T01:16:00+08:00" pubdate data-updated="true">Jul 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><blockquote><p><p>malloc并不是从一个编译时就确定的固定大小的数组中分配空间，而是在需要的时向操作系统申请空间。因为程序中的某些地方可能不通过malloc调用申请空间（通过其它方式申请空间），因此，malloc管理的空间不一定是连续的。这样空闲存储空间以空闲块链表的方式组织，每个块包含一个长度、一个指向下一块的指针以及一个指向自身存储空间的指针。</p>
+<!-- more -->
+<p>当有申请请求时，malloc将扫描空闲块链表，直到找到一个足够大的块为止。该算法称为“首次适应”（first fit）；与之相对应的算法是“最佳适应”（best fit），它寻找满足条件的最小块。如果该块恰好与请求的大小相符合，则将它从链表中移走并返回给用户。如果该块太大，则将它分成两部分；大小合适的块返回给用户，剩下的部分留在空闲块链表中。如果找不到一个足够大的块，则向操作系统申请一个大块并加入到空闲块链表中。</p></p></blockquote>
+
+<figure class='code'><figcaption><span>malloc  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">typedef</span> <span class="kt">long</span> <span class="n">Align</span><span class="p">;</span>     <span class="cm">/*按照long类型的边界对齐*/</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">union</span> <span class="n">header</span> <span class="p">{</span>          <span class="cm">/*块的头部*/</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">union</span> <span class="n">header</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span> <span class="cm">/*空闲块链表的下一块*/</span>
+</span><span class='line'>        <span class="kt">unsigned</span> <span class="n">size</span><span class="p">;</span>        <span class="cm">/*本块的大小*/</span>
+</span><span class='line'>        <span class="p">}</span><span class="n">s</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">Align</span> <span class="n">x</span><span class="p">;</span>                    <span class="cm">/*强制块对齐*/</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">typedef</span> <span class="k">union</span> <span class="n">header</span> <span class="n">Header</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="n">Header</span> <span class="n">base</span><span class="p">;</span>       <span class="cm">/*从空链表开始*/</span>
+</span><span class='line'><span class="k">static</span> <span class="n">Header</span> <span class="o">*</span><span class="n">freep</span> <span class="o">=</span> <span class="nb">NULL</span> <span class="cm">/*空闲链表的初始指针*/</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/*malloc函数:通用存储分配函数*/</span>
+</span><span class='line'><span class="kt">void</span> <span class="o">*</span><span class="n">malloc</span><span class="p">(</span> <span class="kt">unsigned</span> <span class="n">nbytes</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Header</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">prevp</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">Header</span> <span class="o">*</span><span class="nf">morecore</span><span class="p">(</span><span class="kt">unsigned</span><span class="p">);</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="n">nunits</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">nunits</span> <span class="o">=</span> <span class="p">(</span><span class="n">nbytes</span> <span class="o">+</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">Header</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Header</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">prevp</span> <span class="o">=</span> <span class="n">freep</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>    <span class="cm">/*没有空闲链表*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">base</span><span class="p">.</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">freep</span> <span class="o">=</span> <span class="n">prevp</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">base</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">base</span><span class="p">.</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="n">prevp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span> <span class="p">;</span> <span class="n">prevp</span><span class="o">=</span><span class="n">p</span><span class="p">,</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">nunits</span><span class="p">)</span>                <span class="cm">/*足够大*/</span>
+</span><span class='line'>                <span class="p">{</span>
+</span><span class='line'>                    <span class="k">if</span><span class="p">(</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">nunits</span><span class="p">)</span>        <span class="cm">/*正好*/</span>
+</span><span class='line'>                        <span class="n">prevp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">else</span>                                    <span class="cm">/*分配末尾部分*/</span>
+</span><span class='line'>                        <span class="p">{</span>
+</span><span class='line'>                            <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">-=</span> <span class="n">nunits</span><span class="p">;</span>
+</span><span class='line'>                            <span class="n">p</span> <span class="o">+=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>                            <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">nunits</span><span class="p">;</span>
+</span><span class='line'>                        <span class="p">}</span>
+</span><span class='line'>                    <span class="n">freep</span> <span class="o">=</span> <span class="n">prevp</span><span class="p">;</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="n">p</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="k">if</span><span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">freep</span><span class="p">)</span>                              <span class="cm">/*闭环的空闲链表*/</span>
+</span><span class='line'>                <span class="k">if</span><span class="p">((</span><span class="n">p</span> <span class="o">=</span> <span class="n">morecore</span><span class="p">(</span><span class="n">nunits</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>                        <span class="cm">/*没有剩余的存储空间*/</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>函数morecore用于向操作系统请求存储空间。在设置完size字段后，morecore函数调用free函数把多余的存储空间插入到空闲区域中。</p></p></blockquote>
+
+<figure class='code'><figcaption><span>morecore  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#define NALLOC 1024</span>
+</span><span class='line'><span class="cm">/*morecore函数:向系统申请更多的存储空间*/</span>
+</span><span class='line'><span class="k">static</span> <span class="n">Header</span> <span class="o">*</span><span class="nf">morecore</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">nu</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">char</span> <span class="o">*</span><span class="n">cp</span><span class="p">,</span> <span class="o">*</span><span class="n">sbrk</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">Header</span> <span class="o">*</span><span class="n">up</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">cp</span> <span class="o">=</span> <span class="n">sbrk</span><span class="p">(</span><span class="n">nu</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="n">Header</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="n">cp</span> <span class="o">==</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>    <span class="cm">/*没有空间*/</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="n">Header</span> <span class="o">*</span><span class="p">)</span><span class="n">cp</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">up</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">nu</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">free</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)(</span><span class="n">up</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">freep</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>free函数从freep指向的地址开始，逐个扫描空闲块链表，寻找可以插入空闲块的地方。该位置可能在两个空闲块之间，也可能在链表的末尾。在任何一种情况下，如果被释放的块与另一空闲块相邻，则将这两个块合并起来。合并两个块的操作很简单，只需要设置指针指向正确的位置，并设置正确的块大小就可以了。</p></p></blockquote>
+
+<figure class='code'><figcaption><span>free  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cm">/*free函数:将块ap放入空闲块链表中*/</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">free</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">ap</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">Header</span> <span class="o">*</span><span class="n">bp</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">bp</span> <span class="o">=</span> <span class="p">(</span><span class="n">Header</span> <span class="o">*</span><span class="p">)</span><span class="n">ap</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>                   <span class="cm">/*指向块头*/</span>
+</span><span class='line'>    <span class="k">for</span> <span class="p">(</span> <span class="n">p</span> <span class="o">=</span> <span class="n">freep</span><span class="p">;</span> <span class="o">!</span><span class="p">(</span><span class="n">bp</span> <span class="o">&gt;</span> <span class="n">p</span> <span class="o">&amp;&amp;</span> <span class="n">bp</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">);</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span> <span class="n">p</span> <span class="o">&gt;=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">bp</span> <span class="o">&gt;</span><span class="n">p</span> <span class="o">||</span> <span class="n">bp</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">))</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>                                <span class="cm">/*被释放的块在链表的开头或末尾*/</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span> <span class="n">bp</span> <span class="o">+</span> <span class="n">bp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">)</span>   <span class="cm">/*与上一相邻块合并*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">bp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">+=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">bp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="n">bp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">bp</span><span class="p">)</span>             <span class="cm">/*与下一相邻块合并*/</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span> <span class="o">+=</span> <span class="n">bp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>            <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">bp</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>        <span class="n">p</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">.</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">bp</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">freep</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>typedef和union的使用解决了地址对齐（假定sbrk返回的是合适的指针)问题</p></p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">ForgeBrain</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-12T01:16:00+08:00" pubdate data-updated="true">Jul 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>Linux</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+</div>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/11/linux-command/" title="Previous Post: Linux Command">&laquo; Linux Command</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p>Forge brain as steal</p>
+  <p>Keep learning and moving</p>
+  <p>Email:juda-zhida@qq.com</p>
+</section>
+
+<section>
+<h1>Tags</h1>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 142.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 154.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a> </span>
+</section>
+
+<section>
+  <h1>Categories</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (7)</a></li>
+<li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
+<li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
+<li class='category'><a href='/blog/categories/psychology/'>psychology (9)</a></li>
+
+  </ul>
+</section><section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/12/malloc/">Malloc</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/11/linux-command/">Linux Command</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/10/thread/">Thread</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/09/new-concept-english/">New Concept English</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/09/literature/">literature</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Neighbour</h1>
+  <ul>
+	<li><a href="http://www.everet.org">EverET |</a><a href="http://coolshell.cn/"> CoolShell</a></li>
+	<li><a href="http://www.kidsang.com">KidSang |</a><a href="http://jiafei.org/"> JiaFei</a></li>
+	<li><a href="http://xuyufish.com">Fish |</a><a href="http://rdc.taobao.com/blog/cs/"> Taobao</a></li>
+  </ul>
+</section>
+<section>
+    <h1>Recent Comments</h1>
+    <script type="text/javascript" src="http://coolbrain.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
+</section>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - ForgeBrain -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'coolbrain';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/07/12/malloc/';
+        var disqus_url = 'http://coolbrain.github.com/blog/2013/07/12/malloc/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
