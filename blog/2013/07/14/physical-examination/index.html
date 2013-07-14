@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Linux Command - ForgeBrain</title>
+  <title>physical examination - ForgeBrain</title>
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。
-1.解压.tar.xz: tar Jxvf xxx.tar.xz
-2.解压7z： 7z x filename.7z 3.统计源代码的行数：
-find . -name &#8217;.c&#8217; -o - &hellip;">
+  <meta name="description" content="找屋篇
+我答应过同学7月12号一起和他找屋租的，可惜到了11号，我就有点退缩了。同学和他老爸一起找了一天了，我想他们俩找得这么辛苦，我却在家，答应过别人又不去，岂不是又吃言，又玩拖延症，到时候又非后悔莫及。所以，就算到了12号的11点，我还是不管三七二十一，决定十三点去深圳。突然的决定， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +19,7 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/07/11/linux-command/">
+  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/07/14/physical-examination/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -85,7 +83,7 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Linux Command</h1>
+      <h1 class="entry-title">Physical Examination</h1>
     
     
       <p class="meta">
@@ -101,51 +99,25 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
   
 
 
-<time datetime="2013-07-11T00:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2013</time>
+<time datetime="2013-07-14T20:20:00+08:00" pubdate data-updated="true">Jul 14<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><blockquote><p><p>linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。</p>
-<p>1.解压.tar.xz:        tar Jxvf xxx.tar.xz</p>
-<p>2.解压7z：       7z x filename.7z</p>
+<div class="entry-content"><blockquote><p><p><strong>找屋篇</strong></p>
+<p>我答应过同学7月12号一起和他找屋租的，可惜到了11号，我就有点退缩了。同学和他老爸一起找了一天了，我想他们俩找得这么辛苦，我却在家，答应过别人又不去，岂不是又吃言，又玩拖延症，到时候又非后悔莫及。所以，就算到了12号的11点，我还是不管三七二十一，决定十三点去深圳。突然的决定，是因为我不想我又玩悔恨。到了深圳，我和他们找的第一个地方就是我们要租的地方，因此12号我们就找好房了。</p>
+<p><strong>入职篇</strong></p>
+<p>我到TP-Link入职，体检和被安排在深圳大学城居住的体会和感悟。来TP-Link入职，用的是学校带来的坏习惯，鸡毛蒜皮的小事都需要别人提醒，假如没人提醒，自己就忘记去做。入职时温馨提示写得清清楚楚，明明白白要上网的同事在荔园3栋1楼登记，可惜自己没有看清楚，走马观花飘过；入职时温馨提示白字黑字写着7月14号11：30-13：30是统一充值饭卡的时间，可惜自己又错过。到头来自己又在悔恨人生，就为这么一点事，那么我的心情有怎么好起来呢？以后一定要仔细看清楚，并用手机日历记下，这样到时手机就会提示自己该做什么，而不是好似盲头苍蝇乱撞，到最后，又不知道缺了什么，或者少了什么。</p>
 <!-- more -->
-<p>3.统计源代码的行数：
-<p>find . -name &#8217;<em>.c&#8217; -o -name &#8217;</em>.h&#8217; | xargs wc -l</p>
-<p>find . -name &#8217;<em>.c&#8217; -o -name &#8217;</em>.h&#8217; | xargs cat | sed &#8216;/<sup>\s*$/d&#8217;</sup> | wc -l</p>
-<p>cloc ./</p>
-<p>4.grep命令：grep (regular pattern) (input file)</p>
-<p>使用 grep 抓取匹配关键字附近的行, 有时我们会对 grep 匹配关键字附近的行感兴趣（这有点上下文的味道），使用 -A、-B、以及 -C 选项可以满足我们的愿望。</p>
-<p>grep -A <n> &#8216;keyword&#8217; file # 匹配 keyword 的下 n 行</p>
-<p>grep -B <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行</p>
-<p>grep -C <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行及下 n 行</p>
-<p>5.apt-get命令</p>
-<p>apt-cache search ‹name› # find package ‹name› for install by “apt-get”</p>
-<p>apt-cache show ‹name›   # describe package ‹name›</p>
-<p>apt-get install ‹name›  # install a new program. (usually used with sudo in front)</p>
-<p>apt-get remove ‹name›   # remove (un-install) a program.</p>
-<p>apt-get purge ‹name›    # remove a program and its config files.</p>
-<p>dpkg -l # list all installed packages</p>
-<p>6.反向解析域名:host 0.0.0.0</p>
-<p>7.得到本机ip:</p>
-<p>ifconfig | awk &#8216;/inet addr:/ {print $2}&#8217; | awk -F: &#8216;{if ($2 != &#8220;127.0.0.1&#8221;) print $2}&#8217;</p>
-<p>ifconfig | sed -rn &#8216;s/.<em>r:([^ ]+) .</em>/\1/p&#8217;</p>
-<p>8.创建目录：mkdir {1..50}；创建文件：touch {1..50}；</p>
-<p>9.对打开端口进行检查：netstat -an | grep &#8211;color -i -E &#8216;listen|listening&#8217;</p>
-<p>netstat -tlnp</p>
-<p>10.找到超过100M的文件：find . -type f -size +100M</p>
-<p>11.删除文件：rm !(<em>.foo|</em>.bar|*.baz)</p>
-<p>12.快速重命名：mv filename.{old,new} </p>
-<p>13.终止进程：killall -KILL 进程名称 | killall -signal process | kill -SIGKILL processID</p>
-<p>14.成为Ubuntu超级用户：sudo passwd root 新建root用户</p>
-<p>15.寻找文件：find 路径名（path） 参数（根据文件名称-name、类型-type、权限-perm、修改世间-atime） 模式匹配</p>
-<p>16.使某个配置文件立即生效：source /etc/profile</p>
-<p>17.打开或关闭某项服务:service 某项服务（iptables） on|stop</p>
-<p>18.查看系统进程占用资源的工具：top,ps,free,vmstat,iostat,pmap</p>
-<p>19.找到某个进程的ID：ps -aux | grep processname </p>
-<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p></p></blockquote>
+<p><strong>体检篇</strong></p>
+<p>我知道身体存在问题，腹部膨胀，在高中的时候，我曾经想过高考完就去做一次彻底的体检，去查出自己的问题所在。可惜，我又把这样重要的事情放下，因为我没有积极去面对问题和解决问题。在大学的体检也没有相应项目的检查，到现在入职体检，有个肝胆B超，照出我有胆结石，那之前的口苦，腹部膨胀，血压在正常的高值也有了进一步的解释了。到现在我也清楚地意识到我的问题不止这些，还有面瘫、耳鸣、脚痛，骨盘偏左，但是我都没有真真正正采取行动去治好它们，或者从饮食行为上，学习、娱乐作息上去杜绝它们进一步恶化。反而之前还浑浑噩噩地去看电视，现在我又是悔恨过去的行为，因为再没有颓废，不积极的理由，后面就是绝路，随便一个恶化，都可以把我干掉了，并且我都没有做好准备。</p>
+<p><strong>计划篇&lt;</strong>/p>
+<p>基于上面体检的问题，在TP-Link工作时，采取的策略就是在某一方面专研下去，上班的时候，做好自己的本职工作，积极应对。下班的时候，安排相应的时间学习。<strong>最重要的是，不管有多忙都要有一个或半个小时的锻炼，跑步或打羽毛球。不管别人怎么看自己，自己都要保持心情愉悦，宽畅。</strong></p>
+<p><strong>深圳大学城游览篇</strong></p>
+<p>我是住在哈工大的宿舍，体检完，没事情，我就独自一个人去游览了深圳大学城。深圳大学城是由清华、北大、哈工大研究院所组成，中间是深圳科技图书馆。在这里不是研究生、硕士，就是博士或者教授。虽然这里是和广州大学城新建的校区一样，但我感觉这里更像大学，更有大学的气息，也可能这里的学校都差不多是全国最好的大学。走到一个北大的教室，刚好是北京大学汇丰商学院2013年优秀大学生经济金融论坛，说白了，就相当于是夏令营，他们一个轮着一个到讲堂上做presentation，全程英文，如同论文答辩的形式，下面的评判都是海归回来的博士或者是教授，在用英文提问做presention的同学。他们的英文非常的漂亮，并且是用英文阐释经济学的内容，我连一大半的英文都没听懂。当时，我觉得我太缺少这样锻炼的机会，在大学里，我应该抓紧这样的机会，而不是每次都让它溜走。他们才读大四，就已经比我厉害这么多，而我自己却是半桶水，根本就用不上场。</p>
+<p>深圳科技图书馆是一个现代化，人性化的图书馆，广州新图书馆在它面前显得逊色。它不但配备完善，读书写字上网查阅资料样样都行，并且书籍琳琅满目。真不愧是给清华、北大和哈工大研究生的图书馆，并且是这三间学校公用的图书馆。有人说，图书馆是大学的心脏。从这样一个图书馆，就可以看出其大学的水平究竟是怎么样的。</p></p></blockquote>
 </div>
 
 
@@ -168,12 +140,12 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
   
 
 
-<time datetime="2013-07-11T00:39:00+08:00" pubdate data-updated="true">Jul 11<span>th</span>, 2013</time>
+<time datetime="2013-07-14T20:20:00+08:00" pubdate data-updated="true">Jul 14<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>
+    <a class='category' href='/blog/categories/psychology/'>psychology</a>
   
 </span>
 
@@ -189,10 +161,8 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/07/10/thread/" title="Previous Post: Thread">&laquo; Thread</a>
+        <a class="basic-alignment left" href="/blog/2013/07/12/malloc/" title="Previous Post: Malloc">&laquo; Malloc</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/07/12/malloc/" title="Next Post: Malloc">Malloc &raquo;</a>
       
     </p>
   </footer>
@@ -287,8 +257,8 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/07/11/linux-command/';
-        var disqus_url = 'http://coolbrain.github.com/blog/2013/07/11/linux-command/';
+        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/07/14/physical-examination/';
+        var disqus_url = 'http://coolbrain.github.com/blog/2013/07/14/physical-examination/';
         var disqus_script = 'embed.js';
       
     (function () {
