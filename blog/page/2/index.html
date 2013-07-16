@@ -9,8 +9,9 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="大学看的电影比较多，不过能在脑海中留下印记的只有那些能够触动心灵的经典，所以对于其它一般的电影，又何必浪费时间去看？因为其一文不值、一无是处。
-《毕业生》展示了一个大学生毕业后的迷惘，在受到性的诱惑下，居然和你一个有夫之妇搞上关系。而后来这个毕业生追求其女儿，但东窗事发，此家庭坚决拒绝他。 &hellip;">
+  <meta name="description" content="进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。
+I/O复用典型应用在下列的网络场合：
+1.当客户处理多个描述符（ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +81,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/07/i-slash-o-multiplexing/">I/O Multiplexing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-07T22:57:00+08:00" pubdate data-updated="true">Jul 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。</p>
+<p>I/O复用典型应用在下列的网络场合：</p>
+<p>1.当客户处理多个描述符（通常是交互式输入和网络套接字）时，必须使用I/O 复用。</p>
+<p>2.如果一个TCP服务器既要处理监听套接字，又要处理已连接套接字，一般就要使用I/O复用。</p>
+<p>3.如果一个服务器既要处理TCP，又要处理UDP，一般使用I/O复用。</p>
+<p>4.如果服务器要处理多个服务或者多个协议（inetd守护进程），一般使用I/O复用。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/07/i-slash-o-multiplexing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -445,46 +491,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/26/memo-based-query-execution/">Memo-based Query Execution</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-26T22:57:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/26/memo-based-query-execution/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -506,7 +512,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 135.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 150.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.0%'>Sql</a> </span>
 </section>
 
 <section>
@@ -516,12 +522,16 @@
 <li class='category'><a href='/blog/categories/linux/'>Linux (7)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
-<li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
+<li class='category'><a href='/blog/categories/psychology/'>psychology (12)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/16/second-day/">Second Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/15/induction-ceremony/">Induction Ceremony</a>
@@ -537,10 +547,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/11/linux-command/">Linux Command</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/10/thread/">Thread</a>
       </li>
     
   </ul>
