@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。
+  <meta name="description" content="MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。
 ">
   
 
@@ -80,6 +80,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/monetdb-vs-postgresql/">MonetDB vs PostgreSQL</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T19:43:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/28/monetdb-vs-postgresql/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -444,47 +484,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-architecture-overview/">MonetDB Architecture Overview</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-22T20:04:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p><strong>总体概览</strong></p>
-<p>MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。设计的目的反应在架构的各个层次和提供给用户的功能。尽管MonetDB/SQL提供了完善的SQL接口，但是在大容量，且需要保存不同层次的ACID属性的事务处理能力有点欠缺。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/22/monetdb-architecture-overview/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -506,7 +505,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 142.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 154.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 118.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 142.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 154.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 124.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -517,12 +516,16 @@
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (9)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>tp-link (3)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>tp-link (4)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/17/third-day/">Third Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/16/second-day/">Second Day</a>
@@ -538,10 +541,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/12/malloc/">Malloc</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/11/linux-command/">Linux Command</a>
       </li>
     
   </ul>

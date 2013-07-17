@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-17T00:05:46+08:00</updated>
+  <updated>2013-07-18T00:10:14+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Third Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/17/third-day/"/>
+    <updated>2013-07-17T23:51:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/17/third-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天是我在TP-Link的第三天，只有上午两个小时是用来上公共课，关于入职须知的。其余时间都是自由支配，重点是读《深入理解计算机》这本书，读完后，还要写读后感。可惜，我这种人最喜欢囫囵吞枣的，看完后，都不知道自己懂不懂，扮得很认真，就是不肯动手，不动手，又怎么会懂呢？敷衍自己，麻痹自己，以为自己很认真，学到很多所谓的知识，想做阿Q 也不至于如此吧！</p>
+<!-- more -->
+<p>对于《TCP/IP详解I》，我就有实践去明白理论，因为这么好实践的书籍，居然不实践的理解，简直暴殄天物。其中大概明白了ARP的工作流程，IMGP协议是用来支持多播，FTP，SMTP，tcpdump,复习了TCP协议。</p>
+<p>今晚继续看《量子物理史话》，普朗克的黑体辐射，爱恩斯坦的光电效应，卢瑟福的原子核模型，波尔的波尔模型。</p>
+<p>明天一定要好好实践，不懂就问，但在问之前，自己要有思路。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Second Day]]></title>
@@ -3715,27 +3728,6 @@ Christ the Redeemer, Brazil
 <p>r∩s:  1. 对Hri建立内存散列索引  2.对Hsi的每个元组，检查散列索引，仅当它出现在散列索引中时将元组写到结果中。</p>
 <p>r-s:  1. 对Hri建立内存散列索引  2.对Hsi的每个元组，检查散列索引，若它出现在散列索引中则将之从散列索引中删除。 3. 把散列索引中剩余的元组加入结果中 </p>
 <p><strong>5.聚集运算:</strong>（min，max，count,avg,group by） 如去除重复，可以用排序和散列的方法。  </p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[MonetDB VS PostgreSQL]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/04/28/monetdb-vs-postgresql/"/>
-    <updated>2013-04-28T19:43:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/04/28/monetdb-vs-postgresql</id>
-    <content type="html"><![CDATA[<blockquote><p><p>MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。</p>
-<!-- more -->
-<p><strong>PostgreSQL的进程结构：</strong></p>
-<p>PostgreSQL系统的主要功能都集中于Postgres程序，其入口是Main模块中的main函数，在初始化数据集簇，启动数据库服务器时，都将从这里开始。Main模块主要的工作是确定当前的操作系统平台，并据此做一些平台相关的环境变量设置和初始化。然后通过对命令行参数的判断，将控制转到相应的模块中去。图是PostgreSQL系统主函数main的流程.</p>
-<img src="http://coolbrain.github.com/assets/images/PostgresqlProcess.jpg" alt="&quot;postgresqlProcess&quot;" />
-<p>PostgreSQL使用一种专用服务器进程体系结构，其中，最主要的两个进程就是守护进程Postmaster和服务进程Postgres。从本质上来说，Postmaster和Postgres都是通过装入Postgres程序而形成的进程，只是在运行时所处的分支不同而已。守护进程Postmaster负责整个系统的启动和关闭。它监听并接受客户端的连接请求，为其分配服务进程Postgres.服务进程Postgres接受并执行客户端发送的命令。它在底层模块（如存储，事务管理，索引等）之上调用各个主要的功能模块（如编译器，优化器，执行器等）(如下图所示），完成客户端的各种数据库操作，并返回执行结果。</p>
-<img src="http://coolbrain.github.com/assets/images/postgresql.jpg" alt="&quot;postgresql&quot;" />
-<p>PostgreSQL守护进程Postmaster（单用户模式的Postgres进程）除为用户连接请求分配后台Postgres服务进程外，还将启动相关的后台辅助进程。守护进程Postmaster在完成基本环境初始化，创建接受用户请求的监听端口后，顺序启动如下系统辅助进程：SysLogger（系统日志进程）、PsStat（统计数据收集进程）、AutoVacuum（系统自动清理进程）。在守护进程Postmaster进入到循环监听中启动如下进程：BgWriter（后台写进程）、WalWriter（预写式日志写进程），PgArch（预写式日志归档进程）。</p>
-<p><strong>守护进程PostMaster：</strong></p>
-<p>Postmaster就像一个处理客户端请求的调度中心。当客户端程序需要对数据库进行操作时，首先会发出一个起始消息给Postmaster进行请求。Postmaster将根据这个起始消息中的信息对客户端进行验证，如果身份验证通过，Postmaster就为该客户端新建一个服务进程Postgres。随后Postmaster将与客户端的交互工作转交给Postgres服务进程，由Postgres来完成客户端所需要的数据库操作。</p>
-<p>PostgreSQL请求&#8211;响应模型</p>
-<img src="http://coolbrain.github.com/assets/images/postmaster.jpg" alt="&quot;postmaster&quot;" />
-<p>Postmaster也负责管理整个系统范围的操作，例如中断等操作，Postmaster本身不进行这些操作，它只是指派一个子进程在适当的时间去处理它们。同时它要在数据库崩溃的时候重启系统。Postmaster进程在起始时会建立共享内存和信号库，<strong>Postmaster及其子进程的通信就通过共享内存和信号</strong>来实现。这种多进程设计使得整个系统的稳定性更好，即使某个后台进程崩溃也不会影响系统中其他进程的工作，Postmaster只需要重置共享内存即可从单个后台进程的崩溃中恢复。</p></p></blockquote>
 ]]></content>
   </entry>
   

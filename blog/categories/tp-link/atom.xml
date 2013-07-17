@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-17T00:05:46+08:00</updated>
+  <updated>2013-07-18T00:10:14+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Third Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/17/third-day/"/>
+    <updated>2013-07-17T23:51:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/17/third-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天是我在TP-Link的第三天，只有上午两个小时是用来上公共课，关于入职须知的。其余时间都是自由支配，重点是读《深入理解计算机》这本书，读完后，还要写读后感。可惜，我这种人最喜欢囫囵吞枣的，看完后，都不知道自己懂不懂，扮得很认真，就是不肯动手，不动手，又怎么会懂呢？敷衍自己，麻痹自己，以为自己很认真，学到很多所谓的知识，想做阿Q 也不至于如此吧！</p>
+<!-- more -->
+<p>对于《TCP/IP详解I》，我就有实践去明白理论，因为这么好实践的书籍，居然不实践的理解，简直暴殄天物。其中大概明白了ARP的工作流程，IMGP协议是用来支持多播，FTP，SMTP，tcpdump,复习了TCP协议。</p>
+<p>今晚继续看《量子物理史话》，普朗克的黑体辐射，爱恩斯坦的光电效应，卢瑟福的原子核模型，波尔的波尔模型。</p>
+<p>明天一定要好好实践，不懂就问，但在问之前，自己要有思路。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Second Day]]></title>
