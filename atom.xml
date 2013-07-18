@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-18T00:10:14+08:00</updated>
+  <updated>2013-07-19T00:02:02+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fourth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/18/fourth-day/"/>
+    <updated>2013-07-18T23:38:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/18/fourth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天是我来tp-link的第四天，培训内容是公司的计算机安全与管理制度。之后的自由支配时间都在看《深入了解计算机系统》的第三章：程序的机器级的表示，主要是汇编与C语言的转换，包括访问信息（内存或寄存器），算术和逻辑操作，控制和过程等。发现后面的习题很经典，相识恨晚，一定要实践的，不然就会悔恨了。不过下午到四点的时候就已经好似没有精神看下去了，中午休息不太好，一定要睡个好觉。于是浏览了公司相关的研发，行政等文件，发现公司好有规章制度和条理，在这么纯洁的公司做事，真是荣幸之至。</p>
+<!-- more -->
+<p>晚上继续看了《量子物理史话》，到对波尔模型的进一步解释，但一直解决不了与经典磁场直接的矛盾，光是波还是微粒的问题一直纠结下去，弄得科学家们焦头烂额。波尔都在苦思冥想，海森堡隆重登场了。面对光怪陆离的现象，海森堡又如何独辟蹊径，问鼎量子学呢？将在这一章节继续演绎。正所谓滚滚长江东逝水，浪花淘尽英雄。</p>
+<p>书看累了，就去操场跑步，大概跑了十几圈，就一直幻想参加马拉松，我的坏习惯又来了。我跑步是为了强身健体，不是为了展示自己，也不知天高地厚，也学起了沽名钓誉。</p>\
+<p>回来就想冲个热水澡，就继续看《深入理解计算机系统》，可惜，接到一个同学电话，就和他聊了半个钟头，那看书就成为泡影了。聊天是必要的，别忘了正经事。就好似今日评论了同学的一条微博一样，搞到心神不定，最后以大话连篇，无厘头收场。也不知道是否同学相不相信我的话，其实是假话。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Third Day]]></title>
@@ -3704,30 +3717,6 @@ Christ the Redeemer, Brazil
 <p>人生有几多个十年？最紧要要过得痛快。其实很多的话都是meaningless，不会produce any effect，但好像我这样的人，就当作宝了。一个人不meditate，reflect，其实就不算人了，与动物无异。在历史面前，谦卑，景仰和沉思。</p>
 <p>希望听起这首背景曲调时，会想起某些事，某些人，谁有能理解谁呢？时代已变，以前想都不敢想的观念，现在已经深入人心，但这个时代也有这时代的局限，让人觉得透不过起来，是啊，假如人不能适应现时代，那就&#8211;闷闷不乐，郁郁寡欢。<a href="http://dabaoku.com/dabaoku/uploads/soft/yinxiao/beijing/166.mp3">金枝欲攀叹调.</a></p>
 <p><a href="http://www.nbcnews.com/id/6981409/ns/travel-travel_photos/">Reference Source:traval_photos</a></p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[SQL Proccessing]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/04/28/sql-proccessing/"/>
-    <updated>2013-04-28T23:45:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/04/28/sql-proccessing</id>
-    <content type="html"><![CDATA[<blockquote><p><p>查询处理步骤：1.语法分析与翻译 2.优化  3.执行 如图：</p>
-<p>用于执行一个查询的原语的操作序列称为<strong>查询执行计划</strong>（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划，。执行该计划并把结果返回给查询。</p>
-<!-- more -->
-<img src="http://coolbrain.github.com/assets/images/sqlprocess.jpg" alt="&quot;sqlprocess&quot;" />
-<p><strong>SQL运算处理的实现方法：</strong></p>
-<p><strong>1.选择运算</strong>（select operation）：<p>
-<p>A1（线性搜索） A2（二分搜索） A3（主索引，码属性等值比较） </p>
-<p><strong>2.连接运算</strong>(join operation):</p>
-<p>1.嵌套循环连接 2.块嵌套循环连接（若连接的结果大小几乎与两个关系的笛卡尔积相当） 3.<strong>索引嵌套循环连接</strong>（若存在索引） 4.<strong>归并连接</strong>（若关系已排序，则归并连接比较可取） 5.<strong>散列连接</strong>（把关系划分多个部分，是每个部分都能被内存所容纳。划分过程是通过连接属性的散列函数来进行，这样，相应的划分对可以独立地进行连接）如图：</p>
-<img src="http://coolbrain.github.com/assets/images/hashjoin.jpg" alt="&quot;hashjoin&quot;" />
-<p><strong>3.去除重复：</strong>1.归并排序完，将相邻相同的去除，只保留一个 2.建立内存散列索引，只有不在索引的元组才插入；否则，元组被抛弃。</p>
-<p><strong>4.集合运算：</strong>(union，intersection，except）</p>
-<p>r∪s: 1. 对Hri建立内存散列索引  2.把Hsi中的元组加入散列索引中，条件是该元组不再散列索引中 3.把散列索引中的元组加入结果中</p>
-<p>r∩s:  1. 对Hri建立内存散列索引  2.对Hsi的每个元组，检查散列索引，仅当它出现在散列索引中时将元组写到结果中。</p>
-<p>r-s:  1. 对Hri建立内存散列索引  2.对Hsi的每个元组，检查散列索引，若它出现在散列索引中则将之从散列索引中删除。 3. 把散列索引中剩余的元组加入结果中 </p>
-<p><strong>5.聚集运算:</strong>（min，max，count,avg,group by） 如去除重复，可以用排序和散列的方法。  </p></p></blockquote>
 ]]></content>
   </entry>
   
