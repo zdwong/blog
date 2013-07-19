@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-19T00:02:02+08:00</updated>
+  <updated>2013-07-20T00:09:08+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,6 +14,19 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Firth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/19/firth-day/"/>
+    <updated>2013-07-19T23:45:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/19/firth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天是到tp-link的第五天，听了两个讲座，一个是关于tp-link的研发文化，另外一个是关于如何成为一名合格的研发工程师。说的清楚的，知其然,也要知其所以然。不要说“大概”，“似乎”这样的字眼。要有敬业精神，天下之事始于易，从懂得的下手，把难的事情做对，将易的事情做好。tp-link的研发氛围是不错的，只要肯攀登，肯定有自己表现的舞台。如果不是，那就是得过且过，终究在悔恨中消失。</p>
+<!-- more -->
+<p><strong>我都不知道自己哪一天会突然离开，但活在世上，要对得起自己，对得起父母，对得起周围关心自己的人，自己就算离开，也都问心无愧。而不要总是担心明天不确定的事情，担心自己没有完成心愿就离开，要积极，乐观，我不敢说山重水复疑无路，柳暗花明又一村，但只要每一天都过得充实，过得快乐。每一天都看作是自己生命中最后的一天，那么今天就会去做些什么，当自己离开时，自己还会不会带着遗憾离开。</strong></p>
+<p>今天主要看了《深入理解计算机系统》的第三章：程序机器级的表示。主要说的汇编语言，通过阅读和分析汇编语言，从而写出更为高效的C代码。switch语句应用的是跳转表的机制实现，比if-else语句执行要搞笑。union联合可以节省空间的使用，或者对struct结构体的字段的重新调整也可以减少空间的使用。最为紧要的是理解栈帧结构，在函数调用的栈进行的操作和递归函数的机制，了解到栈溢出，从而导致程序崩溃，找不到返回地址，或者跳转到去执行病毒的地址。</p>
+<p>从做书的练习可以看得出，我半桶水，有很多的知识都没有掌握，真不愧是大学连一本完整的书都没有读完出来的人。那么工作了，是否应该将这本书读透呢？是否好应该知耻而后勇呢？是否好应该知道时间不留人，自己的时间不多呢？</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Fourth Day]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/18/fourth-day/"/>
     <updated>2013-07-18T23:38:00+08:00</updated>
@@ -21,7 +34,7 @@
     <content type="html"><![CDATA[<blockquote><p><p>今天是我来tp-link的第四天，培训内容是公司的计算机安全与管理制度。之后的自由支配时间都在看《深入了解计算机系统》的第三章：程序的机器级的表示，主要是汇编与C语言的转换，包括访问信息（内存或寄存器），算术和逻辑操作，控制和过程等。发现后面的习题很经典，相识恨晚，一定要实践的，不然就会悔恨了。不过下午到四点的时候就已经好似没有精神看下去了，中午休息不太好，一定要睡个好觉。于是浏览了公司相关的研发，行政等文件，发现公司好有规章制度和条理，在这么纯洁的公司做事，真是荣幸之至。</p>
 <!-- more -->
 <p>晚上继续看了《量子物理史话》，到对波尔模型的进一步解释，但一直解决不了与经典磁场直接的矛盾，光是波还是微粒的问题一直纠结下去，弄得科学家们焦头烂额。波尔都在苦思冥想，海森堡隆重登场了。面对光怪陆离的现象，海森堡又如何独辟蹊径，问鼎量子学呢？将在这一章节继续演绎。正所谓滚滚长江东逝水，浪花淘尽英雄。</p>
-<p>书看累了，就去操场跑步，大概跑了十几圈，就一直幻想参加马拉松，我的坏习惯又来了。我跑步是为了强身健体，不是为了展示自己，也不知天高地厚，也学起了沽名钓誉。</p>\
+<p>书看累了，就去操场跑步，大概跑了十几圈，就一直幻想参加马拉松，我的坏习惯又来了。我跑步是为了强身健体，不是为了展示自己，也不知天高地厚，也学起了沽名钓誉。</p>
 <p>回来就想冲个热水澡，就继续看《深入理解计算机系统》，可惜，接到一个同学电话，就和他聊了半个钟头，那看书就成为泡影了。聊天是必要的，别忘了正经事。就好似今日评论了同学的一条微博一样，搞到心神不定，最后以大话连篇，无厘头收场。也不知道是否同学相不相信我的话，其实是假话。</p></p></blockquote>
 ]]></content>
   </entry>
@@ -52,7 +65,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Induction Ceremony]]></title>
+    <title type="html"><![CDATA[First Day]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/15/induction-ceremony/"/>
     <updated>2013-07-15T23:43:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/15/induction-ceremony</id>
@@ -3676,47 +3689,6 @@
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Places of Historical Interest]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest/"/>
-    <updated>2013-05-06T20:14:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest</id>
-    <content type="html"><![CDATA[<blockquote><p><p>If I have a dream, I should keep and protect it. Don&#8217;t let myself down. The outside world is beatiful, wonderful and unbelievable. Could I always keep hope in my heart? It&#8217;s easy to give up, to walk away; but it&#8217;s hard to stay, live and make things better. Don&#8217;t think about myself. Think about my parents, the people around me. Am I worthy? </p>
-<!-- more -->
-<p>2013.6月我去深圳的世界之窗，发现原来里面全是世界名胜古迹的赝品，在这里已经流连忘返、乐在其中，更何况是真正的名胜古迹。要知道自己的世界是由自己决定，是否成为井底之蛙，或者&#8221;会当凌绝顶，一览众山小&#8221;,就看自己的选择。只是仰慕、瞻仰是不够的，要有切实的行动。不单单是这样的事情，更多的事情也有现在的状态去决定。</p>
-<p>I want to show some photos to inspire myself. Many great places are waiting me to see.</p>
-U.S Congress, the symbol of American democracy
-<img src="http://coolbrain.github.com/assets/images/place/U.S_Congress.jpg"  alt="U.S_Congress"/>
-Washington Monument
-<img src="http://coolbrain.github.com/assets/images/place/Washington_Monument.jpg"  alt="Washington_Monument"/>
-Lincoln Memorial. Lincoln is the most respectable president in America. History witnesses this great man. One hundred year later, Martin Luther King gave a great speech 《 I have a dream 》 at this place, 28 August 1963.
-<img src="http://coolbrain.github.com/assets/images/place/Lincoln_Memorial.jpg"  alt="Lincoln_Memorial"/>
-Golden Gate Brige
-<img src="http://coolbrain.github.com/assets/images/place/Golden_Gate_Bridge.jpg"  alt="Golden_Gate_Bridge"/>
-Canyonlands Utah. Natural scenary
-<img src="http://coolbrain.github.com/assets/images/place/Canyonlands.jpg"  alt="Canyonlands"/>
-Maine Coast
-<img src="http://coolbrain.github.com/assets/images/place/Maine_coast.jpg"  alt="Maine_coast"/>
-River Thames, London
-<img src="http://coolbrain.github.com/assets/images/place/River_Thames.jpg"  alt="River_Thames"/>
-Millennium Bridge
-<img src="http://coolbrain.github.com/assets/images/place/Millennium_Bridge.jpg"  alt="Millennium_Bridge"/>
-Buckingham Palace
-<img src="http://coolbrain.github.com/assets/images/place/Buckingham_Palace.jpg"  alt="Buckingham_Palace"/>
-Standing gaurd, Ancient Egypt
-<img src="http://coolbrain.github.com/assets/images/place/Standing_gaurd.jpg"  alt="Standing_gaurd"/>
-Temple of Horus
-<img src="http://coolbrain.github.com/assets/images/place/Temple_of_Horus.jpg"  alt="Temple_of_Horus"/>
-Architectural marvel
-<img src="http://coolbrain.github.com/assets/images/place/Architectural_marvel.jpg"  alt="Architectural_marvel"/>
-Christ the Redeemer, Brazil
-<img src="http://coolbrain.github.com/assets/images/place/Christ_the_Redeemer.jpg"  alt="Christ_the_Redeemer"/>
-<p>人生有几多个十年？最紧要要过得痛快。其实很多的话都是meaningless，不会produce any effect，但好像我这样的人，就当作宝了。一个人不meditate，reflect，其实就不算人了，与动物无异。在历史面前，谦卑，景仰和沉思。</p>
-<p>希望听起这首背景曲调时，会想起某些事，某些人，谁有能理解谁呢？时代已变，以前想都不敢想的观念，现在已经深入人心，但这个时代也有这时代的局限，让人觉得透不过起来，是啊，假如人不能适应现时代，那就&#8211;闷闷不乐，郁郁寡欢。<a href="http://dabaoku.com/dabaoku/uploads/soft/yinxiao/beijing/166.mp3">金枝欲攀叹调.</a></p>
-<p><a href="http://www.nbcnews.com/id/6981409/ns/travel-travel_photos/">Reference Source:traval_photos</a></p></p></blockquote>
 ]]></content>
   </entry>
   
