@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Places of Historical Interest - ForgeBrain</title>
+  <title>Processor Architecture - ForgeBrain</title>
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="If I have a dream, I should keep and protect it. Don&#8217;t let myself down. The outside world is beatiful, wonderful and unbelievable. Could I &hellip;">
+  <meta name="description" content="今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest/">
+  <link rel="canonical" href="http://coolbrain.github.com/blog/2013/07/21/processor-architecture/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,7 +82,7 @@
   
   <header>
     
-      <h1 class="entry-title">Places of Historical Interest</h1>
+      <h1 class="entry-title">Processor Architecture</h1>
     
     
       <p class="meta">
@@ -98,46 +98,17 @@
   
 
 
-<time datetime="2013-05-06T20:14:00+08:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+<time datetime="2013-07-21T23:53:00+08:00" pubdate data-updated="true">Jul 21<span>st</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><blockquote><p><p>If I have a dream, I should keep and protect it. Don&#8217;t let myself down. The outside world is beatiful, wonderful and unbelievable. Could I always keep hope in my heart? It&#8217;s easy to give up, to walk away; but it&#8217;s hard to stay, live and make things better. Don&#8217;t think about myself. Think about my parents, the people around me. Am I worthy? </p>
+<div class="entry-content"><blockquote><p><p>今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。之后讲到SEQ硬件结构、时序和实现。最后讲到的SEQ流水线的实现和对流水线固有问题的解决。如用暂停和转发来避免数据冒险。还说到流水线控制逻辑：1.处理ret；2.加载/使用冒险；3.预测错误的分支；4.异常。同时指出Y86处理器未完成的实现：1.多周期指令；2.与存储系统的接口。</p>
 <!-- more -->
-<p>2013.6月我去深圳的世界之窗，发现原来里面全是世界名胜古迹的赝品，在这里已经流连忘返、乐在其中，更何况是真正的名胜古迹。要知道自己的世界是由自己决定，是否成为井底之蛙，或者&#8221;会当凌绝顶，一览众山小&#8221;,就看自己的选择。只是仰慕、瞻仰是不够的，要有切实的行动。不单单是这样的事情，更多的事情也有现在的状态去决定。</p>
-<p>I want to show some photos to inspire myself. Many great places are waiting me to see.</p>
-U.S Congress, the symbol of American democracy
-<img src="/assets/images/place/U.S_Congress.jpg"  alt="U.S_Congress"/>
-Washington Monument
-<img src="/assets/images/place/Washington_Monument.jpg"  alt="Washington_Monument"/>
-Lincoln Memorial. Lincoln is the most respectable president in America. History witnesses this great man. One hundred year later, Martin Luther King gave a great speech 《 I have a dream 》 at this place, 28 August 1963.
-<img src="/assets/images/place/Lincoln_Memorial.jpg"  alt="Lincoln_Memorial"/>
-Golden Gate Brige
-<img src="/assets/images/place/Golden_Gate_Bridge.jpg"  alt="Golden_Gate_Bridge"/>
-Canyonlands Utah. Natural scenary
-<img src="/assets/images/place/Canyonlands.jpg"  alt="Canyonlands"/>
-Maine Coast
-<img src="/assets/images/place/Maine_coast.jpg"  alt="Maine_coast"/>
-River Thames, London
-<img src="/assets/images/place/River_Thames.jpg"  alt="River_Thames"/>
-Millennium Bridge
-<img src="/assets/images/place/Millennium_Bridge.jpg"  alt="Millennium_Bridge"/>
-Buckingham Palace
-<img src="/assets/images/place/Buckingham_Palace.jpg"  alt="Buckingham_Palace"/>
-Standing gaurd, Ancient Egypt
-<img src="/assets/images/place/Standing_gaurd.jpg"  alt="Standing_gaurd"/>
-Temple of Horus
-<img src="/assets/images/place/Temple_of_Horus.jpg"  alt="Temple_of_Horus"/>
-Architectural marvel
-<img src="/assets/images/place/Architectural_marvel.jpg"  alt="Architectural_marvel"/>
-Christ the Redeemer, Brazil
-<img src="/assets/images/place/Christ_the_Redeemer.jpg"  alt="Christ_the_Redeemer"/>
-<p>人生有几多个十年？最紧要要过得痛快。其实很多的话都是meaningless，不会produce any effect，但好像我这样的人，就当作宝了。一个人不meditate，reflect，其实就不算人了，与动物无异。在历史面前，谦卑，景仰和沉思。</p>
-<p>希望听起这首背景曲调时，会想起某些事，某些人，谁有能理解谁呢？时代已变，以前想都不敢想的观念，现在已经深入人心，但这个时代也有这时代的局限，让人觉得透不过起来，是啊，假如人不能适应现时代，那就&#8211;闷闷不乐，郁郁寡欢。<a href="http://dabaoku.com/dabaoku/uploads/soft/yinxiao/beijing/166.mp3">金枝欲攀叹调.</a></p>
-<p><a href="http://www.nbcnews.com/id/6981409/ns/travel-travel_photos/">Reference Source:traval_photos</a></p></p></blockquote>
+<p>大概看了这一章，我问自己，何为系统？如现实的处理器就是很复杂的系统，有其基本执行的流程，如加法、乘法，也有提高其吞吐量的流水线管道，但同时也有其反馈机制和异常处理，保证其正确地执行和反应真实的运行情况。如初中生物学到人体的八大系统，有其正常的运作，也有其反馈机制和与其它系统沟通的接口。系统，我觉得是一个由内部机制控制运行的物体，同时提供与外部交流的接口。</p>
+<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬有怎会有脸皮的？豁出去吧！</p></p></blockquote>
 </div>
 
 
@@ -160,7 +131,7 @@ Christ the Redeemer, Brazil
   
 
 
-<time datetime="2013-05-06T20:14:00+08:00" pubdate data-updated="true">May 6<span>th</span>, 2013</time>
+<time datetime="2013-07-21T23:53:00+08:00" pubdate data-updated="true">Jul 21<span>st</span>, 2013</time>
       
 
 <span class="categories">
@@ -181,10 +152,8 @@ Christ the Redeemer, Brazil
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/04/28/sql-proccessing/" title="Previous Post: SQL Proccessing">&laquo; SQL Proccessing</a>
+        <a class="basic-alignment left" href="/blog/2013/07/20/be-happy/" title="Previous Post: Be Happy">&laquo; Be Happy</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/05/08/interprocess-communications/" title="Next Post: Interprocess Communications">Interprocess Communications &raquo;</a>
       
     </p>
   </footer>
@@ -280,8 +249,8 @@ Christ the Redeemer, Brazil
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest/';
-        var disqus_url = 'http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest/';
+        var disqus_identifier = 'http://coolbrain.github.com/blog/2013/07/21/processor-architecture/';
+        var disqus_url = 'http://coolbrain.github.com/blog/2013/07/21/processor-architecture/';
         var disqus_script = 'embed.js';
       
     (function () {

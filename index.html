@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="今天是星期六不用上班，在科技图书馆度过。不过，大概只看了半日的时间，又想起过去的事情来了。因为我在看的《深入理解计算机系统》，许多知识都是大学学过的，似曾相识，可惜我都没有掌握。越想，心情越不能平静下来，当想到大学居然没一件事做对的时候，自己就快要崩溃了。一直有个疑问， &hellip;">
+  <meta name="description" content="今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/21/processor-architecture/">Processor Architecture</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-21T23:53:00+08:00" pubdate data-updated="true">Jul 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。之后讲到SEQ硬件结构、时序和实现。最后讲到的SEQ流水线的实现和对流水线固有问题的解决。如用暂停和转发来避免数据冒险。还说到流水线控制逻辑：1.处理ret；2.加载/使用冒险；3.预测错误的分支；4.异常。同时指出Y86处理器未完成的实现：1.多周期指令；2.与存储系统的接口。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/21/processor-architecture/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -443,46 +483,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/10/thread/">Thread</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-10T15:53:00+08:00" pubdate data-updated="true">Jul 10<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>线程包含了表示进程内执行环境必需的信息，其中包含进程中标识线程的线程ID、一组寄存器、栈、调度优先级和策略、信号屏蔽字、errno变量以及线程私有数据。进程的所有信息对该进程的所有线程都是共享的，包括可执行的程序文本、程序的全局内存和堆内存、栈以及文件描述符。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/10/thread/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -502,7 +502,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 112.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 142.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 160.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 112.0%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 136.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 132.72727272727272%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -512,13 +512,17 @@
 <li class='category'><a href='/blog/categories/linux/'>Linux (7)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
-<li class='category'><a href='/blog/categories/psychology/'>psychology (10)</a></li>
+<li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
 <li class='category'><a href='/blog/categories/tp-link/'>tp-link (6)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/21/processor-architecture/">Processor Architecture</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/20/be-happy/">Be Happy</a>
@@ -534,10 +538,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/17/third-day/">Third Day</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/16/second-day/">Second Day</a>
       </li>
     
   </ul>
