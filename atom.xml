@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-22T00:18:48+08:00</updated>
+  <updated>2013-07-23T00:17:32+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,6 +14,20 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Sixth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/22/sixth-day/"/>
+    <updated>2013-07-22T23:50:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/22/sixth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今日是在tp-link的第六日，讲座的内容是邮件的使用规范。听到这个题目就有点掉以轻心，其实这个不但与自己的工作息息相关，而且很容易一些低级的错误。今天总算仔细学习下了，不懂地就问一下同事，涉及到使用<strong>过滤器对邮件进行分类</strong>，<strong>个人签名模版</strong>，<strong>纯文本txt与HTML格式的区别与使用</strong>，段落的格式，还有宏的使用。最终这些基础的工作都顺利完成了。</p>
+<!-- more -->
+<p>这一天主要是看了《深入理解计算机系统》的第五章优化程序性能，主要提到性能提高技术：1）为遇到的问题选择适当的算法和数据结构；2）避免限制优化的因素：a.消除连续的函数调用。在可能时，将计算移到循环体外；b.消除不必要的存储器引用。引入临时变量来保存结果，只有在最后的值计算出来时，才将结果存放到数组或全局变量中。3）低级优化：a.展开循环，降低开销，使进一步的优化成为可能；b.通过使用例如<strong>多个累积变量和重新组合</strong>等技术，找到方法提高指令级的并行；c.用功能的风格重写条件操作，使得编译采用条件数据传送。</p>
+<p>第六章存储器层次结构，理解存储器层次结构本质，且利用它编写出更有效的程序。特别是以下技术:1)将注意力集中在<strong>内循环</strong>上，大部分计算和存储访问都发生在这里；2）通过按照数据对象存储在存储中的顺序、步长为1的来读数据，从而使得程序中的<strong>空间局部性</strong>最大；3）一旦从存储器中读入了一个数据对象，就尽可能多地使用它，从而使得程序中的<strong>时间局部性</strong>最大。</p>
+<p>第七章链接。链接器主要是符号解析和重定位。符号解析将目标文件中的每个全局符号都绑定到唯一的定义，而重定位确定每个符号的最终存储地址，并修改对那些目标的引用。</p>
+<p>第八章异常控制流，分为中断、故障、终止和陷阱。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Processor Architecture]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/21/processor-architecture/"/>
     <updated>2013-07-21T23:53:00+08:00</updated>
@@ -21,7 +35,7 @@
     <content type="html"><![CDATA[<blockquote><p><p>今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。之后讲到SEQ硬件结构、时序和实现。最后讲到的SEQ流水线的实现和对流水线固有问题的解决。如用暂停和转发来避免数据冒险。还说到流水线控制逻辑：1.处理ret；2.加载/使用冒险；3.预测错误的分支；4.异常。同时指出Y86处理器未完成的实现：1.多周期指令；2.与存储系统的接口。</p>
 <!-- more -->
 <p>大概看了这一章，我问自己，何为系统？如现实的处理器就是很复杂的系统，有其基本执行的流程，如加法、乘法，也有提高其吞吐量的流水线管道，但同时也有其反馈机制和异常处理，保证其正确地执行和反应真实的运行情况。如初中生物学到人体的八大系统，有其正常的运作，也有其反馈机制和与其它系统沟通的接口。系统，我觉得是一个由内部机制控制运行的物体，同时提供与外部交流的接口。</p>
-<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬有怎会有脸皮的？豁出去吧！</p></p></blockquote>
+<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬又怎会有脸皮的？豁出去吧！</p></p></blockquote>
 ]]></content>
   </entry>
   
@@ -3035,79 +3049,6 @@
 <p>在商业中心时，对其它事物也不懂得细心观察，譬如三星，诺基亚产品，它们的配置，性能，用户的友好程度，或者如北京同仁堂，从中就可以学习一些中医的知识。知识，创新是从用心体会生活开始的。</p>
 <p>茫茫沧海中没有目的，那是就一只不归船，永远停留在沧海中，没有能靠到岸的一日。</p>
 <p>对于女朋友，时刻准备着，把自己的各方面变得更加地好，包括情趣、谈吐、专业等。不能自暴自弃，不能沉迷于某样无聊的事情之中，浪费自己的时间，让自己周围的人都看不起自己，甚至连自己的好朋友都是那样。那么，这样的话，我就会一步步地封闭自己，进入一个恶性循环，那么我就更加走不出来，死得静悄悄的。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Procrastination]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/06/09/procrastination/"/>
-    <updated>2013-06-09T20:36:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/06/09/procrastination</id>
-    <content type="html"><![CDATA[<blockquote><p><p>按照百度百科的解释，单纯地做事拖拉或是懒得去做，只能定义为“拖延”，也仅是一种坏习惯，改正它并不难。<strong>当“拖延”已经影响到情绪，如出现强烈自责情绪，强烈负罪感，不断的自我否定、自我贬低，伴生出焦虑症、抑郁症等心理疾病时，才能称之为“拖延症”</strong>。</p>
-<!-- more -->
-<p>拖延的基础，实际上是对自身很高甚至不切实际的期望，如果说完成任务是走过一块一人宽、十米长的厚木板，那么当它放在地面上时，几乎人人都可以轻松地走过，但对结果的高期望则像是将这块木板架到了两座高楼间十层楼高的地方，于是我们会害怕掉下来，即害怕失败或害怕成功，甚至不敢向前迈上一步，而deadline则是身后的一团火，当它离我们足够近时，害怕被烧着的恐惧感战胜了对掉下去的恐惧感，于是我们一下子冲了过去，在deadline前赶完了任务，尽管质量难说。 </p>
-<p>更可怕的是，很多拖延的人甚至很享受那种deadline过后突然一下放松的感觉，而且拖延的结果有时反而挺好。这种时候，会在心里表扬自己很有“效率”。同时，长期这样下去，尽管不愿承认，但潜意识里确实觉得自己如果花了很多时间成绩却平平，会是一件非常丢脸的事情。于是这一切的一切，都再次强化的拖延。</p>
-<p>拖延症之歌</p>
-<p>See I have to write this essay </p>
-<p>that the teacher gave last week </p>
-<p>and it&#8217;s due tomorrow morning </p>
-<p>twenty pages all in Greek </p>
-<p>Nah but first I check my Tumblur</p>
-<p>Facebook,Twitter, call my Mom </p>
-<p>Then just one more, one more page</p>
-<p>oh I waste so much time dot com </p>
-<p>I&#8217;m procrastinating</p>
-<p>All day I sit here waiting</p>
-<p>for just the perfect moment to begin</p>
-<p>we&#8217;re procrastinating</p>
-<p>Why work, we could be gaming</p>
-<p>Agreed! Procrastinating FTM!</p>
-<p>I have to start this diet</p>
-<p>cause my prom&#8217;s a week away</p>
-<p>So I&#8217;m only eating veggies</p>
-<p>and I&#8217;m starting that today</p>
-<p>But I&#8217;m getting really hungry</p>
-<p>and those cookies look sublime</p>
-<p>Fine,I&#8217;ll have just one, or two, or ten</p>
-<p>Why not?It&#8217;s not crime!<p>
-<p>We&#8217;re procrasinating</p>
-<p>No better way than eating</p>
-<p>cause nothing else could possibly compare</p>
-<p>I&#8217;m procrastinating</p>
-<p>It&#8217;s really fascinating</p>
-<p>I know there&#8217;s work to do but I don&#8217;t care</p>
-<p>I should probably do my laundry</p>
-<p>I should probably feed my cat</p>
-<p>But right now we&#8217;re playing Halo</p>
-<p>YOLO! Headshot! Take that!</p>
-<p>You should probably call the doctor</p>
-<p>Never mind it&#8217;s just a scratch</p>
-<p>But your arm&#8217;s gone</p>
-<p>It&#8217;s a flesh wound</p>
-<p>Now come on let&#8217;s play some catch!</p>
-<p>I have organized my desktop</p>
-<p>Now I&#8217;m all set up to work</p>
-<p>Wait that picture&#8217;s kinda crooked</p>
-<p>and it&#8217;s driving me berserk</p>
-<p>Now I might as well just color code</p>
-<p>my pencils one by one</p>
-<p>and my papers and my files</p>
-<p>I can&#8217;t work until it&#8217;s done!</p>
-<p>We&#8217;re procrastinating</p>
-<p>All day I sit here waiting</p>
-<p>for just the perfect moment to begin</p>
-<p>We&#8217;re procrastinating</p>
-<p>Wait!</p>
-<p>You&#8217;re procratinating right now</p>
-<p>You&#8217;re procratinating</p>
-<p>Why are you still here watching?</p>
-<p>I&#8217;m sure that you&#8217;ve got things due long ago</p>
-<p>You&#8217;re procratinating</p>
-<p>Please leave a thumbs up rating</p>
-<p>Go do your work</p>
-<p>Tomorrow!</p>
-<p>大学最后论文阶段，我患上了严重的拖延症，导致焦虑，自我否定，最终论文质量大打折扣。因为心情不好，遇到挫折后，就不断拖延，直至弄出个大头佛。大学不但失败，而且被别人冷朝热讽，人啊，要有所兼顾，但要做最重要的事情，不要本末倒置，不然适得其反；戒骄戒躁，坚持前行;不要轻信人言，要懂得分析；不要感情用事，用行动改变现状！</p>
-<p><strong>与其沉沉闷闷地抱怨人生,不如轰轰烈烈地扭转乾坤</strong></p></p></blockquote>
 ]]></content>
   </entry>
   

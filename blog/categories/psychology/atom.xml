@@ -4,7 +4,7 @@
   <title><![CDATA[Category: psychology | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/psychology/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-22T00:18:48+08:00</updated>
+  <updated>2013-07-23T00:17:32+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -21,7 +21,7 @@
     <content type="html"><![CDATA[<blockquote><p><p>今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。之后讲到SEQ硬件结构、时序和实现。最后讲到的SEQ流水线的实现和对流水线固有问题的解决。如用暂停和转发来避免数据冒险。还说到流水线控制逻辑：1.处理ret；2.加载/使用冒险；3.预测错误的分支；4.异常。同时指出Y86处理器未完成的实现：1.多周期指令；2.与存储系统的接口。</p>
 <!-- more -->
 <p>大概看了这一章，我问自己，何为系统？如现实的处理器就是很复杂的系统，有其基本执行的流程，如加法、乘法，也有提高其吞吐量的流水线管道，但同时也有其反馈机制和异常处理，保证其正确地执行和反应真实的运行情况。如初中生物学到人体的八大系统，有其正常的运作，也有其反馈机制和与其它系统沟通的接口。系统，我觉得是一个由内部机制控制运行的物体，同时提供与外部交流的接口。</p>
-<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬有怎会有脸皮的？豁出去吧！</p></p></blockquote>
+<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬又怎会有脸皮的？豁出去吧！</p></p></blockquote>
 ]]></content>
   </entry>
   
