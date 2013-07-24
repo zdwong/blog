@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-24T23:31:53+08:00</updated>
+  <updated>2013-07-25T00:18:44+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -279,16 +279,34 @@
 <p>grep -B <n> 'keyword' file # 匹配 keyword 的上 n 行</p>
 <p>grep -C <n> 'keyword' file # 匹配 keyword 的上 n 行及下 n 行</p>
 <p>5.apt-get命令</p>
-<p>apt-cache search ‹name› # find package ‹name› for install by “apt-get”</p>
-<p>apt-cache show ‹name›   # describe package ‹name›</p>
-<p>apt-get install ‹name›  # install a new program. (usually used with sudo in front)</p>
-<p>apt-get remove ‹name›   # remove (un-install) a program.</p>
-<p>apt-get purge ‹name›    # remove a program and its config files.</p>
-<p>dpkg -l # list all installed packages</p>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;apt-cache search ‹name› <span class="c"># find package ‹name› for install by “apt-get”</span>
+</span><span class='line'>apt-cache show ‹name›   <span class="c"># describe package ‹name›</span>
+</span><span class='line'>apt-get install ‹name›  <span class="c"># install a new program. (usually used with sudo in front)</span>
+</span><span class='line'>apt-get remove ‹name›   <span class="c"># remove (un-install) a program.</span>
+</span><span class='line'>apt-get purge ‹name›    <span class="c"># remove a program and its config files.</span>
+</span><span class='line'>dpkg -l <span class="c"># list all installed packages</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>6.反向解析域名:host 0.0.0.0</p>
 <p>7.得到本机ip:</p>
-<p>ifconfig | awk '/inet addr:/ {print $2}' | awk -F: '{if ($2 != "127.0.0.1") print $2}'</p>
-<p>ifconfig | sed -rn 's/.<em>r:([^ ]+) .</em>/\1/p'</p>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ifconfig | awk <span class="s1">&#39;/inet addr:/ {print $2}&#39;</span> | awk -F: <span class="s1">&#39;{if ($2 != &quot;127.0.0.1&quot;) print $2}&#39;</span>
+</span><span class='line'>ifconfig | sed -rn <span class="s1">&#39;s/.&lt;em&gt;r:([^ ]+) .&lt;/em&gt;/\1/p&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>8.创建目录：mkdir {1..50}；创建文件：touch {1..50}；</p>
 <p>9.对打开端口进行检查：netstat -an | grep --color -i -E 'listen|listening'</p>
 <p>netstat -tlnp</p>
