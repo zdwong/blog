@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-24T00:28:15+08:00</updated>
+  <updated>2013-07-24T23:25:46+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -290,7 +290,43 @@
 <p>17.打开或关闭某项服务:service 某项服务（iptables） on|stop</p>
 <p>18.查看系统进程占用资源的工具：top,ps,free,vmstat,iostat,pmap</p>
 <p>19.找到某个进程的ID：ps -aux | grep processname </p>
-<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p></p></blockquote>
+<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p>
+<p>21.查看当前目录下文件的个数：ls -l | grep "<sup>-"</sup> | wc -l 查看当前目录下文件的个数，包括子目录里的：ls -lR | grep "<sup>-"</sup> | wc -l 查看某目录下文件夹（目录）的个数，包括子目录里的：ls -lR | grep "<sup>d"</sup> | wc -l</p>
+<p>设置文件及文件夹权限：chmod -R 664 文件夹名称 （赋予文件属主和同组用户读、写权限，其他用户只读权限),文件夹和其目录下的文件都被设置了相同的664权限,u代表的是与文件属主拥有一样的权限</p>
+<p>Shell删除目录下的无效链接</p>
+<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;&lt;/blockquote&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;link<span class="o">=</span>&lt;code&gt;find . -type l&lt;/code&gt;
+</span><span class='line'><span class="nb">echo</span> <span class="nv">$link</span>
+</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span>;&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;do
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> ! -f <span class="nv">$i</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">    </span>rm <span class="nv">$i</span> ;
+</span><span class='line'><span class="k">fi</span> ;
+</span><span class='line'><span class="k">done</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 ]]></content>
   </entry>
   

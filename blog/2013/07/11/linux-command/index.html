@@ -145,7 +145,33 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
 <p>17.打开或关闭某项服务:service 某项服务（iptables） on|stop</p>
 <p>18.查看系统进程占用资源的工具：top,ps,free,vmstat,iostat,pmap</p>
 <p>19.找到某个进程的ID：ps -aux | grep processname </p>
-<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p></p></blockquote>
+<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p>
+<p>21.查看当前目录下文件的个数：ls -l | grep &#8221;<sup>-&#8221;</sup> | wc -l 查看当前目录下文件的个数，包括子目录里的：ls -lR | grep &#8221;<sup>-&#8221;</sup> | wc -l 查看某目录下文件夹（目录）的个数，包括子目录里的：ls -lR | grep &#8221;<sup>d&#8221;</sup> | wc -l</p>
+<p>设置文件及文件夹权限：chmod -R 664 文件夹名称 （赋予文件属主和同组用户读、写权限，其他用户只读权限),文件夹和其目录下的文件都被设置了相同的664权限,u代表的是与文件属主拥有一样的权限</p>
+<p>Shell删除目录下的无效链接</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">link</span><span class="o">=</span><span class="sb">`</span> find . -type l <span class="sb">`</span>
+</span><span class='line'><span class="nb">echo</span> <span class="nv">$link</span>
+</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span>;
+</span><span class='line'>  <span class="k">do</span>
+</span><span class='line'><span class="k">  if</span> <span class="o">[</span> ! -f <span class="nv">$i</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span>rm <span class="nv">$i</span> ;
+</span><span class='line'>  <span class="k">fi</span> ;
+</span><span class='line'>  <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
