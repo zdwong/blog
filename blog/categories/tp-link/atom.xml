@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-25T00:18:44+08:00</updated>
+  <updated>2013-07-25T03:17:38+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Eighth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/25/eighth-day/"/>
+    <updated>2013-07-25T00:46:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/25/eighth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天的培训讲座分别是实验室管理的规章制度和嵌入式linux的开发。我有点担心我不会使用设备，这说明我不够自信心，也不够进取，单单使用设备都学不会，那不是简直笨得无法救药，如示波器。嵌入式开发之前也接触过一点，但是知识懂点皮毛，没有耐心地去学习。</p>
+<!-- more -->
+<p>初略地学习shell编程，没有一本很好的书，让自己学习。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Seventh Day]]></title>
@@ -63,19 +74,6 @@
 <p>晚上继续看了《量子物理史话》，到对波尔模型的进一步解释，但一直解决不了与经典磁场直接的矛盾，光是波还是微粒的问题一直纠结下去，弄得科学家们焦头烂额。波尔都在苦思冥想，海森堡隆重登场了。面对光怪陆离的现象，海森堡又如何独辟蹊径，问鼎量子学呢？将在这一章节继续演绎。正所谓滚滚长江东逝水，浪花淘尽英雄。</p>
 <p>书看累了，就去操场跑步，大概跑了十几圈，就一直幻想参加马拉松，我的坏习惯又来了。我跑步是为了强身健体，不是为了展示自己，也不知天高地厚，也学起了沽名钓誉。</p>
 <p>回来就想冲个热水澡，就继续看《深入理解计算机系统》，可惜，接到一个同学电话，就和他聊了半个钟头，那看书就成为泡影了。聊天是必要的，别忘了正经事。就好似今日评论了同学的一条微博一样，搞到心神不定，最后以大话连篇，无厘头收场。也不知道是否同学相不相信我的话，其实是假话。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Third Day]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/17/third-day/"/>
-    <updated>2013-07-17T23:51:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/17/third-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天是我在TP-Link的第三天，只有上午两个小时是用来上公共课，关于入职须知的。其余时间都是自由支配，重点是读《深入理解计算机》这本书，读完后，还要写读后感。可惜，我这种人最喜欢囫囵吞枣的，看完后，都不知道自己懂不懂，扮得很认真，就是不肯动手，不动手，又怎么会懂呢？敷衍自己，麻痹自己，以为自己很认真，学到很多所谓的知识，想做阿Q 也不至于如此吧！</p>
-<!-- more -->
-<p>对于《TCP/IP详解I》，我就有实践去明白理论，因为这么好实践的书籍，居然不实践的理解，简直暴殄天物。其中大概明白了ARP的工作流程，IMGP协议是用来支持多播，FTP，SMTP，tcpdump,复习了TCP协议。</p>
-<p>今晚继续看《量子物理史话》，普朗克的黑体辐射，爱恩斯坦的光电效应，卢瑟福的原子核模型，波尔的波尔模型。</p>
-<p>明天一定要好好实践，不懂就问，但在问之前，自己要有思路。</p></p></blockquote>
 ]]></content>
   </entry>
   

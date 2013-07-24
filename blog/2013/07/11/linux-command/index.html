@@ -201,6 +201,58 @@ find . -name &#39 &hellip;">
 </span><span class='line'>  <span class="k">done</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<blockquote><p><p>24.shell给可执行的文件创建链接</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>mkdir -p  ./exelink
+</span><span class='line'><span class="nb">cd </span>exelink
+</span><span class='line'><span class="nv">link</span><span class="o">=</span><span class="sb">`</span> find ../ -type f -perm -111  <span class="sb">`</span>
+</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span> ;
+</span><span class='line'>  <span class="k">do</span>
+</span><span class='line'><span class="k">  if</span> <span class="o">[</span>  -f <span class="nv">$i</span> <span class="o">]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="nv">$i</span>
+</span><span class='line'>      link  <span class="nv">$i</span> <span class="sb">`</span><span class="nb">echo</span> <span class="nv">$i</span> | sed <span class="s1">&#39;s,.*/,,&#39;</span><span class="sb">`</span>
+</span><span class='line'>  <span class="k">fi</span> ;
+</span><span class='line'>  <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>25.根据不同的时段输出不一样的欢迎词</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nv">HH</span><span class="o">=</span><span class="sb">`</span> date +%k <span class="sb">`</span>
+</span><span class='line'><span class="nb">echo</span> <span class="nv">$HH</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 0 <span class="o">]&amp;&amp;[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -lt 12 <span class="o">]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Morning `whoami`&quot;</span>;
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 12 <span class="o">]&amp;&amp;[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -l 18 <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Afternoon `whoami`&quot;</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Evening `whoami`&quot;</span>
+</span><span class='line'><span class="k">fi</span>;
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
@@ -272,7 +324,7 @@ find . -name &#39 &hellip;">
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 143.63636363636363%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 149.0909090909091%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -283,12 +335,16 @@ find . -name &#39 &hellip;">
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>tp-link (8)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>tp-link (9)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/25/eighth-day/">Eighth Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/24/seventh-day/">Seventh Day</a>
@@ -304,10 +360,6 @@ find . -name &#39 &hellip;">
     
       <li class="post">
         <a href="/blog/2013/07/20/be-happy/">Be Happy</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/19/firth-day/">Firth Day</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-25T00:18:44+08:00</updated>
+  <updated>2013-07-25T03:17:38+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,17 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Eighth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/25/eighth-day/"/>
+    <updated>2013-07-25T00:46:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/25/eighth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天的培训讲座分别是实验室管理的规章制度和嵌入式linux的开发。我有点担心我不会使用设备，这说明我不够自信心，也不够进取，单单使用设备都学不会，那不是简直笨得无法救药，如示波器。嵌入式开发之前也接触过一点，但是知识懂点皮毛，没有耐心地去学习。</p>
+<!-- more -->
+<p>初略地学习shell编程，没有一本很好的书，让自己学习。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Seventh Day]]></title>
@@ -450,6 +461,58 @@
 </span><span class='line'><span class="k">      </span>rm <span class="nv">$i</span> ;
 </span><span class='line'>  <span class="k">fi</span> ;
 </span><span class='line'>  <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>24.shell给可执行的文件创建链接</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>mkdir -p  ./exelink
+</span><span class='line'><span class="nb">cd </span>exelink
+</span><span class='line'><span class="nv">link</span><span class="o">=</span><span class="sb">`</span> find ../ -type f -perm -111  <span class="sb">`</span>
+</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span> ;
+</span><span class='line'>  <span class="k">do</span>
+</span><span class='line'><span class="k">  if</span> <span class="o">[</span>  -f <span class="nv">$i</span> <span class="o">]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="nv">$i</span>
+</span><span class='line'>      link  <span class="nv">$i</span> <span class="sb">`</span><span class="nb">echo</span> <span class="nv">$i</span> | sed <span class="s1">&#39;s,.*/,,&#39;</span><span class="sb">`</span>
+</span><span class='line'>  <span class="k">fi</span> ;
+</span><span class='line'>  <span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>25.根据不同的时段输出不一样的欢迎词</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="nv">HH</span><span class="o">=</span><span class="sb">`</span> date +%k <span class="sb">`</span>
+</span><span class='line'><span class="nb">echo</span> <span class="nv">$HH</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 0 <span class="o">]&amp;&amp;[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -lt 12 <span class="o">]</span> ; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Morning `whoami`&quot;</span>;
+</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 12 <span class="o">]&amp;&amp;[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -l 18 <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Afternoon `whoami`&quot;</span>
+</span><span class='line'><span class="k">else</span>
+</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Evening `whoami`&quot;</span>
+</span><span class='line'><span class="k">fi</span>;
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
@@ -3044,59 +3107,6 @@
 <p>《国王的演讲》一个口吃的国王，在二战英国受难时，挺身而出，最终成为一个吐字清晰的国王。</p>
 <p>《霸王别姬》人如戏，戏如生。</p>
 <p>&#8230;这么多的电影，就总结了这么多，实在太小太小，太不可思议。真是光阴似箭，岁月如梭！</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[TV Series]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/04/tv-series/"/>
-    <updated>2013-07-04T23:24:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/04/tv-series</id>
-    <content type="html"><![CDATA[<blockquote><p><p>大学里面的最后一年半的时间是在看电视剧过来的。为什么浪费“一寸光阴一寸金”的时间来看电视剧？是遭受了挫折后的堕落，是心智的幼稚，还是思路的混乱和目标的迷失？人生不如意之事十有八九。在遇到挫折时，我显得脆弱不堪，悠游寡断，自暴自弃。就大学那么的一个挫折，就把自己的人生搞得乱七八糟，不堪回首，如同烂泥。那么，以后面对大风大浪，岂不是毫无抵抗地沉入大海？人要自个儿成全自个儿。</p>
-<!-- more -->
-<p>稍微总结一下，一年半所看的电视剧和电影。因为这是一种经历，不论是好还是坏，都需要思考和总结。杜绝人生如流水账那样，走马观花，得过且过。</p>
-<p>《越狱》说的是主人公为了救自己无辜入狱的哥哥，亲自犯罪入监狱救出他。他们被追捕，之后它们逃到巴拿马;最后，返回美国，帮助寻找所谓的&#8221;黑名单&#8221;，其实高科技能源技术。剧中，主人公利用自己专业————土木工程的知识来进行越狱，并且之前早构思好一个相对完美的越狱计划。《越狱》体现了主人公的兄弟情，爱情和友情，并反应了社会和政治的勾心斗角。</p>
-<p>《迷失》我并没有完整看完，但我觉得主人公是一个名副其实，有魄力的医生。如同《越狱》中的主人公一样，都是自己专业中的佼佼者。每一个人都有自己的迷失的时候，在这个孤岛上逐渐都找回了自己，《迷失》通过时间的穿越来体现。</p>
-<p>《三国》是三国演义的电视剧版本，曹丕是一个奸诈狡猾之人，曹操也知道其为了帝位，不惜杀害自己的弟弟，但曹操也意识到为了保住自己打下来的江山，非大奸大诈，心机重重的人不可。刘备是一个深藏不露，哀乐不显于脸色和有情有义的人，其三顾茅庐，精神所至，金石为开。刘备是从祧园三结义兴起，也由这个终结，可谓成也萧何败也萧何。</p>
-<p>《寻秦记》主人公通过穿越时空来到战国时期，主要任务是帮助嬴政顺利登基。主人公是一个有情有义，乐于助人的人。</p>
-<p>《大唐双龙传》的寇仲是一个聪明伶俐、雄心勃勃的人，喜欢的李秀玲是一个有勇有谋，相貌出众的人。徐子陵是一个重情重义、敦厚温顺的人，喜欢的师妃暄是一个出尘脱俗、与世无争的人。</p>
-<p>《射雕英雄传》的郭靖是一个敦厚老实，行侠仗义的人，获得聪明绝顶、口齿伶俐的黄蓉的青睐和芳心。</p>
-<p>《神雕侠侣》的杨过是一个藐视封建礼教，无拘无束的人，与沉鱼落雁、闭花羞月的小龙女的师徒恋，虽然遭到世人（包括郭靖和黄蓉）的遗弃和唾骂，但杨过依然摒弃世人的俗见，我行我素，得知小龙女已被玷污，杨过依然不理睬狗屁不通的礼教，从一而终。不过，电视剧只是一种理想的状态，假如杨过不是一个武功超群，技压群雄的人，哪能和小龙女长相厮守呢？不过，杨过和小龙女也可以找一个世外桃源的地方，演绎他们的故事。</p>
-<p>《倚天屠龙记》的张无忌是一个明辨是非，纯真朴素的人，与诡计多端、心机重重但心地善良的赵敏产生微妙的感情。周子若唯师命是从，最终作茧自缚，断送前程。</p>
-<p>《笑傲江湖》的令狐冲是一个无拘无束，放荡不羁的人，对小师妹情真意切、疼爱有加，不过有情人难成眷属。任盈盈对在危难时期的令狐冲有情有义，当他扭转乾坤时，对任盈盈也是不离不弃，忠贞不二。</p>
-<p>《天龙八部》的段誉是一个慈悲为怀、普渡众生的人，对王姑娘一见钟情，不过当时王姑娘已心有所属。但段誉对王姑娘一直都是默默奉献，尾随左右，最终得到其芳心。反过来看，就是姑苏慕容不切实际、不自量力、如痴如梦地进行其复燕大计，这就是男人以事业为重的行动，同时也体现其对王姑娘不够上心。乔峰是一个光明磊落，嫉恶如仇的人，其父考验他在绝处逢生的能力。虚竹是一个佛学子弟，其武艺、爱情、地位&#8221;无心插柳柳成荫“。</p>
-<p>《鹿鼎记》的韦小宝是一个圆滑、有情有义和幸运的人。在三座大山————清朝皇帝、天地会、神龙教的压力下中艰难生存，稍有不慎，就会立即丧命。不过，韦爵爷不但走运，还艳福不浅，有七个大小老婆相伴。</p>
-<p>《隋唐英雄传》的李世民是一个胸襟广阔，善于纳谏和唯才善用的人。他思路开阔，敢于创新，实现科举制度，三省六部制，允许外籍人士到长安进行生意的买卖。</p>
-<p>《金枝欲孽》说的是明争暗斗、尔虞我诈、勾心斗角的后宫的境况。孙白杨是一个不拘小节、锄强扶弱、热心肠的御医。其获得后宫中三大贵人的芳心，而就是这红墙之内，又怎会容许有爱情的存在？</p>
-<p>《金枝欲孽II》说的是后宫中两姐妹，一个当朝举足轻重的如妃，一个是前朝斤斤计较的贵妃，两姐妹在宫中的矛盾不断激发，一个忍辱负重，另一个则咄咄逼人。两人在宫中玩弄手段，甚至不惜利用爱情为筹码来达到自己天下太平的目的。</p>
-<p>《巾帼枭雄》说的是女主人公是一个济世安民，深谋远虑的人。男主人公柴九是一个忠肝义胆，顺水推舟的人，与女主人公同舟共济，共渡难关。</p>
-<p>《巾帼枭雄之义海豪情》的九姑娘是一个痛恨毒品、运筹帷幄的人，男主人公是一个义气云天、肝胆相照的警察。两人在患难中，结下了深厚的友谊。</p>
-<p>《溏心风暴》展示了一个长期被压抑的护士，没有妻子的名分，就连妾的身份也没有。在旁人的教唆下，名正言顺地当上妻子，对其老公的家产虎视眈眈。当老公离世，咄咄逼人、毫不相让地瓜分财产，并和其丈夫子女法庭上刀锋相对、拼个你死我活。同时，也反映了此家庭和谐温馨的一面。</p>
-<p>《溏心风暴之家好月圆》展示了曾经是一对相濡以沫的夫妇，在受到外来的侵袭时（第三者的出现），妻子忍辱负重，且同意和老公离婚，两方都分配到三个孩子的抚养权。之后，两方不断出现矛盾，简直是多事之秋。两方经历了这些的风风雨雨，这两人又分而复合。可惜，第三者机关算尽，到头来，除了钱，依然是竹篮子打水一场空。</p>
-<p>《怒火街头》二部展示了男主人公是一名威震法律界的大律师，当年为了挣大钱，埋没良心，丧尽天良。之后，他迷途知返，默默地在一个小区帮助当地居民伸张正义，宣扬法律知识。而女主人公是一个初出茅庐的律师，当年也以男主人公为偶像，可惜其隐身埋名了七年。当两人萍水相逢时，两人意见大相径庭。男的久经沙场、历经风险，而女的则是胸怀大志、要闯出一块天地。男的不忍心看着女的重蹈自己之前的错误，一直对其悉心指导、不离不弃，两人日久生情，成为一对情侣，而女的也乐意到小区去服务。</p>
-<p>《名媛望族》展示的是香港从清朝的一夫多妻制到从法律上规定只允许一夫一妻制的历程。剧中，通过一个赫赫有名的大律师来展开，其有三个老婆。之后，遇到一个聪明伶俐、漂亮迷人的女子，娶其为四老婆，并答应不再娶其它老婆。可惜，后面的矛盾的激发就有其娶第五个老婆开始陆续爆发。</p>
-<p>《大唐女巡按》展示的是女主人公凭借自己的细心观察、逻辑推理，屡破奇案，得到武则天的赏识和赞许。她查案时险象横生，但其刚正不阿、一视同仁，且巧妙地击破各个老奸巨猾的敌人。真是巾帼不让须眉。</p>
-<p>《读心神探》是说在审嫌疑人的时候，通过观察通过的行为举止、表情等来判断其心理行为。</p>
-<p>《飞虎队》一群训练有素的特警的生活和其歹徒斗智斗勇的场面。</p>
-<p>《天之商娇》说的是男主人公已经是一个退隐商界的&#8221;商业杀手“，女主人公是一个大大咧咧，注重家庭感情的人，两人在误解的时候认识，之后男教女如何运用商业知识去挣钱，之后，两人心生情愫，最终步入婚姻的殿堂。</p>
-<p>《蒲松龄》说的是蒲松龄的个人经历。其实，他一把年纪还去科举考试，这和其经历息息相关。</p>
-<p>《护花危情》说的是一个帅气十足的警察去保护一个脆弱、敏感的女孩子，在这执行任务的过程中，女的对男的产生爱慕之心。而女的爸爸不满于一个警察喜欢其女儿，其实女的爸爸的发家史是靠绑架且撕票开始的，剧情就由此展开。</p>
-<p>《老友狗狗》狗是有灵性的动物，对警察的帮助很大，训练好一条警犬，相当于多了一个能识别气味，找出炸弹，追踪敌人的好警察。</p>
-<p>《搜神记》说的是一个瘦小力气小的人因为孝顺受到神仙的眷顾，给予他法力，可惜其有了法力后，就失去了原来的本性，反而去欺负别人。
-<p>《咏春传奇》说的是一个女子受到追杀后，到了人人习武的女子村学习武功，同时自创出咏春的招式。</p>
-<p>《花花世界花大姐》说的是一个智商偏低的人，因为思想单纯，乐于助人，虽然经历挫折，惊险，最终化险为夷，得到阔少爷的眷顾。</p>
-<p>《四大名捕》说的是合四个能干，各有所长的人的能力去侦破各种奇案的故事。</p>
-<p>《公主嫁到》说的是公主下嫁金家，其刁蛮任性，不讲情理，但与金家经历了一些事情后，逐渐改变自己，对金家的感情也逐渐深厚。</p>
-<p>《法证先锋》三部都是说通过犯罪的人在犯案现场留下的蛛丝马迹来查案，通过高科技的仪器，对现场留下可疑物件进行检验，这对案情的进展有好大的帮助。</p>
-<p>《笑傲江湖》大陆版本，东方不败是一个漂亮迷人，不过心肠未免有点毒辣的年轻女子，对令狐冲也可谓是仁至义尽。</p>
-<p>《施公奇案》说的是一个县官对案情反复推敲，翻来覆去，但最终屡破奇案。</p>
-<p>《潜行狙击》说的是一个小混混做警察的卧底，但其又不甘心做警探卧底，其利用与警探的关系，自己成为黑社会的大佬，与之前的警探对着干。</p>
-<p>《法网狙击》说的是两个律师合作无间地帮助不同的群体打下不小漂亮的官司。</p>
-<p>《古灵精探》说的是一个警探凭借古灵奇怪的感觉来推断出案情和事实的真相。</p>
-<p>《Yummy Yummy》说的是团队比赛，领队和队员，队员与队员间的故事。当然是有激烈的竞争，也有温馨感人的场面。</p>
-<p>《白发魔女传》某女主人公练功走火入魔，变得满头白发，而和其有深厚交情的武当弟子，在得到女主人公师父的功力后，义无反顾地帮助白发魔女变成青春焕发，满头黑发的少女，而武当弟子却瞬间变成满头白发的青年。</p>
-<p>《轩辕剑之天之痕》讲述陈国后裔陈靖仇从一个不思长进的人，最后和宇文拓成为拯救大地的使者。</p>
-<p>&#8230; 还有这么多的电视剧等着去总结，花费了这么多的时间，才总结出那么一点。可谓是捡了芝麻丢了西瓜，得不偿失。</p></p></blockquote>
 ]]></content>
   </entry>
   
