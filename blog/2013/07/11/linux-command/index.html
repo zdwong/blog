@@ -11,8 +11,12 @@
   
   <meta name="description" content="linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。
 1.解压.tar.xz: tar Jxvf xxx.tar.xz
-2.解压7z： 7z x filename.7z 3.统计源代码的行数：
-find . -name &#8217;.c&#8217; -o - &hellip;">
+2.解压7z： 7z x filename.7z 3.统计源代码的行数： 1
+2
+3
+4
+#!/bin/bash
+find . -name &#39 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -112,11 +116,20 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
 <p>1.解压.tar.xz:        tar Jxvf xxx.tar.xz</p>
 <p>2.解压7z：       7z x filename.7z</p>
 <!-- more -->
-<p>3.统计源代码的行数：
-<p>find . -name &#8217;<em>.c&#8217; -o -name &#8217;</em>.h&#8217; | xargs wc -l</p>
-<p>find . -name &#8217;<em>.c&#8217; -o -name &#8217;</em>.h&#8217; | xargs cat | sed &#8216;/<sup>\s*$/d&#8217;</sup> | wc -l</p>
-<p>cloc ./</p>
-<p>4.grep命令：grep (regular pattern) (input file)</p>
+<p>3.统计源代码的行数：</p></p></blockquote>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>find . -name <span class="s1">&#39;*.c&#39;</span> -o -name <span class="s1">&#39;*.h&#39;</span> | xargs wc -l
+</span><span class='line'>find . -name <span class="s1">&#39;*.c&#39;</span> -o -name <span class="s1">&#39;*.h&#39;</span> | xargs cat | sed <span class="s1">&#39;/^\s*$/d&#39;</span> | wc -l
+</span><span class='line'>cloc ./
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>4.grep命令：grep (regular pattern) (input file)</p>
 <p>使用 grep 抓取匹配关键字附近的行, 有时我们会对 grep 匹配关键字附近的行感兴趣（这有点上下文的味道），使用 -A、-B、以及 -C 选项可以满足我们的愿望。</p>
 <p>grep -A <n> &#8216;keyword&#8217; file # 匹配 keyword 的下 n 行</p>
 <p>grep -B <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行</p>
@@ -147,8 +160,8 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
 <p>19.找到某个进程的ID：ps -aux | grep processname </p>
 <p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p>
 <p>21.查看当前目录下文件的个数：ls -l | grep &#8221;<sup>-&#8221;</sup> | wc -l 查看当前目录下文件的个数，包括子目录里的：ls -lR | grep &#8221;<sup>-&#8221;</sup> | wc -l 查看某目录下文件夹（目录）的个数，包括子目录里的：ls -lR | grep &#8221;<sup>d&#8221;</sup> | wc -l</p>
-<p>设置文件及文件夹权限：chmod -R 664 文件夹名称 （赋予文件属主和同组用户读、写权限，其他用户只读权限),文件夹和其目录下的文件都被设置了相同的664权限,u代表的是与文件属主拥有一样的权限</p>
-<p>Shell删除目录下的无效链接</p></p></blockquote>
+<p>22.设置文件及文件夹权限：chmod -R 664 文件夹名称 （赋予文件属主和同组用户读、写权限，其他用户只读权限),文件夹和其目录下的文件都被设置了相同的664权限,u代表的是与文件属主拥有一样的权限</p>
+<p>23.Shell删除目录下的无效链接</p></p></blockquote>
 
 <figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -159,9 +172,7 @@ find . -name &#8217;.c&#8217; -o - &hellip;">
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-<span class='line-number'>10</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>
 </span><span class='line'><span class="nv">link</span><span class="o">=</span><span class="sb">`</span> find . -type l <span class="sb">`</span>
 </span><span class='line'><span class="nb">echo</span> <span class="nv">$link</span>
 </span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span>;
