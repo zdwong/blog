@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="今天的讲座是编程规范，统一的代码规格有利于后面的阅读和维护。我们的组长是我们没有按照规范来写代码的话，就是能力，工作态度都不行的人。因为那些规范只要用心注意下，就应该不会出什么问题。
+  <meta name="description" content="今天写了memmove这样的函数，首先要检测内存覆盖问题，然后是考虑怎样加快移动的效率.因为传统的做法是以char一个字节的传送，而现在可以通过四个字节对齐的方式，通过int整型一次四个字节的传送。可以大大地加快了传送的效率，因为一次传送一个字节和一次传送四个字节是一样的。
 ">
   
 
@@ -80,6 +80,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/31/twelveth-day/">Twelveth Day</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-31T00:08:00+08:00" pubdate data-updated="true">Jul 31<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天写了memmove这样的函数，首先要检测内存覆盖问题，然后是考虑怎样加快移动的效率.因为传统的做法是以char一个字节的传送，而现在可以通过四个字节对齐的方式，通过int整型一次四个字节的传送。可以大大地加快了传送的效率，因为一次传送一个字节和一次传送四个字节是一样的。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/31/twelveth-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -441,46 +481,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/16/second-day/">Second Day</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-16T23:48:00+08:00" pubdate data-updated="true">Jul 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是我入职TP-Link的第二天，我被分配到宽带接入产品线，我马上上网查了下其相关的内容，生怕自己一点都不懂这方面的知识，首先心理要有个底。公司为我们配备了一台电脑，我们就开始设置邮件，安装各种软件了。我的导师是南京大学毕业的女生，人还是很好沟通的，想不到工作还是女性做我的导师。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/16/second-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -500,7 +500,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 154.54545454545456%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -511,12 +511,16 @@
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>tp-link (10)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>tp-link (11)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/31/twelveth-day/">Twelveth Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/29/eleventh-day/">Eleventh Day</a>
@@ -532,10 +536,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/22/sixth-day/">Sixth Day</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/21/processor-architecture/">Processor Architecture</a>
       </li>
     
   </ul>
