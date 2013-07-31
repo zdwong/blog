@@ -9,9 +9,8 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。
-I/O复用典型应用在下列的网络场合：
-1.当客户处理多个描述符（ &hellip;">
+  <meta name="description" content="ping程序操作非常简单，往某个IP地址发送一个ICMP回射请求，该节点则以一个ICMP回射应答响应。此程序用到原始套接字。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -81,6 +80,46 @@ I/O复用典型应用在下列的网络场合：
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/09/ping/">Ping</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T11:57:00+08:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>ping程序操作非常简单，往某个IP地址发送一个ICMP回射请求，该节点则以一个ICMP回射应答响应。此程序用到原始套接字。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/09/ping/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -451,46 +490,6 @@ I/O复用典型应用在下列的网络场合：
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/28/monetdb-vs-postgresql/">MonetDB vs PostgreSQL</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-28T19:43:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/28/monetdb-vs-postgresql/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -512,7 +511,7 @@ I/O复用典型应用在下列的网络场合：
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.9090909090909%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 138.1818181818182%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 154.54545454545456%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 160.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.9090909090909%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 135.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 150.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 155.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.0%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -523,12 +522,16 @@ I/O复用典型应用在下列的网络场合：
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>tp-link (11)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>tp-link (12)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/01/thirteenth-day/">Thirteenth Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/31/twelveth-day/">Twelveth Day</a>
@@ -544,10 +547,6 @@ I/O复用典型应用在下列的网络场合：
     
       <li class="post">
         <a href="/blog/2013/07/24/seventh-day/">Seventh Day</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/22/sixth-day/">Sixth Day</a>
       </li>
     
   </ul>

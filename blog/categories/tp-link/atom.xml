@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-07-31T00:27:24+08:00</updated>
+  <updated>2013-08-01T00:40:54+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Thirteenth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/01/thirteenth-day/"/>
+    <updated>2013-08-01T00:24:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/01/thirteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天有个讲座是IAD硬件基础，其实IAD是Integrated Access Device(综合接入设备），包含ADSL，route, VoIP(网络电话），USB，无线wifi。重点是说了网络IP电话（VOIP）技术，音频的编码，语音的控制（SIP协议），语音的传输（RTP，底层还是使用UDP协议），语音质量的保证（消除回声）等。</p>
+<!-- more -->
+<p>这些功能都整合到路由器上，可惜中国都法定规定不允许使用IP电话，不然打电话就便宜了。这产品是外销到外国的。但从其配置上看，比较复杂，需要专业人士，不过外国人接触的东西比较多，按照说明书的指示，应该还是能够配置成功。其配置中可以通过传统的PSTN电信的通信网通信，也可以通过互联网（VOIP）语音聊天，就是语音质量会比传统的PSTN稍微差一些。增加了一个语音模块，就增加了五个芯片，布线也变得复杂，接口也增加了好几个。</p>
+<p>下午还是编程，主要是把代码改成符合编程规范，写单元测试用例，继续优化代码。还跟导师讨论了多进程的通信问题，引起了我的兴趣，我不断地看这进程通信，有很多东西还没理解，如mmap的实现机制是怎样的，如何正确地使用。</p>
+<p>要学如何写Makefile文件，不然怎么对得起自己呢？</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Twelveth Day]]></title>
@@ -63,20 +76,6 @@
 <p>第二个内容就是有效沟通。在大学，我的说话方式就会令人误解，其实是语调和重音放得不对，说多就好了。有效沟通的关键在于听，说，问。</p>
 <p>今天粗略地看了《深入理解计算机系统》的虚拟存储器，其主要功能：1.它在主存中自动缓存最近使用的存放磁盘上的虚拟地址空间的内容，对磁盘上页的引用会触发缺页，缺页将控制转移到操作系统的一个缺页处理程序。缺页处理程序将页面从磁盘拷贝到主存缓存，如果必要，将写回被驱逐的页。2.虚拟存储器简化了存储管理，进而简化了链接，在进程间共享数据，进程的存储器分配以及程序加载。3.虚拟存储器通过在每条页表条目中加入保护位，从而简化了存储器保护。</p>
 <p>管理和使用虚拟存储器是一件困难和容易出错的任务。常见的错误事例：间接引用坏指针，读取未初始化的存储器，允许栈缓冲区溢出，假设指针和它们的指向的对象相同，引用指针而不是它所指向的对象，误解指针运算，引用不存在的变量，以及引起存储器泄漏。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sixth Day]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/22/sixth-day/"/>
-    <updated>2013-07-22T23:50:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/22/sixth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今日是在tp-link的第六日，讲座的内容是邮件的使用规范。听到这个题目就有点掉以轻心，其实这个不但与自己的工作息息相关，而且很容易犯一些低级的错误。今天总算仔细学习下了，不懂地就问一下同事，涉及到使用<strong>过滤器对邮件进行分类</strong>，<strong>个人签名模版</strong>，<strong>纯文本txt与HTML格式的区别与使用</strong>，段落的格式，还有宏的使用。最终这些基础的工作都顺利完成了。</p>
-<!-- more -->
-<p>这一天主要是看了《深入理解计算机系统》的第五章优化程序性能，主要提到性能提高技术：1）为遇到的问题选择适当的算法和数据结构；2）避免限制优化的因素：a.消除连续的函数调用。在可能时，将计算移到循环体外；b.消除不必要的存储器引用。引入临时变量来保存结果，只有在最后的值计算出来时，才将结果存放到数组或全局变量中。3）低级优化：a.展开循环，降低开销，使进一步的优化成为可能；b.通过使用例如<strong>多个累积变量和重新组合</strong>等技术，找到方法提高指令级的并行；c.用功能的风格重写条件操作，使得编译采用条件数据传送。</p>
-<p>第六章存储器层次结构，理解存储器层次结构本质，且利用它编写出更有效的程序。特别是以下技术:1)将注意力集中在<strong>内循环</strong>上，大部分计算和存储访问都发生在这里；2）通过按照数据对象存储在存储中的顺序、步长为1的来读数据，从而使得程序中的<strong>空间局部性</strong>最大；3）一旦从存储器中读入了一个数据对象，就尽可能多地使用它，从而使得程序中的<strong>时间局部性</strong>最大。</p>
-<p>第七章链接。链接器主要是符号解析和重定位。符号解析将目标文件中的每个全局符号都绑定到唯一的定义，而重定位确定每个符号的最终存储地址，并修改对那些目标的引用。</p>
-<p>第八章异常控制流，分为中断、故障、终止和陷阱。中断是异步发生的，是来自处理器外部的I/O设备的信号的结果。应用程序通过使用一个叫做陷阱或者系统调用的ECF形式，向操作系统请求服务。</p></p></blockquote>
 ]]></content>
   </entry>
   
