@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-01T00:40:54+08:00</updated>
+  <updated>2013-08-02T00:16:38+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fourteenth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/01/fourteenth-day/"/>
+    <updated>2013-08-01T23:58:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/01/fourteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误，是地址，而不是长度，一般用汇编写比较能提高效率，且可以利用流水线加速。每一条编程题都有改进的空间。</p>
+<!-- more -->
+<p>I spent two hours learning how to write Makefile. 懂得如何递归地执行Makefile文件和递归地删除目标文件，学习的时候需要带着问题去学习，这样效果会比较好。</p>
+<p>晚上回来还是不断地查找关于共享库全局变量的问题，原来每个进程执行的时候都有自己的副本。关于链接库，共享内存实现的机制，还有虚拟存储的理解又加深了，还要继续深究这些问题，因为还没有弄明白究竟是怎么一回事，不能糊里糊涂地让其过去。我受不了还没有理解，我受不了效率这么低。</p>
+<p><strong>PS:感谢张韵婷同学对我的help。同时自己要积极进取，努力去解决问题。keep optimistic and working hard to solve the facing problem.</strong></p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thirteenth Day]]></title>
@@ -63,19 +76,6 @@
 <P>星期六打完球后，真是累的，可能一天吃了七个香蕉的缘故，没有消化好，都怪我没有自控能力。但是有一点是肯定的，那就是我发现我的脚痛发作了，运动会导致之前受过伤但没医好的病发作，这个就一直都是我的心病了，不过，人要看开点，小小问题也就不足挂齿。</p>
 <p>星期日就要挨批了，买的书和送来的书都到了，一直在盼望，可惜到了，就什么兴奋都没有，并且也不去看了，反而看起电影来了，反而觉得电影还挺好看的，简直是愚蠢至极。现在是什么时候啦，看起《七宗罪》来啦，看起《大话西游》来啦，其实踏实做人，电影里的事情美好的事情还是会发生在现实中的，同时不好的事情也可以避免的。</p>
 <p><strong>如果自己真要选择颓废的话，那我就要想想如何面对他人的嘲笑，讽刺和鄙视，还将自己看得连狗都不如，自己却无力回击，甚至他们是不学无术之人。人争一口气佛争一炷香。你能吞得下这口气？</strong></p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Seventh Day]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/24/seventh-day/"/>
-    <updated>2013-07-24T00:02:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/24/seventh-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天的培训内容是时间管理和有效沟通。说起时间管理，如谈虎色变，心落千仗，因为之前我给自己制定目标，但是一个都没有做到，导致心情极其低落，恨透了什么时间管理，还不如没什么计划，见步走步，这样心理也踏踏实实，没有这么大的情绪起伏。其实我这种想法是错误的，因为我制定的目标是不切实际的，好高骛远的，不是可衡量的，违反了制定的目标的基本规则，反而受到时间管理的反效果，还不如顺其自然。</p>
-<!-- more -->
-<p>第二个内容就是有效沟通。在大学，我的说话方式就会令人误解，其实是语调和重音放得不对，说多就好了。有效沟通的关键在于听，说，问。</p>
-<p>今天粗略地看了《深入理解计算机系统》的虚拟存储器，其主要功能：1.它在主存中自动缓存最近使用的存放磁盘上的虚拟地址空间的内容，对磁盘上页的引用会触发缺页，缺页将控制转移到操作系统的一个缺页处理程序。缺页处理程序将页面从磁盘拷贝到主存缓存，如果必要，将写回被驱逐的页。2.虚拟存储器简化了存储管理，进而简化了链接，在进程间共享数据，进程的存储器分配以及程序加载。3.虚拟存储器通过在每条页表条目中加入保护位，从而简化了存储器保护。</p>
-<p>管理和使用虚拟存储器是一件困难和容易出错的任务。常见的错误事例：间接引用坏指针，读取未初始化的存储器，允许栈缓冲区溢出，假设指针和它们的指向的对象相同，引用指针而不是它所指向的对象，误解指针运算，引用不存在的变量，以及引起存储器泄漏。</p></p></blockquote>
 ]]></content>
   </entry>
   

@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="ping程序操作非常简单，往某个IP地址发送一个ICMP回射请求，该节点则以一个ICMP回射应答响应。此程序用到原始套接字。
-">
+  <meta name="description" content="Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/09/traceroute/">Traceroute</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T12:31:00+08:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in transmit&#8221;(传输中超时）错误。接着它递增TTL一次发送一个UDP数据报，从而逐步确定下一跳路由器。当某个UDP数据报到达最终目的地时，目标是由这个主机返送一个ICMP“port unreachable(端口不可达）“错误。这个目标通过向一个随机选取的（但愿）未被目的主机使用的端口发送UDP数据报得以实现。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/09/traceroute/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -449,47 +488,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/28/sql-proccessing/">SQL Proccessing</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-28T23:45:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>查询处理步骤：1.语法分析与翻译 2.优化  3.执行 如图：</p>
-<p>用于执行一个查询的原语的操作序列称为<strong>查询执行计划</strong>（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划，。执行该计划并把结果返回给查询。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/28/sql-proccessing/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -511,7 +509,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 110.0%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 135.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 150.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 155.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 110.0%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 109.23076923076923%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 132.30769230769232%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 146.15384615384616%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 150.76923076923077%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 109.23076923076923%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -522,12 +520,16 @@
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>tp-link (12)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>tp-link (13)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/01/fourteenth-day/">Fourteenth Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/01/thirteenth-day/">Thirteenth Day</a>
@@ -543,10 +545,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/25/eighth-day/">Eighth Day</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/24/seventh-day/">Seventh Day</a>
       </li>
     
   </ul>
