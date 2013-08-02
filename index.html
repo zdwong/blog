@@ -9,7 +9,8 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误， &hellip;">
+  <meta name="description" content="今天主要是把之前写的DebugLog模块转变为可以多进程调用的共享模块，基本上测试成功，但还不知道怎样对共享内存区域进行加锁。另外，还要尝试将DebugLog模块做成内核模块，就如printf函数一样的模块。好多知识要学，踏实点，不要眼高手低。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/02/fifteenth-day/">Fifteenth Day</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-02T23:14:00+08:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天主要是把之前写的DebugLog模块转变为可以多进程调用的共享模块，基本上测试成功，但还不知道怎样对共享内存区域进行加锁。另外，还要尝试将DebugLog模块做成内核模块，就如printf函数一样的模块。好多知识要学，踏实点，不要眼高手低。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/02/fifteenth-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -440,46 +481,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/19/firth-day/">Firth Day</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-19T23:45:00+08:00" pubdate data-updated="true">Jul 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是到tp-link的第五天，听了两个讲座，一个是关于tp-link的研发文化，另外一个是关于如何成为一名合格的研发工程师。说的清楚的，知其然,也要知其所以然。不要说“大概”，“似乎”这样的字眼。要有敬业精神，天下之事始于易，从懂得的下手，把难的事情做对，将易的事情做好。tp-link的研发氛围是不错的，只要肯攀登，肯定有自己表现的舞台。如果不是，那就是得过且过，终究在悔恨中消失。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/19/firth-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -499,7 +500,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 109.23076923076923%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 132.30769230769232%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 146.15384615384616%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 150.76923076923077%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 109.23076923076923%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/intern' style='font-size: 108.57142857142857%'>Intern</a>  <a href='/blog/categories/linux' style='font-size: 130.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 142.85714285714286%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 147.14285714285714%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 108.57142857142857%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -510,12 +511,16 @@
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (11)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>tp-link (13)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>tp-link (14)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/02/fifteenth-day/">Fifteenth Day</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/01/fourteenth-day/">Fourteenth Day</a>
@@ -531,10 +536,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/29/eleventh-day/">Eleventh Day</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/25/eighth-day/">Eighth Day</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-02T00:16:38+08:00</updated>
+  <updated>2013-08-02T23:25:23+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Fifteenth Day]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/02/fifteenth-day/"/>
+    <updated>2013-08-02T23:14:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/02/fifteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天主要是把之前写的DebugLog模块转变为可以多进程调用的共享模块，基本上测试成功，但还不知道怎样对共享内存区域进行加锁。另外，还要尝试将DebugLog模块做成内核模块，就如printf函数一样的模块。好多知识要学，踏实点，不要眼高手低。</p>
+<!-- more -->
+<p>将DebugLog模块编译成动态链接库，各个进程使用是独立的，包括模块中的全局变量，只有内存映射才是公共的，但各个进程来说，其地址又是不一样的，因为是进程使用的虚拟地址，所以存储在共享内存的数据,包含链表，都只能使用相对的地址，所有的操作都是利用指针进行相对地址的操作。</p>
+<p>今天有个关于MIPS架构的讲座，讲师很厉害，不过我也有几个不明白的地方，一：大小端问题，二：字节对齐问题 三：cache问题，以后还要慢慢弄懂这些问题，不要犯一些低级错误。如近期经常在while，或for循环后面加个“；”，其后面的代码根本就发挥不了作用，只执行了仅仅一次，就退出了。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Fourteenth Day]]></title>
@@ -61,21 +73,6 @@
 <p>今天写代码发现写代码的能力好低，大学写的代码太少了，并且经常颓废，都不是一心一意地去解决问题，而是让问题积累。要努力写代码啦！ </p>
 <p>今天总算见识了shell的厉害，以前一直都不愿意学，原来其作用还是好大的。与makeFile文件，svn和平时的工作都有密切的关系，特别是利用shell可以提高工作的效率。一步步来，一定行的，功夫不负有心人。</p>
 <p>看了乔布斯的之前的采访，发现我们董事长跟我们说的话许多都是来自乔爷爷。看来乔爷爷是我们的好榜样，乔爷爷说要有点taste（品味）的，而不是什么都是随众的。乔爷爷也是很有好奇心的，并且也好有想法去解决问题。不过乔爷爷也善于学习，其实好多也都是不是乔爷爷做出来的，如图形界面，面向对象，但乔爷爷都察觉到这就是未来的方向。乔爷爷说，跟优秀的人工作很happy，也不会有太多烦恼。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Eighth Day]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/25/eighth-day/"/>
-    <updated>2013-07-25T00:46:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/25/eighth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天的培训讲座分别是实验室管理的规章制度和嵌入式linux的开发。我有点担心我不会使用设备，这说明我不够自信心，也不够进取，单单使用设备都学不会，那不是简直笨得无法救药，如示波器。嵌入式开发之前也接触过一点，但是知识懂点皮毛，没有耐心地去学习。</p>
-<!-- more -->
-<p>初略地学习shell编程，没有一本很好的书，让自己学习。那就应该要积极解决问题，从家里寄来了几本不错的书，其中有《鸟哥linux私房菜》,那就应该没借口说自己没好书学习了。</p>
-<p>星期六也去打羽毛球了，虽然其中有些挫折，甚至不注意安全，这是非常不好的，又是犯一个老毛病，事前没有做好功课，连球拍的线都还没拉，就匆匆忙忙地去拉线和打球，足足迟到了一个小时，换做是另外的事情，也是这样。做事情没一点筹谋和策划，注定是没什么好结果的。</p>
-<P>星期六打完球后，真是累的，可能一天吃了七个香蕉的缘故，没有消化好，都怪我没有自控能力。但是有一点是肯定的，那就是我发现我的脚痛发作了，运动会导致之前受过伤但没医好的病发作，这个就一直都是我的心病了，不过，人要看开点，小小问题也就不足挂齿。</p>
-<p>星期日就要挨批了，买的书和送来的书都到了，一直在盼望，可惜到了，就什么兴奋都没有，并且也不去看了，反而看起电影来了，反而觉得电影还挺好看的，简直是愚蠢至极。现在是什么时候啦，看起《七宗罪》来啦，看起《大话西游》来啦，其实踏实做人，电影里的事情美好的事情还是会发生在现实中的，同时不好的事情也可以避免的。</p>
-<p><strong>如果自己真要选择颓废的话，那我就要想想如何面对他人的嘲笑，讽刺和鄙视，还将自己看得连狗都不如，自己却无力回击，甚至他们是不学无术之人。人争一口气佛争一炷香。你能吞得下这口气？</strong></p></p></blockquote>
 ]]></content>
   </entry>
   
