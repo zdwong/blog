@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="If I have a dream, I should keep and protect it. Don&#8217;t let myself down. The outside world is beatiful, wonderful and unbelievable. Could I &hellip;">
+  <meta name="description" content="linux系统下每个进程都有自己独立的内存空间，但实际应用却需要它们互相的通信去完成某项复杂的任务，这与面向对象程序的设计思想：高内聚，低耦合的思想一脉相承。linux下进程通信的方式：1.管道 2.有名管道（FIFO) 3.消息队列 4.共享内存 5.UNIX套接字。管道主要用于父子进程中， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/05/08/interprocess-communications/">Interprocess Communications</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-08T21:08:00+08:00" pubdate data-updated="true">May 8<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>linux系统下每个进程都有自己独立的内存空间，但实际应用却需要它们互相的通信去完成某项复杂的任务，这与面向对象程序的设计思想：高内聚，低耦合的思想一脉相承。linux下进程通信的方式：1.管道 2.有名管道（FIFO) 3.消息队列 4.共享内存 5.UNIX套接字。管道主要用于父子进程中，而有名管道是用于无亲缘关系的进程中。管道在linux命令很常见，如 who | sort | lp ，who的进程的输出是sort进程的输入，sort进程的输出又是lp进程的输入。共享内存是最快的一种通信方式。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/05/08/interprocess-communications/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -443,46 +483,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/28/catch-signal-in-monetdb/">Catch Signal in MonetDB</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-28T23:24:00+08:00" pubdate data-updated="true">Mar 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB运行在Unix系统上，就需要进行一些系统的捕捉和处理。下列是常见的几种信号：</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/28/catch-signal-in-monetdb/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -505,7 +505,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 104.61538461538461%'>English</a>  <a href='/blog/categories/intern' style='font-size: 109.23076923076923%'>Intern</a>  <a href='/blog/categories/life' style='font-size: 123.07692307692308%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.9230769230769%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 146.15384615384616%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 123.07692307692308%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 109.23076923076923%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 104.61538461538461%'>English</a>  <a href='/blog/categories/intern' style='font-size: 109.23076923076923%'>Intern</a>  <a href='/blog/categories/life' style='font-size: 127.6923076923077%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.9230769230769%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 146.15384615384616%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 123.07692307692308%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 109.23076923076923%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -516,7 +516,7 @@
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (10)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/english/'>english (1)</a></li>
-<li class='category'><a href='/blog/categories/life/'>life (5)</a></li>
+<li class='category'><a href='/blog/categories/life/'>life (6)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>psychology (5)</a></li>
 <li class='category'><a href='/blog/categories/tp-link/'>tp-link (13)</a></li>
 
@@ -524,6 +524,10 @@
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/03/peaceful-holiday/">静谧的假期</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/02/fifteenth-day/">Fifteenth Day</a>
@@ -539,10 +543,6 @@
     
       <li class="post">
         <a href="/blog/2013/07/31/twelveth-day/">Twelveth Day</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/29/eleventh-day/">Eleventh Day</a>
       </li>
     
   </ul>

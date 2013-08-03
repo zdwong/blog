@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-03T23:18:20+08:00</updated>
+  <updated>2013-08-03T23:36:50+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[静谧的假期]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/03/peaceful-holiday/"/>
+    <updated>2013-08-03T23:34:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/03/peaceful-holiday</id>
+    <content type="html"><![CDATA[<blockquote><p><p>假期，早上比平时睡多两个钟头，起床。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Fifteenth Day]]></title>
@@ -842,20 +851,6 @@
 
 
 <blockquote><p><p>线程的基本的同步机制：互斥、读写锁及条件变量,了解如何使用它们保护共享资源。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[New Concept English]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/09/new-concept-english/"/>
-    <updated>2013-07-09T12:35:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/09/new-concept-english</id>
-    <content type="html"><![CDATA[<blockquote><p><p>新概念英语我只是仰慕、走马观花，但一直都没有细心研读。因此英语停滞不前，人要用心，才会学有所成，而不是应付了事。时间不留人，荒废的青春会一去不复返，这是人人都是平等的。应该用在哪些地方，如何是用，怎样规划？这些都是需要思考的地方。</p>
-<!-- more -->
-<p>《Concept Second》的句子都基本上是简单句，如，The manager was sympathetic, but he could do nothing（来源于 It could be worse).</p>
-<p>《Concept Third》的句子略加复杂，如，Yet, in real life, circumstances do sometimes conspire to bring about coincidences which anyone but a nineteenth century novelist would find incredible（来源于 a chance in a million).这个句子里有定语从句。</p>
-<p>《Concept Fourth》的句子就已经很复杂了，如, Young men who have reason to fear that they will be killed in battle may justifiably feel bitter in the thought that they have been cheated of the best things that life has to offer(来源于 how to grow old）.这句子里有三个定语从句，一个宾语从句。</p>
-<p>由此可见，新概念英语从句子的长度、复杂度，题材的思考度来定义的。其许多文章的内容都值得去深思。如上面一篇文章《how to grow old》,就是教老人如何安度晚年的，属于心理范畴；《Youth》是谈论青年问题的；《Education》是谈论教育问题的。这些文章都是议论性的文章，在学习的时候，不但要懂得阐述文章上的观点，而且还要发表自己的看法，而不是人云亦云。要深入地学习文章，就要研讨它们，而不是有大概印象，或者大概有这回事的糊涂想法。</p></p></blockquote>
 ]]></content>
   </entry>
   
