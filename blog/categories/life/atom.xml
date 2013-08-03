@@ -4,7 +4,7 @@
   <title><![CDATA[Category: life | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/life/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-03T23:36:50+08:00</updated>
+  <updated>2013-08-04T01:17:00+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -18,12 +18,16 @@
     <link href="http://coolbrain.github.com/blog/2013/08/03/peaceful-holiday/"/>
     <updated>2013-08-03T23:34:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/08/03/peaceful-holiday</id>
-    <content type="html"><![CDATA[<blockquote><p><p>假期，早上比平时睡多两个钟头，起床。</p></p></blockquote>
+    <content type="html"><![CDATA[<blockquote><p><p>假期，早上比平时睡多两个钟头，起床，吃了很不错的breakfast。然后大致看了下《深入linux的内核架构》的这本书，想不到里面还有网络层的实现分析，我想找的是模块和设备驱动来解决我现在遇到的问题，发现这本书偏理论，应该先实践，对其有所了解，再从理论上分析，这样的过程才符合学习的规律。</p>
+<!-- more -->
+<p>中午的lunch也不错，哈工大的饭堂比华工的饭堂好多了，如果能够在这里读研究生，其实也是一件挺好的事情。睡个午觉，就去羽毛球了，来的人比较少，无人替换，于是采取省力策略，柔中带刚，刚中带柔，这果然奏效，坚持打了两个小时。不过回来后，整个人虚脱了，睡了三个小时才恢复元气。拿出本《量子物理史话》来看，又进入了波粒二象说的世界，三百年之争，到近代还是乌云密布，晴天霹雳。量子力学理论能够造出量子计算机，如果这个成的话，世界将再一次进行大洗牌。</p>
+<p>现在的科技发展好快，无人驾驶汽车就要面世，以后的人都会觉得人驾驶车是荒谬的。Google glass的进展也不错，它的面世将会逐步替代手机，因为带上的眼镜已经包含手机的所有功能，并且使用方便，不需要低头看手机。IBM的量子计算机，现代的高铁，私人飞行物，3G->4G时代，智能家居，这一切都在改变人类的生活，使人的步伐越来越快，也越来越舒适。在这样的大环境下，许多的问题就不成问题，但始终是那一句留得青山在不愁没柴烧。</p>
+<p>《量子物理史话》还分析了牛顿的苹果，瓦特的茶壶等脍炙人口的故事，其实并不真实，只是为了神化他们，或者通过这些来掩饰他们的理论是受到他人的启示的。真实的一面才是真实的生活，伟大的想法又怎会一蹴而就呢？其实通过长期的与人交流，摩擦产生。牛顿和胡克二十年来的恩恩怨怨难分难解，这才表明其实牛顿也是一个血肉之人。</p></p></blockquote>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Be Happy]]></title>
+    <title type="html"><![CDATA[知甘苦，近情理，心平气和]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/20/be-happy/"/>
     <updated>2013-07-20T23:51:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/20/be-happy</id>
@@ -37,7 +41,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[physical examination]]></title>
+    <title type="html"><![CDATA[入职和体检]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/14/physical-examination/"/>
     <updated>2013-07-14T20:20:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/14/physical-examination</id>
