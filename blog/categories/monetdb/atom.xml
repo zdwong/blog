@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MonetDB | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/monetdb/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-04T01:44:08+08:00</updated>
+  <updated>2013-08-04T02:12:24+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[MonetDB VS PostgreSQL]]></title>
+    <title type="html"><![CDATA[MonetDB VS PostgreSQL数据库]]></title>
     <link href="http://coolbrain.github.com/blog/2013/04/28/monetdb-vs-postgresql/"/>
     <updated>2013-04-28T19:43:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/04/28/monetdb-vs-postgresql</id>
@@ -35,7 +35,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Memo-based Query Execution]]></title>
+    <title type="html"><![CDATA[基于Memo-based(日志)的查询执行]]></title>
     <link href="http://coolbrain.github.com/blog/2013/04/26/memo-based-query-execution/"/>
     <updated>2013-04-26T22:57:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/04/26/memo-based-query-execution</id>
@@ -2741,7 +2741,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[MonetDB Optimizers]]></title>
+    <title type="html"><![CDATA[MonetDB 优化器]]></title>
     <link href="http://coolbrain.github.com/blog/2013/04/24/monetdb-optimizers/"/>
     <updated>2013-04-24T20:02:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/04/24/monetdb-optimizers</id>
@@ -6728,7 +6728,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[MonetDB's Mmap]]></title>
+    <title type="html"><![CDATA[MonetDB 内存映射mmap]]></title>
     <link href="http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory/"/>
     <updated>2013-03-29T23:47:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/03/29/monetdbs-memory</id>
@@ -6975,7 +6975,7 @@ MonetDB使用mmap实现大内存块的分配和大文件的内存映射,这样�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Catch Signal in MonetDB]]></title>
+    <title type="html"><![CDATA[MonetDB 捕捉信号]]></title>
     <link href="http://coolbrain.github.com/blog/2013/03/28/catch-signal-in-monetdb/"/>
     <updated>2013-03-28T23:24:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/03/28/catch-signal-in-monetdb</id>

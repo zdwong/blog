@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-04T01:44:08+08:00</updated>
+  <updated>2013-08-04T02:12:24+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -26,7 +26,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Malloc]]></title>
+    <title type="html"><![CDATA[Malloc内存管理]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/12/malloc/"/>
     <updated>2013-07-12T01:16:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/12/malloc</id>
@@ -261,7 +261,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Linux Command]]></title>
+    <title type="html"><![CDATA[Linux常用命令]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/11/linux-command/"/>
     <updated>2013-07-11T00:39:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/11/linux-command</id>
@@ -457,7 +457,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Thread]]></title>
+    <title type="html"><![CDATA[Thread线程同步]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/10/thread/"/>
     <updated>2013-07-10T15:53:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/10/thread</id>
@@ -783,7 +783,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Traceroute]]></title>
+    <title type="html"><![CDATA[Traceroute源码]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/09/traceroute/"/>
     <updated>2013-07-09T12:31:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/09/traceroute</id>

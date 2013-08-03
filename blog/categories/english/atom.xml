@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: english | ForgeBrain]]></title>
+  <title><![CDATA[Category: English | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/english/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-04T01:44:08+08:00</updated>
+  <updated>2013-08-04T02:12:24+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[New Concept English]]></title>
+    <title type="html"><![CDATA[新概念英语]]></title>
     <link href="http://coolbrain.github.com/blog/2013/07/09/new-concept-english/"/>
     <updated>2013-07-09T12:35:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/07/09/new-concept-english</id>
@@ -24,6 +24,47 @@
 <p>《Concept Third》的句子略加复杂，如，Yet, in real life, circumstances do sometimes conspire to bring about coincidences which anyone but a nineteenth century novelist would find incredible（来源于 a chance in a million).这个句子里有定语从句。</p>
 <p>《Concept Fourth》的句子就已经很复杂了，如, Young men who have reason to fear that they will be killed in battle may justifiably feel bitter in the thought that they have been cheated of the best things that life has to offer(来源于 how to grow old）.这句子里有三个定语从句，一个宾语从句。</p>
 <p>由此可见，新概念英语从句子的长度、复杂度，题材的思考度来定义的。其许多文章的内容都值得去深思。如上面一篇文章《how to grow old》,就是教老人如何安度晚年的，属于心理范畴；《Youth》是谈论青年问题的；《Education》是谈论教育问题的。这些文章都是议论性的文章，在学习的时候，不但要懂得阐述文章上的观点，而且还要发表自己的看法，而不是人云亦云。要深入地学习文章，就要研讨它们，而不是有大概印象，或者大概有这回事的糊涂想法。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[开天辟地 继往开来]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/03/15/commemorate/"/>
+    <updated>2013-03-15T23:10:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/03/15/commemorate</id>
+    <content type="html"><![CDATA[<blockquote><p><p>Today is a good beginning because I spare the time not watching TV but constructing my own blog.Eventually, I can almost control everything in my field. There is no useless links,no disgusting advertisements, no boring replies.The things existing in blog is very fantastic,invaluable and wonderful.Every time I see them,my mind becomes clear.</p>
+<!-- more -->
+<p> I am willing to share a saying:"yesterday is history,tomorrow is mystery,but today is gift." So Today is precious  because it would be yesterday's result and decides the tomorrow.Don't let myself be addicted in guilty of yesterday's mistakes.In the meantime, don't let tomorrow's uncertainty upset me.</p>
+<p><strong>Because I am a programmer, this blog is used as the analysis of monetdb,including source code and design architecture.</strong>this is the example of highlighting the code</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>example  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Action speak louder than Voice!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="n">printf</span><span class="p">(</span><span class="s">&quot;This could work elegant!&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>Ok, the things I should have been done will be finished now!</p>
+<p>Luckily, I would show some pictures when were token in climbing Baiyun mountain with brothers.</p>
+<img src="/assets/images/mountain.jpg" alt="&quot;BAT&quot;" />
+<p>Wo! I am climbing a tree,but I want to tell you a secret,It's hard to climb and I feel horrible and painful after it.</p>
+<img src="/assets/images/tree.jpg" alt="&quot;tree&quot;" />
+<p>I can't show the pictures anymore because they slow down my website and I can't bear low velocity,that will kill myself.Maybe there are effective methods to solve this problem which I will find out in next day.</p>
+<p>Even though the blog can run normally,but there are many things waitting me to do.It's just a beginning,not an end.</p></p></blockquote>
 ]]></content>
   </entry>
   

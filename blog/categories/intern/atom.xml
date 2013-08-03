@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Intern | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/intern/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-04T01:44:08+08:00</updated>
+  <updated>2013-08-04T02:12:24+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Bugs]]></title>
+    <title type="html"><![CDATA[代码的Bugs(臭虫)]]></title>
     <link href="http://coolbrain.github.com/blog/2013/04/10/bugs/"/>
     <updated>2013-04-10T21:36:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/04/10/bugs</id>
@@ -69,7 +69,7 @@
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[SIP Application]]></title>
+    <title type="html"><![CDATA[SIP 协议]]></title>
     <link href="http://coolbrain.github.com/blog/2013/03/27/sip-introduction/"/>
     <updated>2013-03-27T23:58:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/03/27/sip-introduction</id>
