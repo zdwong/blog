@@ -4,7 +4,7 @@
   <title><![CDATA[Category: psychology | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/psychology/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-03T11:54:12+08:00</updated>
+  <updated>2013-08-03T12:06:34+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,58 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Processor Architecture]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/21/processor-architecture/"/>
-    <updated>2013-07-21T23:53:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/21/processor-architecture</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。之后讲到SEQ硬件结构、时序和实现。最后讲到的SEQ流水线的实现和对流水线固有问题的解决。如用暂停和转发来避免数据冒险。还说到流水线控制逻辑：1.处理ret；2.加载/使用冒险；3.预测错误的分支；4.异常。同时指出Y86处理器未完成的实现：1.多周期指令；2.与存储系统的接口。</p>
-<!-- more -->
-<p>大概看了这一章，我问自己，何为系统？如现实的处理器就是很复杂的系统，有其基本执行的流程，如加法、乘法，也有提高其吞吐量的流水线管道，但同时也有其反馈机制和异常处理，保证其正确地执行和反应真实的运行情况。如初中生物学到人体的八大系统，有其正常的运作，也有其反馈机制和与其它系统沟通的接口。系统，我觉得是一个由内部机制控制运行的物体，同时提供与外部交流的接口。</p>
-<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬又怎会有脸皮的？豁出去吧！</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Be Happy]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/20/be-happy/"/>
-    <updated>2013-07-20T23:51:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/20/be-happy</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天是星期六不用上班，在科技图书馆度过。不过，大概只看了半日的时间，又想起过去的事情来了。因为我在看的《深入理解计算机系统》，许多知识都是大学学过的，似曾相识，可惜我都没有掌握。越想，心情越不能平静下来，当想到大学居然没一件事做对的时候，自己就快要崩溃了。一直有个疑问，为什么那时候会犯这样的弥天大错？</p>
-<!-- more -->
-<p>过去的事情想得清楚当然去想，但不要影响自己的情绪，做一个积极的悲观主义者，Be Happy，积极去解决问题。</p>
-<p>《深入理解计算机系统》的优化程序性能，存储体系结构，虚拟存储器这几章都是从程序员的角度看待计算机硬件的工作原理，利用其实现的原理，写出更加高效的程序。这几章与计算机硬件打交道，一定要看懂，作为以后工作的突破点。这本书将其作为计算机的圣经也不为过。</p>
-<p>今天也有看《量子物理史话》，似乎现在没有之前那么好看了。因为我似乎心不在焉，那就先看计算机相关的吧。</p>
-<p>无论日子怎么样，都要保持愉悦的心态。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[New Concept English]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/09/new-concept-english/"/>
-    <updated>2013-07-09T12:35:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/09/new-concept-english</id>
-    <content type="html"><![CDATA[<blockquote><p><p>新概念英语我只是仰慕、走马观花，但一直都没有细心研读。因此英语停滞不前，人要用心，才会学有所成，而不是应付了事。时间不留人，荒废的青春会一去不复返，这是人人都是平等的。应该用在哪些地方，如何是用，怎样规划？这些都是需要思考的地方。</p>
-<!-- more -->
-<p>《Concept Second》的句子都基本上是简单句，如，The manager was sympathetic, but he could do nothing（来源于 It could be worse).</p>
-<p>《Concept Third》的句子略加复杂，如，Yet, in real life, circumstances do sometimes conspire to bring about coincidences which anyone but a nineteenth century novelist would find incredible（来源于 a chance in a million).这个句子里有定语从句。</p>
-<p>《Concept Fourth》的句子就已经很复杂了，如, Young men who have reason to fear that they will be killed in battle may justifiably feel bitter in the thought that they have been cheated of the best things that life has to offer(来源于 how to grow old）.这句子里有三个定语从句，一个宾语从句。</p>
-<p>由此可见，新概念英语从句子的长度、复杂度，题材的思考度来定义的。其许多文章的内容都值得去深思。如上面一篇文章《how to grow old》,就是教老人如何安度晚年的，属于心理范畴；《Youth》是谈论青年问题的；《Education》是谈论教育问题的。这些文章都是议论性的文章，在学习的时候，不但要懂得阐述文章上的观点，而且还要发表自己的看法，而不是人云亦云。要深入地学习文章，就要研讨它们，而不是有大概印象，或者大概有这回事的糊涂想法。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[literature]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/09/literature/"/>
-    <updated>2013-07-09T12:32:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/09/literature</id>
-    <content type="html"><![CDATA[<blockquote><p><p>《红楼梦》这是一本随着年龄的增长，越读越有意思的书。高中的时候读，可能比较关注贾宝玉、林黛玉、薛宝钗等人。再大一点读，才发现凤姐的厉害，精明能干、相貌出众的人。贾瑞一见凤姐，就起淫心。他也不掂量一下自己有多少斤两，简直是癞蛤蟆想吃天鹅肉，凤姐略施小计，暗示他要改过自身，可惜其不吸取教训，只有去阎罗王那里报到，死之前，还幻想着和凤姐进行云雨之情，难为他老爸含辛茹苦地将其抚养成人，还对他勤加管教，想其有一日能够考取功名利禄、鸡犬升天。在三妻四妾的封建社会，虽然凤姐是一个超级女强人，使色胆包天的贾琏基本上没有妾侍，但其难保贾琏不会在外面拈花野草，偷鸡摸狗、风流快活，从偷取尤二姐就反映贾琏虽然惧怕凤姐，但也有胆量去做凤姐不允许的事情。不过凤姐也够心狠手辣，斩草除根。可惜尤二姐，就这样香消玉损，和尤三姐相比，就没有那么刚烈潇洒。在《红楼梦》中，薛宝钗，袭人等人都是“识时务”之人，讨得大家的欢心；林黛玉、晴雯等人就是有个性，不喜欢迎合的人；贾宝玉更倾向于林黛玉这类人。尤三姐、鸳鸯是刚烈，不对现实屈服的人；史湘云是豁达之人。</p>
-<!-- more -->
-<p>《围城》钱锺书这本书的文字幽默风趣的，曲高和众。方鸿渐是一个冒牌的哲学博士，而苏小姐是一个名副其实的博士，在回国的路上，苏小姐对方鸿渐已经有意思，回国后，苏小姐更想方鸿渐主动地追求她，可惜他喜欢上其表妹唐小姐，后来他俩也因双方互相误解而分开。方鸿渐也去三闾大学教书，在路途上认识孙柔嘉，在三闾大学，由于他帮助过她，且受人所托照顾她，最终二人还走入婚姻的殿堂。不过，自从二人结婚后，大家都不满于双方的作为，以至于两人开始感情上的分裂，日日吵闹。婚姻，未进入的人渴望进入，已经进入的人渴望能够出来。</p>
-<p>《老子》是关于老子思想的书籍，老子思想的核心是无为而治，顺其自然。</p></p></blockquote>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Movies]]></title>
@@ -87,6 +35,275 @@
 <p>《国王的演讲》一个口吃的国王，在二战英国受难时，挺身而出，最终成为一个吐字清晰的国王。</p>
 <p>《霸王别姬》人如戏，戏如生。</p>
 <p>...这么多的电影，就总结了这么多，实在太小太小，太不可思议。真是光阴似箭，岁月如梭！</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Procrastination]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/06/09/procrastination/"/>
+    <updated>2013-06-09T20:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/06/09/procrastination</id>
+    <content type="html"><![CDATA[<blockquote><p><p>按照百度百科的解释，单纯地做事拖拉或是懒得去做，只能定义为“拖延”，也仅是一种坏习惯，改正它并不难。<strong>当“拖延”已经影响到情绪，如出现强烈自责情绪，强烈负罪感，不断的自我否定、自我贬低，伴生出焦虑症、抑郁症等心理疾病时，才能称之为“拖延症”</strong>。</p>
+<!-- more -->
+<p>拖延的基础，实际上是对自身很高甚至不切实际的期望，如果说完成任务是走过一块一人宽、十米长的厚木板，那么当它放在地面上时，几乎人人都可以轻松地走过，但对结果的高期望则像是将这块木板架到了两座高楼间十层楼高的地方，于是我们会害怕掉下来，即害怕失败或害怕成功，甚至不敢向前迈上一步，而deadline则是身后的一团火，当它离我们足够近时，害怕被烧着的恐惧感战胜了对掉下去的恐惧感，于是我们一下子冲了过去，在deadline前赶完了任务，尽管质量难说。 </p>
+<p>更可怕的是，很多拖延的人甚至很享受那种deadline过后突然一下放松的感觉，而且拖延的结果有时反而挺好。这种时候，会在心里表扬自己很有“效率”。同时，长期这样下去，尽管不愿承认，但潜意识里确实觉得自己如果花了很多时间成绩却平平，会是一件非常丢脸的事情。于是这一切的一切，都再次强化的拖延。</p>
+<p>拖延症之歌</p>
+<p>See I have to write this essay </p>
+<p>that the teacher gave last week </p>
+<p>and it's due tomorrow morning </p>
+<p>twenty pages all in Greek </p>
+<p>Nah but first I check my Tumblur</p>
+<p>Facebook,Twitter, call my Mom </p>
+<p>Then just one more, one more page</p>
+<p>oh I waste so much time dot com </p>
+<p>I'm procrastinating</p>
+<p>All day I sit here waiting</p>
+<p>for just the perfect moment to begin</p>
+<p>we're procrastinating</p>
+<p>Why work, we could be gaming</p>
+<p>Agreed! Procrastinating FTM!</p>
+<p>I have to start this diet</p>
+<p>cause my prom's a week away</p>
+<p>So I'm only eating veggies</p>
+<p>and I'm starting that today</p>
+<p>But I'm getting really hungry</p>
+<p>and those cookies look sublime</p>
+<p>Fine,I'll have just one, or two, or ten</p>
+<p>Why not?It's not crime!<p>
+<p>We're procrasinating</p>
+<p>No better way than eating</p>
+<p>cause nothing else could possibly compare</p>
+<p>I'm procrastinating</p>
+<p>It's really fascinating</p>
+<p>I know there's work to do but I don't care</p>
+<p>I should probably do my laundry</p>
+<p>I should probably feed my cat</p>
+<p>But right now we're playing Halo</p>
+<p>YOLO! Headshot! Take that!</p>
+<p>You should probably call the doctor</p>
+<p>Never mind it's just a scratch</p>
+<p>But your arm's gone</p>
+<p>It's a flesh wound</p>
+<p>Now come on let's play some catch!</p>
+<p>I have organized my desktop</p>
+<p>Now I'm all set up to work</p>
+<p>Wait that picture's kinda crooked</p>
+<p>and it's driving me berserk</p>
+<p>Now I might as well just color code</p>
+<p>my pencils one by one</p>
+<p>and my papers and my files</p>
+<p>I can't work until it's done!</p>
+<p>We're procrastinating</p>
+<p>All day I sit here waiting</p>
+<p>for just the perfect moment to begin</p>
+<p>We're procrastinating</p>
+<p>Wait!</p>
+<p>You're procratinating right now</p>
+<p>You're procratinating</p>
+<p>Why are you still here watching?</p>
+<p>I'm sure that you've got things due long ago</p>
+<p>You're procratinating</p>
+<p>Please leave a thumbs up rating</p>
+<p>Go do your work</p>
+<p>Tomorrow!</p>
+<p>大学最后论文阶段，我患上了严重的拖延症，导致焦虑，自我否定，最终论文质量大打折扣。因为心情不好，遇到挫折后，就不断拖延，直至弄出个大头佛。大学不但失败，而且被别人冷朝热讽，人啊，要有所兼顾，但要做最重要的事情，不要本末倒置，不然适得其反；戒骄戒躁，坚持前行;不要轻信人言，要懂得分析；不要感情用事，用行动改变现状！</p>
+<p><strong>与其沉沉闷闷地抱怨人生,不如轰轰烈烈地扭转乾坤</strong></p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Goal-Setting Process]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/05/23/goal-setting-process/"/>
+    <updated>2013-05-23T22:58:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/05/23/goal-setting-process</id>
+    <content type="html"><![CDATA[<blockquote><p><p>This passage is talking about Goal-Setting Process.(字字珠玑）</p>
+<p>1.<strong>Decide exactly what you want in every key area of your life.</strong>(心之所向） Start off by idealing.</p>
+<p>2.<strong>write it down.</strong>(好记性不如烂笔头） They must be clear, specific, detailed and measurable.</p>
+<!-- more -->
+<p>3.<strong>set a deadline.</strong>(末日将至) Your subsconscious mind uses deadlines as "forcing systems " to drive you, consciously and unconsciously toward achieving your goal on scheduler.</p>
+<p>4.<strong>Identity the obstacles that you will have to overcome to achieve your goal.</strong>(知己知彼、百战不殆） Only 20% of the reasons you are not achieving your goal are on the outside. Always start with yourself.The 80/20 Rule applied to constraints.</p>
+<p>5.<strong>Identity the knowledge, information and skills you will need to achieve your goal.</strong>（未雨绸缪) Especially, identify the skills that you will have to develop to be in the top 10% of your field. </p>
+<p>6.<strong>Identity the people whose help and cooperation you will acquire to achieve your goal.</strong>(三顾茅庐、合作无间） One key person at a certain time and place in your life will make all the difference. </p>
+<p>7.<strong>Make a list of everything you will have to do to achieve your goal.</strong> "(步步为营） A journey of  a thousand miles begin with a single step". You can build the biggest wall in the world one brick at a time. </p>
+<p>8.<strong>Organize your list into a plan.</strong>（举足轻重） You organize this list by arranging the steps that you have identified by sequence and priority. The 80/20 Rule says that 80% of your result will come from 20% of your activities.</p>
+<p>9.<strong>Make a plan.</strong> （一气呵成）Organize your list into a series of steps from the beginning all the way through to the completion of your goal. </p>
+<p>10.<strong>Select your number one, most important task for each day.</strong>（明察秋毫、井然有条、重点优先）Set priorities on your list using the 80/20 rule.</p>
+<p>11.<strong>Develop the habit of self-discipline.</strong>（三思而后行，吾日三省吾身） Once you have decide on your most important task. Resolve to concentrate singled-mindedly on that one task until it is 100% completed.</p>
+<p>12.<strong>Practise visualization on your goals.</strong>（望梅止渴） Create clear, vivid, exciting, emotional picture of your goals as if they were already a reality.<p>
+<p>根据自己的兴趣爱好，定好计划，排号优先级，实现自己的目标。且不断改善自身，自律，约束自己的行为举止，同时也要懂得和别人相处和交流。有时候，要想自己实现目标的快乐，这样才能使自己更加有动力，对未来更加之憧憬，对现在更加是珍惜。</p>
+<p><strong>Motto: No man's education is ever finished. A man's reading program should be as carefully planned as his daily diet, for that too is food, without which he cannot mentally develop.</strong> </p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Places of Historical Interest]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest/"/>
+    <updated>2013-05-06T20:14:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/05/06/places-of-historical-interest</id>
+    <content type="html"><![CDATA[<blockquote><p><p>If I have a dream, I should keep and protect it. Don't let myself down. The outside world is beatiful, wonderful and unbelievable. Could I always keep hope in my heart? It's easy to give up, to walk away; but it's hard to stay, live and make things better. Don't think about myself. Think about my parents, the people around me. Am I worthy? </p>
+<!-- more -->
+<p>2013.6月我去深圳的世界之窗，发现原来里面全是世界名胜古迹的赝品，在这里已经流连忘返、乐在其中，更何况是真正的名胜古迹。要知道自己的世界是由自己决定，是否成为井底之蛙，或者"会当凌绝顶，一览众山小",就看自己的选择。只是仰慕、瞻仰是不够的，要有切实的行动。不单单是这样的事情，更多的事情也有现在的状态去决定。</p>
+<p>I want to show some photos to inspire myself. Many great places are waiting me to see.</p>
+U.S Congress, the symbol of American democracy
+<img src="http://coolbrain.github.com/assets/images/place/U.S_Congress.jpg"  alt="U.S_Congress"/>
+Washington Monument
+<img src="http://coolbrain.github.com/assets/images/place/Washington_Monument.jpg"  alt="Washington_Monument"/>
+Lincoln Memorial. Lincoln is the most respectable president in America. History witnesses this great man. One hundred year later, Martin Luther King gave a great speech 《 I have a dream 》 at this place, 28 August 1963.
+<img src="http://coolbrain.github.com/assets/images/place/Lincoln_Memorial.jpg"  alt="Lincoln_Memorial"/>
+Golden Gate Brige
+<img src="http://coolbrain.github.com/assets/images/place/Golden_Gate_Bridge.jpg"  alt="Golden_Gate_Bridge"/>
+Canyonlands Utah. Natural scenary
+<img src="http://coolbrain.github.com/assets/images/place/Canyonlands.jpg"  alt="Canyonlands"/>
+Maine Coast
+<img src="http://coolbrain.github.com/assets/images/place/Maine_coast.jpg"  alt="Maine_coast"/>
+River Thames, London
+<img src="http://coolbrain.github.com/assets/images/place/River_Thames.jpg"  alt="River_Thames"/>
+Millennium Bridge
+<img src="http://coolbrain.github.com/assets/images/place/Millennium_Bridge.jpg"  alt="Millennium_Bridge"/>
+Buckingham Palace
+<img src="http://coolbrain.github.com/assets/images/place/Buckingham_Palace.jpg"  alt="Buckingham_Palace"/>
+Standing gaurd, Ancient Egypt
+<img src="http://coolbrain.github.com/assets/images/place/Standing_gaurd.jpg"  alt="Standing_gaurd"/>
+Temple of Horus
+<img src="http://coolbrain.github.com/assets/images/place/Temple_of_Horus.jpg"  alt="Temple_of_Horus"/>
+Architectural marvel
+<img src="http://coolbrain.github.com/assets/images/place/Architectural_marvel.jpg"  alt="Architectural_marvel"/>
+Christ the Redeemer, Brazil
+<img src="http://coolbrain.github.com/assets/images/place/Christ_the_Redeemer.jpg"  alt="Christ_the_Redeemer"/>
+<p>人生有几多个十年？最紧要要过得痛快。其实很多的话都是meaningless，不会produce any effect，但好像我这样的人，就当作宝了。一个人不meditate，reflect，其实就不算人了，与动物无异。在历史面前，谦卑，景仰和沉思。</p>
+<p>希望听起这首背景曲调时，会想起某些事，某些人，谁有能理解谁呢？时代已变，以前想都不敢想的观念，现在已经深入人心，但这个时代也有这时代的局限，让人觉得透不过起来，是啊，假如人不能适应现时代，那就--闷闷不乐，郁郁寡欢。<a href="http://dabaoku.com/dabaoku/uploads/soft/yinxiao/beijing/166.mp3">金枝欲攀叹调.</a></p>
+<p><a href="http://www.nbcnews.com/id/6981409/ns/travel-travel_photos/">Reference Source:traval_photos</a></p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Depression]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/04/26/depression/"/>
+    <updated>2013-04-26T17:59:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/04/26/depression</id>
+    <content type="html"><![CDATA[<blockquote><p><p>The famous song BOAST of Eason origin from Depression which was written the night of April 1st,2003 by C.Y.Kong who was one of best friends of Leslie committed suicide that day. C.Y.Kong could't understand leslie's decision and wrote a song with ghostly synth to ask him or in memory of him. Eason liked the key change and the style of the song. He wrote some words for the song and Wyman helped him finish off what he wrote.This is how BOAST produced.Please appreciate<a href="http://www.cykong.com/Projects/Audio/Depression(DemoMelody).mp3">The orginal demo</a>  C.Y.Kong's Note: To me, this demo will always be dedicated to leslie.</p>
+<!-- more -->
+<p>浮夸歌词，because I am addicted to this song and willing to translate to English.</p>
+有人问我我就会讲 但是无人来
+<p>if someone ask me, I will talk, but no one come</p>
+我期待 到无奈 有话要讲 得不到装载
+<p>I expect unitl feel helpless. even with words, no chance to express</p>
+我的心情犹豫像樽盖 等被揭开
+<p>the mood is like bottle to be opened</p>
+咀巴却在养青苔
+<p>but the mouth is growing moss and mushroom</p>
+人潮内愈文静 愈变得不受理睬
+<p>the more silent in crowd, the fewer people care of you</p>
+自己要搞出意外
+<p>make accidents by myself</p>
+像突然 地高歌
+<p>like singing loudly and suddenly</p>
+任何地方也像开四面台
+<p>anywhere is like having performace in all directions</p>
+着最闪的衫 扮十分感慨
+<p>wear colorful clothes, diguise as being filled with one thousand regrets</p>
+有人来拍照要记住插袋
+<p>put hands into pockets when someone is coming to take photos</p>
+你当我是浮夸吧 夸张只因我很怕
+<p>you treat me as boast, boast as I am deadly fear</p>
+似木头 似石头的话 得到注意吗
+<p>if like wood or stone, am I get caution </p>
+其实怕被忘记 至放大来演吧
+<p>actually I perform exaggerately as afraid to be forgotten</p>
+很不安 怎去优雅
+<p>deadly upset, how can I be elegant</p>
+世上还赞颂沉默吗
+<p>does the world still praise silence</p>
+不够爆炸 怎麽有话题
+<p>not explosive enough, are there any topic</p>
+让我夸做大娱乐家
+<p>let me boast to be big entertainer</p>
+那年十八 母校舞会 站着如喽罗
+<p>stand as monkey when eighteen in old school's ball</p>
+那时候 我含泪发誓各位 必须看到我
+<p>in that time, refrain from tears and swear everyone must see me in the future </p>
+在世间 平凡又普通的路太多
+<p>there are too many plain and ordinary roads in this world</p>
+屋村你住哪一座
+<p>which road do you live in </p>
+情爱中 工作中 受过的忽视太多
+<p>suffer too much ignorance in love and work</p>
+自尊已饱经跌堕 重视能治肚饿
+<p>there is almost no respect in heart, paying much attention can cure hunger of stomach</p>
+末曾获得过便知我为何 大动作很多
+<p>not ever been gotten, you know me why I have so many big movements</p>
+犯下这些错 搏人们看看我 算病态麽
+<p>make these mistakes, let people judge me whether ill</p>
+幸运儿并不多 若然未当过就知我为何
+<p>there is not many lucky dog, if have not ever been, you know me why</p>
+用十倍苦心 做突出一个
+<p>to be prominent by ten times pains</p>
+正常人够我富议论性么
+<p>normal people is more controversive than me</p>
+你叫我做浮夸吧 加几声嘘声也不怕
+<p>you call me BOAST, don't be afraid to add some shushing </p>
+我在场 有闷场的话
+<p>if I am present and you feel bored</p>
+表演你看吗 够歇斯底里 吗
+<p>can I perform for you, and am I hysterical enough </p>
+以眼泪淋花吧 一心只想你惊讶
+<p>water flower with tears, wholeheartly just want you be suprised</p>
+我旧时似未存在吗
+<p>was I  existing as air in old times</p>
+加重注码 青筋 也现形
+<p>add note yards, blue veins also appear</p>
+话我知 现在存在吗
+<p>please tell me whether I am existing now</p>
+凝视我 别再只看天花
+<p>don't just only see smallpox when glazing at me</p>
+我非你杯茶 也可尽情地喝吧
+<p>I am not a cup of tea of yours, but you can drink it with abandon</p>
+别遗忘有人在 为你 声沙
+<p>don't forget someone hoarse for you</p>
+<p>只因为听了《浮夸》,full of curiosity,search on the internet and know the detail of the song. 张国荣被港人尊称为“哥哥”。我觉得哥哥唱《the moon represent my heart》时，富含感情。哥哥拍的电影《霸王别姬》，简直就是曲高和众。不知道里面的虞姬是否是哥哥现实中的写照呢？哥哥从一而终，对京剧国粹的痴迷，执着，在清朝末代，北洋时期，国民党统治时期，抗日战争，内战，新中国，文革时期，依然没有糟蹋戏。假霸王，真虞姬。</p>
+<p>电影中经典的台词：
+<p>1.人得自个儿成全自个儿 </p>
+<p>2.要想人前现贵，必先人后受罪 </p>
+<p>3.我是假霸王，你是真虞姬 </p>
+<p>4.不疯魔不成活 </p>
+<p>5.自古人生在世，需有一技之能；我辈既务斯业，便当专心用功；以后名扬四海，根据即在年轻。</p>
+<p>6.从一而终</p>
+<p>哥哥在电影中扮演的虞姬，此一回眸...</p>
+<img src="/assets/images/lesie.gif" alt="&quot;brother&quot;" /></p>
+
+<p><p>PS：The Moon Represent my Heart歌词：</p>
+你问我爱你有多深
+<p>how deep I loved you </p>
+我爱你有几分
+<p>how strong emotion within myself</p>
+<p>you are wondering </p>
+我的情不移
+<p>my feeling is true</p>
+我的爱不变
+<p>my love is never new</p>
+月亮代表我的心
+<p>the moon represents my heart</p>
+你问我爱你有多深
+<p>how deep I loved you</p>
+我爱你有几分
+<p>how strong emotion within myself</p>
+<p>you want to know</p>
+我的情不移
+<p>my passion for you is real</p>
+我的爱不变
+<p>my devotion to you is a belief</p>
+月亮代表我的心
+<p>the moon represent my heart</p>
+轻轻的一个吻
+<p>a tender kiss</p>
+已经打动我的心
+<p>moved me to the heaven</p>
+深深的一段情
+<p>a loved story between you</p>
+叫我思念到如今
+<p>it's alive until today</p>
+would you think so
+<p>would you trust me</p></p></blockquote>
 ]]></content>
   </entry>
   
