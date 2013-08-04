@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Library | ForgeBrain]]></title>
+  <link href="http://coolbrain.github.com/blog/categories/library/atom.xml" rel="self"/>
+  <link href="http://coolbrain.github.com/"/>
+  <updated>2013-08-04T23:42:52+08:00</updated>
+  <id>http://coolbrain.github.com/</id>
+  <author>
+    <name><![CDATA[ForgeBrain]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[锲而舍之，朽木不折]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/04/shenzhen-library/"/>
+    <updated>2013-08-04T22:32:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/04/shenzhen-library</id>
+    <content type="html"><![CDATA[<blockquote><p><p>由于昨天打球比较激烈，今天仍然有点头晕，于是就决定睡多几个钟头。这让我怀疑是否我有病，怎么打了两个钟头的羽毛球就变成这样？下次再验证一下。</p>
+<p>睡得天昏地暗，起来也把自己要做的事情忘得一干二净。还是要听从同学的建议，虽然做大计划是不必要的，但小计划还是需要的，不然有时候茫然不知所措。于是就在电脑旁无聊地坐着，突然想起某个高一的女生，不知道她现在怎样呢？我记得我刚来培英的时候，她坐在我前面，她当时和我说的话很少，或者有时候我觉得她看不起我。不过分班之后，就基本上没怎么见过她。高三的时候，她有次碰到我，居然好亲切地叫了我“达哥”，令我受宠若惊。我思前思后，总结出：<strong>要努力，别人才会瞧得起自己。</strong>我在电脑旁用尽所有的搜索工具，都找不到其相关信息，百度，Google，人人网，朋友网，新浪微博...见到许多高中同学的信息，就是见不到她的，最终我也觉得自己够无聊的,于是决定出去走走。</p>
+<p>老地方，深圳科技图书馆。发现之前自己苦苦寻找的shell编程书就在书架上，由于之前自己反应迟钝，被别人抢占先机，都怪自己先知后觉。于是走到英文杂志栏，发现有许多之前想看的杂志，就货真价实地摆在眼前，从高一的时候，我就想看《Scientific American》，但我找遍我们的图书馆都没有，但现在一叠叠都是，却失去了之前的热情。还有《Economist》、《Fortune》、《Science》、《Nature》、《Time》还有许多的杂志，翻看了一下，感觉看得非常吃力，英文没学好，好多单词都不认识，阻碍阅读。想不到学了十几年的英语是如此不堪一击，愧对列祖列宗，愧对天地神灵，愧对十几年的青春光阴。不知曾几何时，就告诉自己，学知识不要囫囵吞枣，浅尝辄止，事实摆在眼前，半桶水的英语只能匍匐前进，随时遭到炮轰，死无全尸，灰飞烟灭。<strong>想要Difference，就要凭真本事，那不是一时一刻就可以练就的，忌好高骛远，心浮气躁，毫无主见，漂移不定。</strong></p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[知甘苦 近情理 心平气和]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/20/be-happy/"/>
+    <updated>2013-07-20T23:51:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/20/be-happy</id>
+    <content type="html"><![CDATA[<blockquote><p><p>今天是星期六不用上班，在科技图书馆度过。不过，大概只看了半日的时间，又想起过去的事情来了。因为我在看的《深入理解计算机系统》，许多知识都是大学学过的，似曾相识，可惜我都没有掌握。越想，心情越不能平静下来，当想到大学居然没一件事做对的时候，自己就快要崩溃了。一直有个疑问，为什么那时候会犯这样的弥天大错？</p>
+<!-- more -->
+<p>过去的事情想得清楚当然去想，但不要影响自己的情绪，做一个积极的悲观主义者，Be Happy，积极去解决问题。</p>
+<p>《深入理解计算机系统》的优化程序性能，存储体系结构，虚拟存储器这几章都是从程序员的角度看待计算机硬件的工作原理，利用其实现的原理，写出更加高效的程序。这几章与计算机硬件打交道，一定要看懂，作为以后工作的突破点。这本书将其作为计算机的圣经也不为过。</p>
+<p>今天也有看《量子物理史话》，似乎现在没有之前那么好看了。因为我似乎心不在焉，那就先看计算机相关的吧。</p>
+<p>无论日子怎么样，都要保持愉悦的心态。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

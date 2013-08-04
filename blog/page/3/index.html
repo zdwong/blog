@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="新概念英语我只是仰慕、走马观花，但一直都没有细心研读。因此英语停滞不前，人要用心，才会学有所成，而不是应付了事。时间不留人，荒废的青春会一去不复返，这是人人都是平等的。应该用在哪些地方，如何是用，怎样规划？这些都是需要思考的地方。
+  <meta name="description" content="线程包含了表示进程内执行环境必需的信息，其中包含进程中标识线程的线程ID、一组寄存器、栈、调度优先级和策略、信号屏蔽字、errno变量以及线程私有数据。进程的所有信息对该进程的所有线程都是共享的，包括可执行的程序文本、程序的全局内存和堆内存、栈以及文件描述符。
 ">
   
 
@@ -80,6 +80,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/10/thread/">Thread线程同步</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-10T15:53:00+08:00" pubdate data-updated="true">Jul 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>线程包含了表示进程内执行环境必需的信息，其中包含进程中标识线程的线程ID、一组寄存器、栈、调度优先级和策略、信号屏蔽字、errno变量以及线程私有数据。进程的所有信息对该进程的所有线程都是共享的，包括可执行的程序文本、程序的全局内存和堆内存、栈以及文件描述符。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/10/thread/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -447,48 +487,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/goal-setting-process/">设立目标的步骤</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-23T22:58:00+08:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>This passage is talking about Goal-Setting Process.(字字珠玑）</p>
-<p>1.<strong>Decide exactly what you want in every key area of your life.</strong>(心之所向） Start off by idealing.</p>
-<p>2.<strong>write it down.</strong>(好记性不如烂笔头） They must be clear, specific, detailed and measurable.</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/05/23/goal-setting-process/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -511,7 +509,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 109.23076923076923%'>English</a>  <a href='/blog/categories/intern' style='font-size: 109.23076923076923%'>Intern</a>  <a href='/blog/categories/life' style='font-size: 141.53846153846155%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.9230769230769%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 141.53846153846155%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 109.23076923076923%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 109.23076923076923%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 109.23076923076923%'>English</a>  <a href='/blog/categories/intern' style='font-size: 109.23076923076923%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 109.23076923076923%'>Library</a>  <a href='/blog/categories/life' style='font-size: 136.9230769230769%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.9230769230769%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 141.53846153846155%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 109.23076923076923%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 109.23076923076923%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -519,7 +517,8 @@
   <ul id="categories">
     <li class='category'><a href='/blog/categories/english/'>English (2)</a></li>
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (9)</a></li>
+<li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (8)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (8)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
@@ -530,6 +529,10 @@
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/04/shenzhen-library/">锲而舍之，朽木不折</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/03/peaceful-holiday/">日新月异 与时俱进</a>
@@ -545,10 +548,6 @@
     
       <li class="post">
         <a href="/blog/2013/08/01/thirteenth-day/">麻雀虽小 五脏俱全</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/31/twelveth-day/">循序渐进 步步为营</a>
       </li>
     
   </ul>
