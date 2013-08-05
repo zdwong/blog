@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-04T23:45:52+08:00</updated>
+  <updated>2013-08-06T00:39:45+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[南柯黄粱梦终醒 人生恰似一浮萍]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/06/sixteenth-day/"/>
+    <updated>2013-08-06T00:23:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/06/sixteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>早上的以太网基础，硬件知识，迷迷糊糊已经睡着了，因为都不懂的，本来是安排给硬件工程师，又叫软件工程师来了解下，方知一点摸不着头脑，反而赐予了两个小时的吹眠时间。睡醒后，还飘飘然的感觉，一点羞耻之感够没有。</p>
+<!-- more -->
+<p>编程实现了进程间共享存储的信号互斥，使用的sem_open函数，之前找来找去都不知道用什么来实现，原来是用Posix的信号灯。规整化了时间的输出，还加了Delog输出的类型。就这样时间就无声无色地过去了。</p>
+<p>没有实现的要求是，在模块系统的时候，输入参数初始化，方知道我是用动态链接库的，都不知道怎样进行初始化，所以又卡在这里了。看来我的效率很低，今天才做了那么一点点事情。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[手高眼低 迎刃而解]]></title>
@@ -60,19 +72,6 @@
 <!-- more -->
 <p>另外是一个debuglog的模块，用链表实现，之前思路一直都不正确，之前写代码的经验又少，弄了好久才写出一个基本模型，以后要多多训练一下了，这么简单的问题都纠结了这么久，效率实在太低了。</p>
 <p>我要狂练代码。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[阳春白雪 下里巴人]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/29/eleventh-day/"/>
-    <updated>2013-07-29T23:49:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/29/eleventh-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天的讲座是编程规范，统一的代码规格有利于后面的阅读和维护。我们的组长是我们没有按照规范来写代码的话，就是能力，工作态度都不行的人。因为那些规范只要用心注意下，就应该不会出什么问题。</p>
-<!-- more -->
-<p>今天写代码发现写代码的能力好低，大学写的代码太少了，并且经常颓废，都不是一心一意地去解决问题，而是让问题积累。要努力写代码啦！ </p>
-<p>今天总算见识了shell的厉害，以前一直都不愿意学，原来其作用还是好大的。与makeFile文件，svn和平时的工作都有密切的关系，特别是利用shell可以提高工作的效率。一步步来，一定行的，功夫不负有心人。</p>
-<p>看了乔布斯的之前的采访，发现我们董事长跟我们说的话许多都是来自乔爷爷。看来乔爷爷是我们的好榜样，乔爷爷说要有点taste（品味）的，而不是什么都是随众的。乔爷爷也是很有好奇心的，并且也好有想法去解决问题。不过乔爷爷也善于学习，其实好多也都是不是乔爷爷做出来的，如图形界面，面向对象，但乔爷爷都察觉到这就是未来的方向。乔爷爷说，跟优秀的人工作很happy，也不会有太多烦恼。</p></p></blockquote>
 ]]></content>
   </entry>
   

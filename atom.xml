@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-04T23:45:52+08:00</updated>
+  <updated>2013-08-06T00:39:45+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[南柯黄粱梦终醒 人生恰似一浮萍]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/06/sixteenth-day/"/>
+    <updated>2013-08-06T00:23:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/06/sixteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>早上的以太网基础，硬件知识，迷迷糊糊已经睡着了，因为都不懂的，本来是安排给硬件工程师，又叫软件工程师来了解下，方知一点摸不着头脑，反而赐予了两个小时的吹眠时间。睡醒后，还飘飘然的感觉，一点羞耻之感够没有。</p>
+<!-- more -->
+<p>编程实现了进程间共享存储的信号互斥，使用的sem_open函数，之前找来找去都不知道用什么来实现，原来是用Posix的信号灯。规整化了时间的输出，还加了Delog输出的类型。就这样时间就无声无色地过去了。</p>
+<p>没有实现的要求是，在模块系统的时候，输入参数初始化，方知道我是用动态链接库的，都不知道怎样进行初始化，所以又卡在这里了。看来我的效率很低，今天才做了那么一点点事情。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[锲而舍之，朽木不折]]></title>
@@ -458,155 +470,6 @@
 
 
 <blockquote><p><p>typedef和union的使用解决了地址对齐（假定sbrk返回的是合适的指针)问题</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Linux常用命令]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/11/linux-command/"/>
-    <updated>2013-07-11T00:39:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/11/linux-command</id>
-    <content type="html"><![CDATA[<blockquote><p><p>linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。</p>
-<p>1.解压.tar.xz:        tar Jxvf xxx.tar.xz</p>
-<p>2.解压7z：       7z x filename.7z</p>
-<!-- more -->
-<p>3.统计源代码的行数：</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>find . -name <span class="s1">&#39;*.c&#39;</span> -o -name <span class="s1">&#39;*.h&#39;</span> | xargs wc -l
-</span><span class='line'>find . -name <span class="s1">&#39;*.c&#39;</span> -o -name <span class="s1">&#39;*.h&#39;</span> | xargs cat | sed <span class="s1">&#39;/^\s*$/d&#39;</span> | wc -l
-</span><span class='line'>cloc ./
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>4.grep命令：grep (regular pattern) (input file)</p>
-<p>使用 grep 抓取匹配关键字附近的行, 有时我们会对 grep 匹配关键字附近的行感兴趣（这有点上下文的味道），使用 -A、-B、以及 -C 选项可以满足我们的愿望。</p>
-<p>grep -A <n> &#8216;keyword&#8217; file # 匹配 keyword 的下 n 行</p>
-<p>grep -B <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行</p>
-<p>grep -C <n> &#8216;keyword&#8217; file # 匹配 keyword 的上 n 行及下 n 行</p>
-<p>5.apt-get命令</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>apt-cache search ‹name› <span class="c"># find package ‹name› for install by “apt-get”</span>
-</span><span class='line'>apt-cache show ‹name›   <span class="c"># describe package ‹name›</span>
-</span><span class='line'>apt-get install ‹name›  <span class="c"># install a new program. (usually used with sudo in front)</span>
-</span><span class='line'>apt-get remove ‹name›   <span class="c"># remove (un-install) a program.</span>
-</span><span class='line'>apt-get purge ‹name›    <span class="c"># remove a program and its config files.</span>
-</span><span class='line'>dpkg -l <span class="c"># list all installed packages</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>6.反向解析域名:host 0.0.0.0</p>
-<p>7.得到本机ip:</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>ifconfig | awk <span class="s1">&#39;/inet addr:/ {print $2}&#39;</span> | awk -F: <span class="s1">&#39;{if ($2 != &quot;127.0.0.1&quot;) print $2}&#39;</span>
-</span><span class='line'>ifconfig | sed -rn <span class="s1">&#39;s/.*r:([^ ]+) .*/\1/p&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>8.创建目录：mkdir {1..50}；创建文件：touch {1..50}；</p>
-<p>9.对打开端口进行检查：netstat -an | grep &#8211;color -i -E &#8216;listen|listening&#8217;</p>
-<p>netstat -tlnp</p>
-<p>10.找到超过100M的文件：find . -type f -size +100M</p>
-<p>11.删除文件：rm !(<em>.foo|</em>.bar|*.baz)</p>
-<p>12.快速重命名：mv filename.{old,new} </p>
-<p>13.终止进程：killall -KILL 进程名称 | killall -signal process | kill -SIGKILL processID</p>
-<p>14.成为Ubuntu超级用户：sudo passwd root 新建root用户</p>
-<p>15.寻找文件：find 路径名（path） 参数（根据文件名称-name、类型-type、权限-perm、修改世间-atime） 模式匹配</p>
-<p>16.使某个配置文件立即生效：source /etc/profile</p>
-<p>17.打开或关闭某项服务:service 某项服务（iptables） on|stop</p>
-<p>18.查看系统进程占用资源的工具：top,ps,free,vmstat,iostat,pmap</p>
-<p>19.找到某个进程的ID：ps -aux | grep processname </p>
-<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p>
-<p>21.查看当前目录下文件的个数：ls -l | grep &#8221;<sup>-&#8221;</sup> | wc -l 查看当前目录下文件的个数，包括子目录里的：ls -lR | grep &#8221;<sup>-&#8221;</sup> | wc -l 查看某目录下文件夹（目录）的个数，包括子目录里的：ls -lR | grep &#8221;<sup>d&#8221;</sup> | wc -l</p>
-<p>22.设置文件及文件夹权限：chmod -R 664 文件夹名称 （赋予文件属主和同组用户读、写权限，其他用户只读权限),文件夹和其目录下的文件都被设置了相同的664权限,u代表的是与文件属主拥有一样的权限</p>
-<p>23.Shell删除目录下的无效链接</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nv">link</span><span class="o">=</span><span class="sb">`</span> find . -type l <span class="sb">`</span>
-</span><span class='line'><span class="nb">echo</span> <span class="nv">$link</span>
-</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span>;
-</span><span class='line'>  <span class="k">do</span>
-</span><span class='line'><span class="k">  if</span> <span class="o">[</span> ! -f <span class="nv">$i</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">      </span>rm <span class="nv">$i</span> ;
-</span><span class='line'>  <span class="k">fi</span> ;
-</span><span class='line'>  <span class="k">done</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>24.shell给可执行的文件创建链接</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'>mkdir -p  ./exelink
-</span><span class='line'><span class="nb">cd </span>exelink
-</span><span class='line'><span class="nv">link</span><span class="o">=</span><span class="sb">`</span> find ../ -type f -perm -111  <span class="sb">`</span>
-</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span> ;
-</span><span class='line'>  <span class="k">do</span>
-</span><span class='line'><span class="k">  if</span> <span class="o">[</span>  -f <span class="nv">$i</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="nv">$i</span>
-</span><span class='line'>      link  <span class="nv">$i</span> <span class="sb">`</span><span class="nb">echo</span> <span class="nv">$i</span> | sed <span class="s1">&#39;s,.*/,,&#39;</span><span class="sb">`</span>
-</span><span class='line'>  <span class="k">fi</span> ;
-</span><span class='line'>  <span class="k">done</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>25.根据不同的时段输出不一样的欢迎词</p></p></blockquote>
-
-<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="nv">HH</span><span class="o">=</span><span class="sb">`</span> date +%k <span class="sb">`</span>
-</span><span class='line'><span class="nb">echo</span> <span class="nv">$HH</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 0 <span class="o">]&amp;&amp;[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -lt 12 <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Morning `whoami`&quot;</span>;
-</span><span class='line'><span class="k">elif</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 12 <span class="o">]&amp;&amp;[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -l 18 <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Afternoon `whoami`&quot;</span>
-</span><span class='line'><span class="k">else</span>
-</span><span class='line'><span class="k">      </span><span class="nb">echo</span> <span class="s2">&quot;Good Evening `whoami`&quot;</span>
-</span><span class='line'><span class="k">fi</span>;
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
