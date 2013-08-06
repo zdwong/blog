@@ -9,10 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。
-1.解压.tar.xz: tar Jxvf xxx.tar.xz
-2.解压7z： 7z x filename.7z
-">
+  <meta name="description" content="malloc并不是从一个编译时就确定的固定大小的数组中分配空间，而是在需要的时向操作系统申请空间。因为程序中的某些地方可能不通过malloc调用申请空间（通过其它方式申请空间），因此，malloc管理的空间不一定是连续的。这样空闲存储空间以空闲块链表的方式组织，每个块包含一个长度、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +79,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/12/malloc/">Malloc内存管理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-12T01:16:00+08:00" pubdate data-updated="true">Jul 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>malloc并不是从一个编译时就确定的固定大小的数组中分配空间，而是在需要的时向操作系统申请空间。因为程序中的某些地方可能不通过malloc调用申请空间（通过其它方式申请空间），因此，malloc管理的空间不一定是连续的。这样空闲存储空间以空闲块链表的方式组织，每个块包含一个长度、一个指向下一块的指针以及一个指向自身存储空间的指针。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/12/malloc/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -451,46 +488,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/04/3d-movie/">3D 电影欣赏</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-04T23:01:00+08:00" pubdate data-updated="true">Jul 4<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>所谓孤独终老，就是自己不敢向前迈出一步。今天，可以说是得偿所愿，看了一部3D电影《钢铁之躯》。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/04/3d-movie/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -513,7 +510,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 108.57142857142857%'>English</a>  <a href='/blog/categories/intern' style='font-size: 108.57142857142857%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 108.57142857142857%'>Library</a>  <a href='/blog/categories/life' style='font-size: 134.28571428571428%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 134.28571428571428%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 138.57142857142856%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 108.57142857142857%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 108.57142857142857%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 108.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 108.0%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 108.0%'>Library</a>  <a href='/blog/categories/life' style='font-size: 132.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 132.0%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 136.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 108.0%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 108.0%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -527,12 +524,16 @@
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
-<li class='category'><a href='/blog/categories/tp-link/'>Tp-link (14)</a></li>
+<li class='category'><a href='/blog/categories/tp-link/'>Tp-link (15)</a></li>
 
   </ul>
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/08/07/seventeenth-day/">屡败屡战 岁月如梭</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/08/06/sixteenth-day/">南柯黄粱梦终醒 人生恰似一浮萍</a>
@@ -548,10 +549,6 @@
     
       <li class="post">
         <a href="/blog/2013/08/02/fifteenth-day/">手高眼低 迎刃而解</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/01/fourteenth-day/">感激涕零 不知所云</a>
       </li>
     
   </ul>

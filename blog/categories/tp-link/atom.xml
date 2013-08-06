@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-06T00:39:45+08:00</updated>
+  <updated>2013-08-07T00:26:50+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,13 +14,24 @@
 
   
   <entry>
+    <title type="html"><![CDATA[屡败屡战 岁月如梭]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/07/seventeenth-day/"/>
+    <updated>2013-08-07T00:05:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/07/seventeenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>由于之前听讲座，觉得邮件发得不好是很令人尴尬的事情，越是这样认为，我发邮件越是心有余悸。这两日发了三封邮件都是丢三落四，不是漏了附件，就是写错了主题，一紧张，又忘了带附件，搞到灰常尴尬。那我是否死定定啦，给领导这么坏的印象，试用期之后第一个棒走我。好吧，又有机会“采菊东篱下，悠然见南山”，乐得逍遥。</p>
+<!-- more -->
+<p>之前的问题稍微改善，动态链接库初始化已经开始，但是输入的参数初始化还没实现。没办法，又想用内存共享，到时候，又挨批，写出来的程序又占内存，又效率低，十八个不是。实在没什么思路，妈妈地呀！怎样改善啊，难道我又要改成内核模块，和其它同事一样，我不。反正我都写出来了，被批多一次不多，少一次不少。来吧，哥，站着给你批！人生有几多个十年，被人批亦是一种福分，哥才不怕呢？反而胆小如鼠，畏首畏脚更不是男人大丈夫所为。我迎接批评，敢于面对它，因为它会才是令让自己成长。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[南柯黄粱梦终醒 人生恰似一浮萍]]></title>
     <link href="http://coolbrain.github.com/blog/2013/08/06/sixteenth-day/"/>
     <updated>2013-08-06T00:23:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/08/06/sixteenth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>早上的以太网基础，硬件知识，迷迷糊糊已经睡着了，因为都不懂的，本来是安排给硬件工程师，又叫软件工程师来了解下，方知一点摸不着头脑，反而赐予了两个小时的吹眠时间。睡醒后，还飘飘然的感觉，一点羞耻之感够没有。</p>
+    <content type="html"><![CDATA[<blockquote><p><p>早上的以太网基础，硬件知识，迷迷糊糊已经睡着了，因为都不懂的，本来是安排给硬件工程师，又叫软件工程师来了解下，方知一点摸不着头脑，反而赐予了两个小时的吹眠时间。睡醒后，还飘飘然的感觉，一点羞耻之感都没有。</p>
 <!-- more -->
-<p>编程实现了进程间共享存储的信号互斥，使用的sem_open函数，之前找来找去都不知道用什么来实现，原来是用Posix的信号灯。规整化了时间的输出，还加了Delog输出的类型。就这样时间就无声无色地过去了。</p>
+<p>下午编程实现了进程间共享存储的信号互斥，使用的sem_open函数，之前找来找去都不知道用什么来实现，原来是用Posix的信号灯。规整化了时间的输出，还加了Delog输出的类型。就这样时间就无声无色地过去了。</p>
 <p>没有实现的要求是，在模块系统的时候，输入参数初始化，方知道我是用动态链接库的，都不知道怎样进行初始化，所以又卡在这里了。看来我的效率很低，今天才做了那么一点点事情。</p></p></blockquote>
 ]]></content>
   </entry>
@@ -60,18 +71,6 @@
 <p>这些功能都整合到路由器上，可惜中国都法定规定不允许使用IP电话，不然打电话就便宜了。这产品是外销到外国的。但从其配置上看，比较复杂，需要专业人士，不过外国人接触的东西比较多，按照说明书的指示，应该还是能够配置成功。其配置中可以通过传统的PSTN电信的通信网通信，也可以通过互联网（VOIP）语音聊天，就是语音质量会比传统的PSTN稍微差一些。增加了一个语音模块，就增加了五个芯片，布线也变得复杂，接口也增加了好几个。</p>
 <p>下午还是编程，主要是把代码改成符合编程规范，写单元测试用例，继续优化代码。还跟导师讨论了多进程的通信问题，引起了我的兴趣，我不断地看这进程通信，有很多东西还没理解，如mmap的实现机制是怎样的，如何正确地使用。</p>
 <p>要学如何写Makefile文件，不然怎么对得起自己呢？</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[循序渐进 步步为营]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/31/twelveth-day/"/>
-    <updated>2013-07-31T00:08:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/31/twelveth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天写了memmove这样的函数，首先要检测内存覆盖问题，然后是考虑怎样加快移动的效率.因为传统的做法是以char一个字节的传送，而现在可以通过四个字节对齐的方式，通过int整型一次四个字节的传送。可以大大地加快了传送的效率，因为一次传送一个字节和一次传送四个字节是一样的。</p>
-<!-- more -->
-<p>另外是一个debuglog的模块，用链表实现，之前思路一直都不正确，之前写代码的经验又少，弄了好久才写出一个基本模型，以后要多多训练一下了，这么简单的问题都纠结了这么久，效率实在太低了。</p>
-<p>我要狂练代码。</p></p></blockquote>
 ]]></content>
   </entry>
   
