@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-07T00:34:40+08:00</updated>
+  <updated>2013-08-08T00:29:10+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[路漫漫其修远兮 吾将上下而求索]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/08/eighteenth-day/"/>
+    <updated>2013-08-08T00:08:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/08/eighteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>自己的一些观念其实是错误的，例如对人生或对自身的看法，选择。等自己明白，其实这个观念是错的，我根本不要为这个而纠结，迈开一步，海阔天空。之前的问题可能不是问题，而将来出现的问题，那真是问题。如果被这些所假象蒙骗，而导致了将来的问题，那才是糊涂虫。</p>
+<!-- more -->
+<p>今日听802.11n局域网的硬件基础，不用多加陈述，我又是去见周公了。不过，我的感悟就是人一定要有一技之长，不然走到哪，就在哪碰壁。天啊，我现在只是一个庸才，能养家糊口，三餐温饱已经是谢天谢地了，更别谈成家立业。所以说，成为一个庸才是人生的根本问题。</p>
+<p>Debuglog模块完成了，用了两个共享内存，有名信号量，还忘记在异常退出时释放信号量，导致程序再次运行的时候出现了问题。也增加了好多的异常处理。同时昨天就已经明白大小端问题，网络用的是大端，x86用的小端，在进行网络传输的时候需要转换。也弄懂了字节对齐问题，强制转换所导致字节不对齐的问题，字节不对齐可以通过LWL、LWR来提取到寄存器。mips 3000 跳转延迟槽和加载延迟槽。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[屡败屡战 岁月如梭]]></title>
@@ -58,19 +70,6 @@
 <p>I spent two hours learning how to write Makefile. 懂得如何递归地执行Makefile文件和递归地删除目标文件，学习的时候需要带着问题去学习，这样效果会比较好。</p>
 <p>晚上回来还是不断地查找关于共享库全局变量的问题，原来每个进程执行的时候都有自己的副本。关于链接库，共享内存实现的机制，还有虚拟存储的理解又加深了，还要继续深究这些问题，因为还没有弄明白究竟是怎么一回事，不能糊里糊涂地让其过去。我受不了还没有理解，我受不了效率这么低。</p>
 <p><strong>PS:感谢张韵婷同学对我的help。同时自己要积极进取，努力去解决问题。keep optimistic and working hard to solve the facing problem.</strong></p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[麻雀虽小 五脏俱全]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/08/01/thirteenth-day/"/>
-    <updated>2013-08-01T00:24:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/08/01/thirteenth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天有个讲座是IAD硬件基础，其实IAD是Integrated Access Device(综合接入设备），包含ADSL，route, VoIP(网络电话），USB，无线wifi。重点是说了网络IP电话（VOIP）技术，音频的编码，语音的控制（SIP协议），语音的传输（RTP，底层还是使用UDP协议），语音质量的保证（消除回声）等。</p>
-<!-- more -->
-<p>这些功能都整合到路由器上，可惜中国都法定规定不允许使用IP电话，不然打电话就便宜了。这产品是外销到外国的。但从其配置上看，比较复杂，需要专业人士，不过外国人接触的东西比较多，按照说明书的指示，应该还是能够配置成功。其配置中可以通过传统的PSTN电信的通信网通信，也可以通过互联网（VOIP）语音聊天，就是语音质量会比传统的PSTN稍微差一些。增加了一个语音模块，就增加了五个芯片，布线也变得复杂，接口也增加了好几个。</p>
-<p>下午还是编程，主要是把代码改成符合编程规范，写单元测试用例，继续优化代码。还跟导师讨论了多进程的通信问题，引起了我的兴趣，我不断地看这进程通信，有很多东西还没理解，如mmap的实现机制是怎样的，如何正确地使用。</p>
-<p>要学如何写Makefile文件，不然怎么对得起自己呢？</p></p></blockquote>
 ]]></content>
   </entry>
   
