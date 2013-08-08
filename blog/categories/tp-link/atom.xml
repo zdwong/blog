@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-08-08T00:29:10+08:00</updated>
+  <updated>2013-08-09T00:54:27+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,19 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[井底之蛙 自筑围城 作茧自缚 自取灭亡]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/08/08/nineteenth-day/"/>
+    <updated>2013-08-08T23:59:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/08/08/nineteenth-day</id>
+    <content type="html"><![CDATA[<blockquote><p><p>下班后，由于忘记了拿打印的资料，于是再次上楼去拿，但下来的时候，班车已经满座了。于是和同事一起时跑时走， 去总部，路上我不够注意安全，意外总是不经意发生的，大意、自以为是都是罪魁祸首，所以千万不可掉以轻心。不过，总部的班车也基本上满人了，只剩下一个座位，但我们有三个人，没有猜拳，因为一个同事好主动地将其让给我了，因为他们两个是住在一起的，没理由拆开他们，当然我欣然接受这个提议，大家欢喜。</p>
+<!-- more -->
+<p>这两日比较坑，居然流量用完了，被广州移动扣了80元，显示为-64元，真是妈妈地呀！，明明都扣到我没钱了，还继续扣，打10086，说我充了30元，毫无反应，还在负支付状态，不得不再充50元，终于显示余额16元。这就是广州移动的策略，还说我老客户，信用值高，不知不觉地就我屌丝的钱就进入那大腹便便的人的口袋。亏了钱，看见街边摆摊的充100送60，又心动了，其实又是挂羊头卖狗肉，骗人的伎俩。幸运遇到我这样的蠢人，他才有挣钱的生意做。就在我被骗的时候，穿着制服的城管在我身边经过，他们漠不关心，让其招摇撞骗，难道他们又是一伙的？不过活在这个社会只有互相勾结，才有暴利，官商勾结。不过对于我这些生活在社会底层的人士来说，就是坑，移动坑，骗子坑，政府也坑。本来成熟的VOIP技术在国外已经相当成熟，就如我们公司的产品都是外销到国外，因为中国政府禁止，因为通过ip来打电话，中国移动，电信，联通，它们所挣的利润将大大减少。国外打电话，上网都相当便宜，因为通过ip电话通信便宜。只有中国国企在中饱私囊。读书也坑，浪费了这么多的光阴来学习政治，所谓的历史，原来都是一个个坑，出来社会根本不是那回事。谁会坑别人，才是真本事。我们生活在技术的社会，但有时都是在别人的操控下，活得像一条狗。朝鲜这样的国家就是一个典型的例子。</p>
+<p>吐槽完了吗？出现问题不从自身找问题，先抱怨外界，有用吗？快乐吗？有效果吗？之前为什么不关心一下流量？充话费的时候为什么不考虑清楚？对待问题，能否心平气和，不要让主观情绪影响客观判断。那这个晚上不就费了吗？什么事情的都没干？</p>
+<p>有时候，过得不开心，会想本来自己是不属于这个世界，却降临到这个世界，这么不如意的活着。这就说明自己还没有走出自己的世界，还在自己的围城里面。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[路漫漫其修远兮 吾将上下而求索]]></title>
@@ -57,19 +70,6 @@
 <!-- more -->
 <p>将DebugLog模块编译成动态链接库，各个进程使用是独立的，包括模块中的全局变量，只有内存映射才是公共的，但各个进程来说，其地址又是不一样的，因为是进程使用的虚拟地址，所以存储在共享内存的数据,包含链表，都只能使用相对的地址，所有的操作都是利用指针进行相对地址的操作。</p>
 <p>今天有个关于MIPS架构的讲座，讲师很厉害，不过我也有几个不明白的地方，一：大小端问题，二：字节对齐问题 三：cache问题，以后还要慢慢弄懂这些问题，不要犯一些低级错误。如近期经常在while，或for循环后面加个“；”，其后面的代码根本就发挥不了作用，只执行了仅仅一次，就退出了。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[感激涕零 不知所云]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/08/01/fourteenth-day/"/>
-    <updated>2013-08-01T23:58:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/08/01/fourteenth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误，是地址，而不是长度，一般用汇编写比较能提高效率，且可以利用流水线加速。每一条编程题都有改进的空间。</p>
-<!-- more -->
-<p>I spent two hours learning how to write Makefile. 懂得如何递归地执行Makefile文件和递归地删除目标文件，学习的时候需要带着问题去学习，这样效果会比较好。</p>
-<p>晚上回来还是不断地查找关于共享库全局变量的问题，原来每个进程执行的时候都有自己的副本。关于链接库，共享内存实现的机制，还有虚拟存储的理解又加深了，还要继续深究这些问题，因为还没有弄明白究竟是怎么一回事，不能糊里糊涂地让其过去。我受不了还没有理解，我受不了效率这么低。</p>
-<p><strong>PS:感谢张韵婷同学对我的help。同时自己要积极进取，努力去解决问题。keep optimistic and working hard to solve the facing problem.</strong></p></p></blockquote>
 ]]></content>
   </entry>
   
