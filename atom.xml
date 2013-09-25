@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-26T00:16:04+08:00</updated>
+  <updated>2013-09-26T00:28:52+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -18,7 +18,8 @@
     <link href="http://coolbrain.github.com/blog/2013/09/22/internet/"/>
     <updated>2013-09-22T19:43:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/09/22/internet</id>
-    <content type="html"><![CDATA[<blockquote><p><p>pjsip是实现sip的协议栈。
+    <content type="html"><![CDATA[<blockquote><p><p>pjsip是实现sip的协议栈。相对于其它的sip协议栈，pjsip实现相对稳定且跨平台。首先分析pjlib基本库，其这些库的实现都比较精湛，是深入学习编程的好材料。并且设计了很多的测试用例，对函数的接口进行测试。<p>
+<p>pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信号量，事件，高精度时间等；网络I/O,具体为socket抽象，网络地址解析，select I/O复用；时间管理；多种数据结构，字符串的操作，数组帮助，哈希表，链表，红黑树等；内存池管理的实现较为精湛。
 <!-- more --></p></blockquote>
 ]]></content>
   </entry>
