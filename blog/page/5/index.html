@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="如果编译原理学得不错的话，根据sql的文法就可以写个程序来解析了,最简单的莫过于自顶向下递归解析。
-sql数据定义:表定义，更改语句，删除语句和模式定义
+  <meta name="description" content="MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。
 ">
   
 
@@ -81,6 +80,86 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/monetdb-vs-postgresql/">MonetDB vs PostgreSQL数据库</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T19:43:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/28/monetdb-vs-postgresql/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/26/memo-based-query-execution/">基于Memo-based(日志)的查询执行</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-26T22:57:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/26/memo-based-query-execution/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -405,87 +484,6 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-architecture-overview/">MonetDB 架构模型</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-22T20:04:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p><strong>总体概览</strong></p>
-<p>MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。设计的目的反应在架构的各个层次和提供给用户的功能。尽管MonetDB/SQL提供了完善的SQL接口，但是在大容量，且需要保存不同层次的ACID属性的事务处理能力有点欠缺。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/22/monetdb-architecture-overview/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/21/monetdbs-debugging/">MonetDB 调试</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-21T21:39:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB can run in different platform,including linux&#8217;s  and window&#8217;s series.Because I want to learn how to use gdb to debug,thus, MonetDB&#8217;s installed on Unbuntu12.10 and &#8211;debug&#8211;init set on true</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/21/monetdbs-debugging/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -508,7 +506,7 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 107.05882352941177%'>English</a>  <a href='/blog/categories/intern' style='font-size: 107.05882352941177%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 107.05882352941177%'>Library</a>  <a href='/blog/categories/life' style='font-size: 128.23529411764707%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 128.23529411764707%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 131.76470588235293%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 107.05882352941177%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 107.05882352941177%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 107.05882352941177%'>English</a>  <a href='/blog/categories/intern' style='font-size: 107.05882352941177%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 107.05882352941177%'>Library</a>  <a href='/blog/categories/life' style='font-size: 131.76470588235293%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 128.23529411764707%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 131.76470588235293%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 107.05882352941177%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 107.05882352941177%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -517,7 +515,7 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
     <li class='category'><a href='/blog/categories/english/'>English (2)</a></li>
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
 <li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (8)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (9)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (8)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
@@ -530,6 +528,14 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/22/internet/">internet</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/08/nothing/">人生无常 尽力而为</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/08/08/nineteenth-day/">井底之蛙 自筑围城 作茧自缚 自取灭亡</a>
       </li>
     
@@ -539,14 +545,6 @@ sql数据定义:表定义，更改语句，删除语句和模式定义
     
       <li class="post">
         <a href="/blog/2013/08/07/seventeenth-day/">屡败屡战 岁月如梭</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/06/sixteenth-day/">南柯黄粱梦终醒 人生恰似一浮萍</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/04/shenzhen-library/">锲而舍之，朽木不折</a>
       </li>
     
   </ul>
