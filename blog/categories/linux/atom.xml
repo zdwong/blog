@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-26T23:39:15+08:00</updated>
+  <updated>2013-09-27T00:01:49+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,729 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[pjsip状态机]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/09/26/pjsip-state-machine/"/>
+    <updated>2013-09-26T23:38:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/09/26/pjsip-state-machine</id>
+    <content type="html"><![CDATA[<blockquote><p><p>近期在voip skeleton上增加了一个简单地状态机，分别是当前的状态（current state），事件（event），新的状态（new state），操作（action），使用的是list链表的方式管理，实现动态注册状态的处理。在pjsip 事务（transation state machine）状态机使用的是用数组的方式来实现，数组的下标为状态，内容为操作handle。</p>
+<!-- more -->
+<p>pjsip的事务状态为以下集中，用枚举定义：</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>transation状态声明 enum state  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;*</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">This</span> <span class="n">enumeration</span> <span class="n">represents</span> <span class="n">transaction</span> <span class="n">state</span><span class="p">.</span>
+</span><span class='line'> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">enum</span> <span class="n">pjsip_tsx_state_e</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">PJSIP_TSX_STATE_NULL</span><span class="p">,</span>   <span class="cm">/**&amp;lt; For UAC, before any message is sent.   */</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_CALLING</span><span class="p">,</span>    <span class="cm">/**&amp;lt; For UAC, just after request is sent.   */</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_TRYING</span><span class="p">,</span> <span class="cm">/**&amp;lt; For UAS, just after request is received.*/</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_PROCEEDING</span><span class="p">,</span> <span class="cm">/**&amp;lt; For UAS/UAC, after provisional response.*/</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_COMPLETED</span><span class="p">,</span>  <span class="cm">/**&amp;lt; For UAS/UAC, after final response.     */</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_CONFIRMED</span><span class="p">,</span>  <span class="cm">/**&amp;lt; For UAS, after ACK is received.        */</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_TERMINATED</span><span class="p">,</span> <span class="cm">/**&amp;lt; For UAS/UAC, before it&#39;s destroyed.    */</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_DESTROYED</span><span class="p">,</span>  <span class="cm">/**&amp;lt; For UAS/UAC, will be destroyed now.    */</span>
+</span><span class='line'><span class="n">PJSIP_TSX_STATE_MAX</span>     <span class="cm">/**&amp;lt; Number of states.              */</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span> <span class="n">pjsip_tsx_state_e</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>pjsip状态处理函数的定义：</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>transation状态处理函数声明 enum state  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_null</span><span class="p">(</span>       <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                            <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_calling</span><span class="p">(</span>    <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                            <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_trying</span><span class="p">(</span>     <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                            <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_proceeding_uas</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_proceeding_uac</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_completed_uas</span><span class="p">(</span>  <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_completed_uac</span><span class="p">(</span>  <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_confirmed</span><span class="p">(</span>  <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_terminated</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_destroyed</span><span class="p">(</span>  <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                        <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>pjsip状态机的注册：</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>transation 状态注册 enum state  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">State</span> <span class="n">handlers</span> <span class="k">for</span> <span class="n">UAC</span><span class="p">,</span> <span class="n">indexed</span> <span class="n">by</span> <span class="n">state</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">static</span> <span class="kt">int</span>  <span class="p">(</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">tsx_state_handler_uac</span><span class="p">[</span><span class="n">PJSIP_TSX_STATE_MAX</span><span class="p">])(</span><span class="n">pjsip_transaction</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="p">)</span> <span class="o">=</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_null</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_calling</span><span class="p">,</span>
+</span><span class='line'><span class="nb">NULL</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_proceeding_uac</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_completed_uac</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_confirmed</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_terminated</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_destroyed</span><span class="p">,</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;/&lt;</span><span class="n">em</span><span class="o">&gt;</span> <span class="n">State</span> <span class="n">handlers</span> <span class="k">for</span> <span class="n">UAS</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">static</span> <span class="kt">int</span>  <span class="p">(</span><span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">tsx_state_handler_uas</span><span class="p">[</span><span class="n">PJSIP_TSX_STATE_MAX</span><span class="p">])(</span><span class="n">pjsip_transaction</span> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="p">)</span> <span class="o">=</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_null</span><span class="p">,</span>
+</span><span class='line'><span class="nb">NULL</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_trying</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_proceeding_uas</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_completed_uas</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_confirmed</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_terminated</span><span class="p">,</span>
+</span><span class='line'><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx_on_state_destroyed</span><span class="p">,</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<blockquote><p><p>当相应的事件来临时，就调用相应的处理函数handle和改变自身的状态，如ack来临，或者超时重传：</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>transation调用相应的处理函数 enum state  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">State</span> <span class="n">Calling</span> <span class="n">is</span> <span class="k">for</span> <span class="n">UAC</span> <span class="n">after</span> <span class="n">it</span> <span class="n">sends</span> <span class="n">request</span> <span class="n">but</span> <span class="n">before</span> <span class="n">any</span> <span class="n">responses</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">is</span> <span class="n">received</span><span class="p">.</span>
+</span><span class='line'> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="n">tsx_on_state_calling</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>                     <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span> <span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">pj_assert</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state</span> <span class="o">==</span> <span class="n">PJSIP_TSX_STATE_CALLING</span><span class="p">);</span>
+</span><span class='line'><span class="n">pj_assert</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">role</span> <span class="o">==</span> <span class="n">PJSIP_ROLE_UAC</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_EVENT_TIMER</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>
+</span><span class='line'><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">body</span><span class="p">.</span><span class="n">timer</span><span class="p">.</span><span class="n">entry</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_status_t</span> <span class="n">status</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Retransmit the request. */</span>
+</span><span class='line'>    <span class="n">status</span> <span class="o">=</span> <span class="n">tsx_retransmit</span><span class="p">(</span> <span class="n">tsx</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">!=</span> <span class="n">PJ_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_EVENT_TIMER</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>
+</span><span class='line'>       <span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">body</span><span class="p">.</span><span class="n">timer</span><span class="p">.</span><span class="n">entry</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Cancel retransmission timer. */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">transport_flag</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">TSX_HAS_PENDING_RESCHED</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Set status code */</span>
+</span><span class='line'><span class="n">tsx_set_status_code</span><span class="p">(</span><span class="n">tsx</span><span class="p">,</span> <span class="n">PJSIP_SC_TSX_TIMEOUT</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Inform TU. */</span>
+</span><span class='line'><span class="n">tsx_set_state</span><span class="p">(</span> <span class="n">tsx</span><span class="p">,</span> <span class="n">PJSIP_TSX_STATE_TERMINATED</span><span class="p">,</span>
+</span><span class='line'>                   <span class="n">PJSIP_EVENT_TIMER</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Transaction is destroyed */</span>
+</span><span class='line'><span class="c1">//return PJSIP_ETSXDESTROYED;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_EVENT_RX_MSG</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">pjsip_msg</span> <span class="o">*</span><span class="n">msg</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">code</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Get message instance */</span>
+</span><span class='line'><span class="n">msg</span> <span class="o">=</span> <span class="n">event</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">body</span><span class="p">.</span><span class="n">rx_msg</span><span class="p">.</span><span class="n">rdata</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">msg_info</span><span class="p">.</span><span class="n">msg</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Better be a response message. */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">msg</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">!=</span> <span class="n">PJSIP_RESPONSE_MSG</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">PJSIP_ENOTRESPONSEMSG</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">code</span> <span class="o">=</span> <span class="n">msg</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">line</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">code</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* If the response is final, cancel both retransmission and timeout</span>
+</span><span class='line'><span class="cm"> * timer.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">code</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">lock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">unlock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="cm">/* Cancel retransmit timer (for non-INVITE transaction, the</span>
+</span><span class='line'><span class="cm">     * retransmit timer will be rescheduled at T2.</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* For provisional response, only cancel retransmit when this</span>
+</span><span class='line'><span class="cm">     * is an INVITE transaction. For non-INVITE, section 17.1.2.1</span>
+</span><span class='line'><span class="cm">     * of RFC 3261 says that:</span>
+</span><span class='line'><span class="cm">     *  - retransmit timer is set to T2</span>
+</span><span class='line'><span class="cm">     *  - timeout timer F is not deleted.</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">method</span><span class="p">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">PJSIP_INVITE_METHOD</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/* Cancel timeout timer */</span>
+</span><span class='line'>    <span class="n">lock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">unlock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">is_reliable</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">TIMER_ACTIVE</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">pjsip_endpt_schedule_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span>
+</span><span class='line'>                       <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">retransmit_timer</span><span class="p">,</span>
+</span><span class='line'>                       <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">t2_timer_val</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">transport_flag</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">TSX_HAS_PENDING_RESCHED</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Discard retransmission message if it is not INVITE.</span>
+</span><span class='line'><span class="cm"> * The INVITE tdata is needed in case we have to generate ACK for</span>
+</span><span class='line'><span class="cm"> * the final response.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="cm">/* Keep last_tx for authorization. */</span>
+</span><span class='line'><span class="c1">//blp: always keep last_tx until transaction is destroyed</span>
+</span><span class='line'><span class="c1">//code = msg-&amp;gt;line.status.code;</span>
+</span><span class='line'><span class="c1">//if (tsx-&amp;gt;method.id != PJSIP_INVITE_METHOD &amp;amp;&amp;amp; code!=401 &amp;amp;&amp;amp; code!=407) {</span>
+</span><span class='line'><span class="c1">//    pjsip_tx_data_dec_ref(tsx-&amp;gt;last_tx);</span>
+</span><span class='line'><span class="c1">//    tsx-&amp;gt;last_tx = NULL;</span>
+</span><span class='line'><span class="c1">//}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Processing is similar to state Proceeding. */</span>
+</span><span class='line'><span class="n">tsx_on_state_proceeding_uac</span><span class="p">(</span> <span class="n">tsx</span><span class="p">,</span> <span class="n">event</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'><span class="n">pj_assert</span><span class="p">(</span><span class="o">!</span><span class="s">&quot;Unexpected event&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">PJ_EBUG</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">return</span> <span class="n">PJ_SUCCESS</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<blockquote><p><p>pjsip 事务相应状态改变函数：</p>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>transation状态改变和改变相应处理函数 enum state  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">Set</span> <span class="n">transaction</span> <span class="n">state</span><span class="p">,</span> <span class="n">and</span> <span class="n">inform</span> <span class="n">TU</span> <span class="n">about</span> <span class="n">the</span> <span class="n">transaction</span> <span class="n">state</span> <span class="n">change</span><span class="p">.</span>
+</span><span class='line'> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="n">tsx_set_state</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>           <span class="n">pjsip_tsx_state_e</span> <span class="n">state</span><span class="p">,</span>
+</span><span class='line'>           <span class="n">pjsip_event_id_e</span> <span class="n">event_src_type</span><span class="p">,</span>
+</span><span class='line'>                       <span class="kt">void</span> <span class="o">*</span><span class="n">event_src</span> <span class="p">)</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">pjsip_tsx_state_e</span> <span class="n">prev_state</span> <span class="o">=</span> <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="cm">/* New state must be greater than previous state */</span>
+</span><span class='line'><span class="n">pj_assert</span><span class="p">(</span><span class="n">state</span> <span class="o">&amp;</span><span class="n">gt</span><span class="p">;</span><span class="o">=</span> <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">PJ_LOG</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">obj_name</span><span class="p">,</span> <span class="s">&quot;State changed from %s to %s, event=%s&quot;</span><span class="p">,</span>
+</span><span class='line'>       <span class="n">state_str</span><span class="p">[</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state</span><span class="p">],</span> <span class="n">state_str</span><span class="p">[</span><span class="n">state</span><span class="p">],</span>
+</span><span class='line'>           <span class="n">pjsip_event_str</span><span class="p">(</span><span class="n">event_src_type</span><span class="p">)));</span>
+</span><span class='line'><span class="n">pj_log_push_indent</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Change state. */</span>
+</span><span class='line'><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Update the state handlers. */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">role</span> <span class="o">==</span> <span class="n">PJSIP_ROLE_UAC</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state_handler</span> <span class="o">=</span> <span class="n">tsx_state_handler_uac</span><span class="p">[</span><span class="n">state</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">state_handler</span> <span class="o">=</span> <span class="n">tsx_state_handler_uas</span><span class="p">[</span><span class="n">state</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Before informing TU about state changed, inform TU about</span>
+</span><span class='line'><span class="cm"> * rx event.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">event_src_type</span><span class="o">==</span><span class="n">PJSIP_EVENT_RX_MSG</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tsx_user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">pjsip_rx_data</span> <span class="o">*</span><span class="n">rdata</span> <span class="o">=</span> <span class="p">(</span><span class="n">pjsip_rx_data</span><span class="o">*</span><span class="p">)</span> <span class="n">event_src</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_assert</span><span class="p">(</span><span class="n">rdata</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">rdata</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">msg_info</span><span class="p">.</span><span class="n">msg</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_RESPONSE_MSG</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span>
+</span><span class='line'>       <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tsx_user</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">on_rx_response</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">(</span><span class="o">*</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tsx_user</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">on_rx_response</span><span class="p">)(</span><span class="n">rdata</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Inform TU about state changed. */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tsx_user</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tsx_user</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">on_tsx_state</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">pjsip_event</span> <span class="n">e</span><span class="p">;</span>
+</span><span class='line'><span class="n">PJSIP_EVENT_INIT_TSX_STATE</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">tsx</span><span class="p">,</span> <span class="n">event_src_type</span><span class="p">,</span> <span class="n">event_src</span><span class="p">,</span>
+</span><span class='line'>               <span class="n">prev_state</span><span class="p">);</span>
+</span><span class='line'><span class="p">(</span><span class="o">*</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tsx_user</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">on_tsx_state</span><span class="p">)(</span><span class="n">tsx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">e</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* When the transaction is terminated, release transport, and free the</span>
+</span><span class='line'><span class="cm"> * saved last transmitted message.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="n">PJSIP_TSX_STATE_TERMINATED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="n">pj_time_val</span> <span class="n">timeout</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* If we&#39;re still waiting for a message to be sent.. */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">transport_flag</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span> <span class="n">TSX_HAS_PENDING_TRANSPORT</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="cm">/* Disassociate ourselves from the outstanding transmit data</span>
+</span><span class='line'><span class="cm">     * so that when the send callback is called we will be able</span>
+</span><span class='line'><span class="cm">     * to ignore that (otherwise we&#39;ll get assertion, see</span>
+</span><span class='line'><span class="cm">     * http://trac.pjsip.org/repos/ticket/1033)</span>
+</span><span class='line'><span class="cm">     */</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">pending_tx</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">pending_tx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">mod_data</span><span class="p">[</span><span class="n">mod_tsx_layer</span><span class="p">.</span><span class="n">mod</span><span class="p">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">pending_tx</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">transport_flag</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">=</span> <span class="o">~</span><span class="p">(</span><span class="n">TSX_HAS_PENDING_TRANSPORT</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">lock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Cancel timeout timer. */</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">TIMER_ACTIVE</span><span class="p">;</span>
+</span><span class='line'><span class="n">pjsip_endpt_schedule_timer</span><span class="p">(</span> <span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">tsx</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">timeout_timer</span><span class="p">,</span>
+</span><span class='line'>                <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">timeout</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">unlock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="n">PJSIP_TSX_STATE_DESTROYED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Unregister transaction. */</span>
+</span><span class='line'><span class="n">mod_tsx_layer_unregister_tsx</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/* Destroy transaction. */</span>
+</span><span class='line'><span class="n">tsx_destroy</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_log_pop_indent</span><span class="p">();</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[正则表达式]]></title>
@@ -1625,202 +2348,6 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <blockquote><p><p>typedef和union的使用解决了地址对齐（假定sbrk返回的是合适的指针)问题</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Linux常用命令]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/11/linux-command/"/>
-    <updated>2013-07-11T00:39:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/11/linux-command</id>
-    <content type="html"><![CDATA[<blockquote><p><p>linux的命令种类繁多，但掌握方法和规则，记住常用的命令，不懂的用man来查询。</p>
-<p>1.解压.tar.xz:        tar Jxvf xxx.tar.xz</p>
-<p>2.解压7z：       7z x filename.7z</p>
-<!-- more -->
-<p>3.统计源代码的行数：</p>
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;find . -name <span class="s1">&#39;&lt;em&gt;.c&#39;</span> -o -name <span class="s1">&#39;&lt;/em&gt;.h&#39;</span> | xargs wc -l
-</span><span class='line'>find . -name <span class="s1">&#39;&lt;em&gt;.c&#39;</span> -o -name <span class="s1">&#39;&lt;/em&gt;.h&#39;</span> | xargs cat | sed <span class="s1">&#39;/&lt;sup&gt;\s*$/d&#39;</span>&lt;/sup&gt; | wc -l
-</span><span class='line'>cloc ./
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>4.grep命令：grep (regular pattern) (input file)</p>
-<p>使用 grep 抓取匹配关键字附近的行, 有时我们会对 grep 匹配关键字附近的行感兴趣（这有点上下文的味道），使用 -A、-B、以及 -C 选项可以满足我们的愿望。</p>
-<p>grep -A <n> 'keyword' file # 匹配 keyword 的下 n 行</p>
-<p>grep -B <n> 'keyword' file # 匹配 keyword 的上 n 行</p>
-<p>grep -C <n> 'keyword' file # 匹配 keyword 的上 n 行及下 n 行</p>
-<p>5.apt-get命令</p>
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;apt-cache search ‹name› <span class="c"># find package ‹name› for install by “apt-get”</span>
-</span><span class='line'>apt-cache show ‹name›   <span class="c"># describe package ‹name›</span>
-</span><span class='line'>apt-get install ‹name›  <span class="c"># install a new program. (usually used with sudo in front)</span>
-</span><span class='line'>apt-get remove ‹name›   <span class="c"># remove (un-install) a program.</span>
-</span><span class='line'>apt-get purge ‹name›    <span class="c"># remove a program and its config files.</span>
-</span><span class='line'>dpkg -l <span class="c"># list all installed packages</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>6.反向解析域名:host 0.0.0.0</p>
-<p>7.得到本机ip:</p>
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>ifconfig | awk <span class="s1">&#39;/inet addr:/ {print $2}&#39;</span> | awk -F: <span class="s1">&#39;{if ($2 != &quot;127.0.0.1&quot;) print $2}&#39;</span>
-</span><span class='line'>ifconfig | sed -rn <span class="s1">&#39;s/.&lt;em&gt;r:([^ ]+) .&lt;/em&gt;/\1/p&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>8.创建目录：mkdir {1..50}；创建文件：touch {1..50}；</p>
-<p>9.对打开端口进行检查：netstat -an | grep --color -i -E 'listen|listening'</p>
-<p>netstat -tlnp</p>
-<p>10.找到超过100M的文件：find . -type f -size +100M</p>
-<p>11.删除文件：rm !(<em>.foo|</em>.bar|*.baz)</p>
-<p>12.快速重命名：mv filename.{old,new} </p>
-<p>13.终止进程：killall -KILL 进程名称 | killall -signal process | kill -SIGKILL processID</p>
-<p>14.成为Ubuntu超级用户：sudo passwd root 新建root用户</p>
-<p>15.寻找文件：find 路径名（path） 参数（根据文件名称-name、类型-type、权限-perm、修改世间-atime） 模式匹配</p>
-<p>16.使某个配置文件立即生效：source /etc/profile</p>
-<p>17.打开或关闭某项服务:service 某项服务（iptables） on|stop</p>
-<p>18.查看系统进程占用资源的工具：top,ps,free,vmstat,iostat,pmap</p>
-<p>19.找到某个进程的ID：ps -aux | grep processname </p>
-<p>20.根据目录下文件的大小排序输出：du -hs * | sort -h </p>
-<p>21.查看当前目录下文件的个数：ls -l | grep "<sup>-"</sup> | wc -l 查看当前目录下文件的个数，包括子目录里的：ls -lR | grep "<sup>-"</sup> | wc -l 查看某目录下文件夹（目录）的个数，包括子目录里的：ls -lR | grep "<sup>d"</sup> | wc -l</p>
-<p>22.设置文件及文件夹权限：chmod -R 664 文件夹名称 （赋予文件属主和同组用户读、写权限，其他用户只读权限),文件夹和其目录下的文件都被设置了相同的664权限,u代表的是与文件属主拥有一样的权限</p>
-<p>23.Shell删除目录下的无效链接</p>
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;link<span class="o">=</span>&lt;code&gt;find . -type l&lt;/code&gt;
-</span><span class='line'><span class="nb">echo</span> <span class="nv">$link</span>
-</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span>;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;do
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> ! -f <span class="nv">$i</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">    </span>rm <span class="nv">$i</span> ;
-</span><span class='line'><span class="k">fi</span> ;
-</span><span class='line'><span class="k">done</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>24.shell给可执行的文件创建链接</p>
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;mkdir -p  ./exelink
-</span><span class='line'><span class="nb">cd </span>exelink
-</span><span class='line'><span class="nv">link</span><span class="o">=</span>&lt;code&gt;find ../ -type f -perm -111 &lt;/code&gt;
-</span><span class='line'><span class="k">for </span>i in <span class="nv">$link</span> ;&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;do
-</span><span class='line'><span class="k">if</span> <span class="o">[</span>  -f <span class="nv">$i</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">    </span><span class="nb">echo</span> <span class="nv">$i</span>
-</span><span class='line'>    link  <span class="nv">$i</span> <span class="sb">`</span><span class="nb">echo</span> <span class="nv">$i</span> | sed <span class="s1">&#39;s,.*/,,&#39;</span><span class="sb">`</span>
-</span><span class='line'><span class="k">fi</span> ;
-</span><span class='line'><span class="k">done</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>25.根据不同的时段输出不一样的欢迎词</p>
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;!/bin/bash&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;HH<span class="o">=</span>&lt;code&gt;date +%k&lt;/code&gt;
-</span><span class='line'><span class="nb">echo</span> <span class="nv">$HH</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 0 <span class="o">]</span>&amp;amp;&amp;amp;<span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -lt 12 <span class="o">]</span> ; <span class="k">then</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;  <span class="nb">echo</span> <span class="s2">&quot;Good Morning `whoami`&quot;</span>;
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;elif <span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -ge 12 <span class="o">]</span>&amp;amp;&amp;amp;<span class="o">[</span> <span class="k">${</span><span class="nv">HH</span><span class="k">}</span> -l 18 <span class="o">]</span>; <span class="k">then</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;  <span class="nb">echo</span> <span class="s2">&quot;Good Afternoon `whoami`&quot;</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;else&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;  <span class="nb">echo</span> <span class="s2">&quot;Good Evening `whoami`&quot;</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;fi;
-</span></code></pre></td></tr></table></div></figure></notextile></div></p></blockquote>
 ]]></content>
   </entry>
   
