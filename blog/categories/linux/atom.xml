@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-26T23:10:56+08:00</updated>
+  <updated>2013-09-26T23:14:49+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -25,7 +25,7 @@
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 批量地找c和h文件，替换PJ_DEF宏，但保留参数不变。掌握正则表达式，对提高工作效率有比较大的帮助。</p>
 <!-- more -->
-<p>一般的正则表达式匹配：**.代表的是任意字符，</em>代表的是多个，[a-z|A-Z]代表的是字母，<sup>[list]代表的是以list开头，[<sup>list]代表的是不是list的，[list]$代表的是以list为结尾，匹配一些特殊符号需要转义，如(,</sup></sup> \t;{1,15}代表的是1-15个。**掌握正则表达式，并且配合grep，sed，awk，perl，python等工具一起使用，对于文本处理，威力就无穷大了。</p></p></blockquote>
+<p>一般的正则表达式匹配：.代表的是任意字符，</em>代表的是多个，[a-z|A-Z]代表的是字母，\<sup>[list]代表的是以list开头，[\<sup>list]代表的是不是list的，[list]$代表的是以list为结尾，匹配一些特殊符号需要转义，如(,</sup></sup> \t;{1,15}代表的是1-15个。掌握正则表达式，并且配合grep，sed，awk，perl，python等工具一起使用，对于文本处理，威力就无穷大了。</p></p></blockquote>
 ]]></content>
   </entry>
   
