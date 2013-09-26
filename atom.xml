@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-26T23:30:39+08:00</updated>
+  <updated>2013-09-26T23:39:15+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[pjsip state machine]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/09/26/pjsip-state-machine/"/>
+    <updated>2013-09-26T23:38:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/09/26/pjsip-state-machine</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[正则表达式]]></title>
@@ -32,7 +41,11 @@
 
 <figure class='code'><figcaption><span>一般的正则表达式匹配：  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>.代表的是任意字符，*代表的是多个，<span class="o">[</span>a-z|A-Z<span class="o">]</span>代表的是字母，^<span class="o">[</span>list<span class="o">]</span>代表的是以list开头，<span class="o">[</span>^list<span class="o">]</span>代表的是不是list的，<span class="o">[</span>list<span class="o">]</span><span class="nv">$代</span>表的是以list为结尾，匹配一些特殊符号需要转义，如<span class="se">\(</span>, <span class="se">\t</span>;<span class="se">\{</span>1,15<span class="se">\}</span>代表的是1-15个。
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>.代表的是任意字符，*代表的是多个，<span class="o">[</span>a-z|A-Z<span class="o">]</span>代表的是字母，^<span class="o">[</span>list<span class="o">]</span>代表的是以list开头，
+</span><span class='line'><span class="o">[</span>^list<span class="o">]</span>代表的是不是list的，<span class="o">[</span>list<span class="o">]</span><span class="nv">$代</span>表的是以list为结尾，匹配一些特殊符号需要转义，
+</span><span class='line'>如<span class="se">\(</span>, <span class="se">\t</span>;<span class="se">\{</span>1,15<span class="se">\}</span>代表的是1-15个。
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
@@ -46,7 +59,1183 @@
     <content type="html"><![CDATA[<blockquote><p><p>pjsip是实现sip的协议栈。相对于其它的sip协议栈，pjsip实现相对稳定且跨平台。首先分析pjlib基本库，其这些库的实现都比较精湛，是深入学习编程的好材料。并且设计了很多的测试用例，对函数的接口进行测试。<p>
 <p>pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信号量，事件，高精度时间等；网络I/O,具体为socket抽象，网络地址解析，select I/O复用；时间管理；多种数据结构，字符串的操作，数组帮助，哈希表，链表，红黑树等；内存池管理的实现较为精湛。
 <!-- more -->
-<p></p></blockquote>
+<p>如红黑树的代码实现：</p></p></blockquote>
+
+<figure class='code'><figcaption><span>rbtree.h  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * @file rbtree.h</span>
+</span><span class='line'><span class="cm"> * @brief Red/Black Tree</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#include &lt;pj/types.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">PJ_BEGIN_DECL</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * @defgroup PJ_RBTREE Red/Black Balanced Tree</span>
+</span><span class='line'><span class="cm"> * @ingroup PJ_DS</span>
+</span><span class='line'><span class="cm"> * @brief</span>
+</span><span class='line'><span class="cm"> * Red/Black tree is the variant of balanced tree, where the search, insert, </span>
+</span><span class='line'><span class="cm"> * and delete operation is \b guaranteed to take at most \a O( lg(n) ).</span>
+</span><span class='line'><span class="cm"> * @{</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Color type for Red-Black tree.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">enum</span> <span class="n">pj_rbcolor_t</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">,</span>
+</span><span class='line'>    <span class="n">PJ_RBCOLOR_RED</span>
+</span><span class='line'><span class="p">}</span> <span class="n">pj_rbcolor_t</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * The type of the node of the R/B Tree.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="n">pj_rbtree_node</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="cm">/** Pointers to the node&#39;s parent, and left and right siblings. */</span>
+</span><span class='line'>    <span class="k">struct</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">parent</span><span class="p">,</span> <span class="o">*</span><span class="n">left</span><span class="p">,</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/** Key associated with the node. */</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/** User data associated with the node. */</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="o">*</span><span class="n">user_data</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="cm">/** The R/B Tree node color. */</span>
+</span><span class='line'>    <span class="n">pj_rbcolor_t</span> <span class="n">color</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span> <span class="n">pj_rbtree_node</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * The type of function use to compare key value of tree node.</span>
+</span><span class='line'><span class="cm"> * @return</span>
+</span><span class='line'><span class="cm"> *  0 if the keys are equal</span>
+</span><span class='line'><span class="cm"> * &lt;0 if key1 is lower than key2</span>
+</span><span class='line'><span class="cm"> * &gt;0 if key1 is greater than key2.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">typedef</span> <span class="kt">int</span> <span class="nf">pj_rbtree_comp</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key2</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Declaration of a red-black tree. All elements in the tree must have UNIQUE</span>
+</span><span class='line'><span class="cm"> * key.</span>
+</span><span class='line'><span class="cm"> * A red black tree always maintains the balance of the tree, so that the</span>
+</span><span class='line'><span class="cm"> * tree height will not be greater than lg(N). Insert, search, and delete</span>
+</span><span class='line'><span class="cm"> * operation will take lg(N) on the worst case. But for insert and delete,</span>
+</span><span class='line'><span class="cm"> * there is additional time needed to maintain the balance of the tree.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="k">typedef</span> <span class="k">struct</span> <span class="n">pj_rbtree</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="n">null_node</span><span class="p">;</span>   <span class="cm">/**&lt; Constant to indicate NULL node.    */</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span><span class="p">;</span>       <span class="cm">/**&lt; Constant to indicate NULL node.    */</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">root</span><span class="p">;</span>       <span class="cm">/**&lt; Root tree node.                    */</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="n">size</span><span class="p">;</span>              <span class="cm">/**&lt; Number of elements in the tree.    */</span>
+</span><span class='line'>    <span class="n">pj_rbtree_comp</span> <span class="o">*</span><span class="n">comp</span><span class="p">;</span>       <span class="cm">/**&lt; Key comparison function.           */</span>
+</span><span class='line'><span class="p">}</span> <span class="n">pj_rbtree</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Guidance on how much memory required for each of the node.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="cp">#define PJ_RBTREE_NODE_SIZE      (sizeof(pj_rbtree_node))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Guidance on memory required for the tree.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="cp">#define PJ_RBTREE_SIZE           (sizeof(pj_rbtree))</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Initialize the tree.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree to be initialized.</span>
+</span><span class='line'><span class="cm"> * @param comp key comparison function to be used for this tree.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">pj_rbtree_init</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="n">pj_rbtree_comp</span> <span class="o">*</span><span class="n">comp</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Get the first element in the tree.</span>
+</span><span class='line'><span class="cm"> * The first element always has the least value for the key, according to</span>
+</span><span class='line'><span class="cm"> * the comparison function.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @return the tree node, or NULL if the tree has no element.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_first</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Get the last element in the tree.</span>
+</span><span class='line'><span class="cm"> * The last element always has the greatest key value, according to the</span>
+</span><span class='line'><span class="cm"> * comparison function defined for the tree.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @return the tree node, or NULL if the tree has no element.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_last</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Get the successive element for the specified node.</span>
+</span><span class='line'><span class="cm"> * The successive element is an element with greater key value.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param node the node.</span>
+</span><span class='line'><span class="cm"> * @return the successive node, or NULL if the node has no successor.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_next</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                   <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * The the previous node for the specified node.</span>
+</span><span class='line'><span class="cm"> * The previous node is an element with less key value.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param node the node.</span>
+</span><span class='line'><span class="cm"> * @return the previous node, or NULL if the node has no previous node.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_prev</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                   <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Insert a new node. </span>
+</span><span class='line'><span class="cm"> * The node will be inserted at sorted location. The key of the node must </span>
+</span><span class='line'><span class="cm"> * be UNIQUE, i.e. it hasn&#39;t existed in the tree.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param node the node to be inserted.</span>
+</span><span class='line'><span class="cm"> * @return zero on success, or -1 if the key already exist.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pj_rbtree_insert</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                 <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Find a node which has the specified key.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param key the key to search.</span>
+</span><span class='line'><span class="cm"> * @return the tree node with the specified key, or NULL if the key can not</span>
+</span><span class='line'><span class="cm"> *         be found.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_find</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                   <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Erase a node from the tree.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param node the node to be erased.</span>
+</span><span class='line'><span class="cm"> * @return the tree node itself.</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_erase</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Get the maximum tree height from the specified node.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param node the node, or NULL to get the root of the tree.</span>
+</span><span class='line'><span class="cm"> * @return the maximum height, which should be at most lg(N)</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kt">unsigned</span> <span class="nf">pj_rbtree_max_height</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                  <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="cm">/**</span>
+</span><span class='line'><span class="cm"> * Get the minumum tree height from the specified node.</span>
+</span><span class='line'><span class="cm"> * @param tree the tree.</span>
+</span><span class='line'><span class="cm"> * @param node the node, or NULL to get the root of the tree.</span>
+</span><span class='line'><span class="cm"> * @return the height</span>
+</span><span class='line'><span class="cm"> */</span>
+</span><span class='line'><span class="kt">unsigned</span> <span class="nf">pj_rbtree_min_height</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                  <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>红黑树的具体实现：</p></p></blockquote>
+
+<figure class='code'><figcaption><span>rbtree.c  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+<span class='line-number'>215</span>
+<span class='line-number'>216</span>
+<span class='line-number'>217</span>
+<span class='line-number'>218</span>
+<span class='line-number'>219</span>
+<span class='line-number'>220</span>
+<span class='line-number'>221</span>
+<span class='line-number'>222</span>
+<span class='line-number'>223</span>
+<span class='line-number'>224</span>
+<span class='line-number'>225</span>
+<span class='line-number'>226</span>
+<span class='line-number'>227</span>
+<span class='line-number'>228</span>
+<span class='line-number'>229</span>
+<span class='line-number'>230</span>
+<span class='line-number'>231</span>
+<span class='line-number'>232</span>
+<span class='line-number'>233</span>
+<span class='line-number'>234</span>
+<span class='line-number'>235</span>
+<span class='line-number'>236</span>
+<span class='line-number'>237</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+<span class='line-number'>241</span>
+<span class='line-number'>242</span>
+<span class='line-number'>243</span>
+<span class='line-number'>244</span>
+<span class='line-number'>245</span>
+<span class='line-number'>246</span>
+<span class='line-number'>247</span>
+<span class='line-number'>248</span>
+<span class='line-number'>249</span>
+<span class='line-number'>250</span>
+<span class='line-number'>251</span>
+<span class='line-number'>252</span>
+<span class='line-number'>253</span>
+<span class='line-number'>254</span>
+<span class='line-number'>255</span>
+<span class='line-number'>256</span>
+<span class='line-number'>257</span>
+<span class='line-number'>258</span>
+<span class='line-number'>259</span>
+<span class='line-number'>260</span>
+<span class='line-number'>261</span>
+<span class='line-number'>262</span>
+<span class='line-number'>263</span>
+<span class='line-number'>264</span>
+<span class='line-number'>265</span>
+<span class='line-number'>266</span>
+<span class='line-number'>267</span>
+<span class='line-number'>268</span>
+<span class='line-number'>269</span>
+<span class='line-number'>270</span>
+<span class='line-number'>271</span>
+<span class='line-number'>272</span>
+<span class='line-number'>273</span>
+<span class='line-number'>274</span>
+<span class='line-number'>275</span>
+<span class='line-number'>276</span>
+<span class='line-number'>277</span>
+<span class='line-number'>278</span>
+<span class='line-number'>279</span>
+<span class='line-number'>280</span>
+<span class='line-number'>281</span>
+<span class='line-number'>282</span>
+<span class='line-number'>283</span>
+<span class='line-number'>284</span>
+<span class='line-number'>285</span>
+<span class='line-number'>286</span>
+<span class='line-number'>287</span>
+<span class='line-number'>288</span>
+<span class='line-number'>289</span>
+<span class='line-number'>290</span>
+<span class='line-number'>291</span>
+<span class='line-number'>292</span>
+<span class='line-number'>293</span>
+<span class='line-number'>294</span>
+<span class='line-number'>295</span>
+<span class='line-number'>296</span>
+<span class='line-number'>297</span>
+<span class='line-number'>298</span>
+<span class='line-number'>299</span>
+<span class='line-number'>300</span>
+<span class='line-number'>301</span>
+<span class='line-number'>302</span>
+<span class='line-number'>303</span>
+<span class='line-number'>304</span>
+<span class='line-number'>305</span>
+<span class='line-number'>306</span>
+<span class='line-number'>307</span>
+<span class='line-number'>308</span>
+<span class='line-number'>309</span>
+<span class='line-number'>310</span>
+<span class='line-number'>311</span>
+<span class='line-number'>312</span>
+<span class='line-number'>313</span>
+<span class='line-number'>314</span>
+<span class='line-number'>315</span>
+<span class='line-number'>316</span>
+<span class='line-number'>317</span>
+<span class='line-number'>318</span>
+<span class='line-number'>319</span>
+<span class='line-number'>320</span>
+<span class='line-number'>321</span>
+<span class='line-number'>322</span>
+<span class='line-number'>323</span>
+<span class='line-number'>324</span>
+<span class='line-number'>325</span>
+<span class='line-number'>326</span>
+<span class='line-number'>327</span>
+<span class='line-number'>328</span>
+<span class='line-number'>329</span>
+<span class='line-number'>330</span>
+<span class='line-number'>331</span>
+<span class='line-number'>332</span>
+<span class='line-number'>333</span>
+<span class='line-number'>334</span>
+<span class='line-number'>335</span>
+<span class='line-number'>336</span>
+<span class='line-number'>337</span>
+<span class='line-number'>338</span>
+<span class='line-number'>339</span>
+<span class='line-number'>340</span>
+<span class='line-number'>341</span>
+<span class='line-number'>342</span>
+<span class='line-number'>343</span>
+<span class='line-number'>344</span>
+<span class='line-number'>345</span>
+<span class='line-number'>346</span>
+<span class='line-number'>347</span>
+<span class='line-number'>348</span>
+<span class='line-number'>349</span>
+<span class='line-number'>350</span>
+<span class='line-number'>351</span>
+<span class='line-number'>352</span>
+<span class='line-number'>353</span>
+<span class='line-number'>354</span>
+<span class='line-number'>355</span>
+<span class='line-number'>356</span>
+<span class='line-number'>357</span>
+<span class='line-number'>358</span>
+<span class='line-number'>359</span>
+<span class='line-number'>360</span>
+<span class='line-number'>361</span>
+<span class='line-number'>362</span>
+<span class='line-number'>363</span>
+<span class='line-number'>364</span>
+<span class='line-number'>365</span>
+<span class='line-number'>366</span>
+<span class='line-number'>367</span>
+<span class='line-number'>368</span>
+<span class='line-number'>369</span>
+<span class='line-number'>370</span>
+<span class='line-number'>371</span>
+<span class='line-number'>372</span>
+<span class='line-number'>373</span>
+<span class='line-number'>374</span>
+<span class='line-number'>375</span>
+<span class='line-number'>376</span>
+<span class='line-number'>377</span>
+<span class='line-number'>378</span>
+<span class='line-number'>379</span>
+<span class='line-number'>380</span>
+<span class='line-number'>381</span>
+<span class='line-number'>382</span>
+<span class='line-number'>383</span>
+<span class='line-number'>384</span>
+<span class='line-number'>385</span>
+<span class='line-number'>386</span>
+<span class='line-number'>387</span>
+<span class='line-number'>388</span>
+<span class='line-number'>389</span>
+<span class='line-number'>390</span>
+<span class='line-number'>391</span>
+<span class='line-number'>392</span>
+<span class='line-number'>393</span>
+<span class='line-number'>394</span>
+<span class='line-number'>395</span>
+<span class='line-number'>396</span>
+<span class='line-number'>397</span>
+<span class='line-number'>398</span>
+<span class='line-number'>399</span>
+<span class='line-number'>400</span>
+<span class='line-number'>401</span>
+<span class='line-number'>402</span>
+<span class='line-number'>403</span>
+<span class='line-number'>404</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">left_rotate</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">rnode</span><span class="p">,</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">rnode</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">rnode</span> <span class="o">==</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">rnode</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">rnode</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">rnode</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">rnode</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="n">node</span><span class="p">)</span>
+</span><span class='line'>     <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">rnode</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">else</span>
+</span><span class='line'>     <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">rnode</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">rnode</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">rnode</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">rnode</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">right_rotate</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">lnode</span><span class="p">,</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">lnode</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">lnode</span> <span class="o">==</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">lnode</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">lnode</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">lnode</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">lnode</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="n">node</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">lnode</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>      <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">lnode</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">lnode</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">lnode</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">lnode</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">insert_fixup</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">temp</span><span class="p">,</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">==</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">temp</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>         <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>         <span class="n">left_rotate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">right_rotate</span><span class="p">(</span> <span class="n">tree</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">temp</span> <span class="o">=</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">right_rotate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">left_rotate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+</span><span class='line'>     <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">delete_fixup</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">&amp;&amp;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">left_rotate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">right_rotate</span><span class="p">(</span> <span class="n">tree</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">left_rotate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">right_rotate</span><span class="p">(</span> <span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span> <span class="o">&amp;&amp;</span>
+</span><span class='line'>      <span class="n">temp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">left_rotate</span><span class="p">(</span> <span class="n">tree</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">temp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">right_rotate</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">pj_rbtree_init</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="n">pj_rbtree_comp</span> <span class="o">*</span><span class="n">comp</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">null_node</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">user_data</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">tree</span><span class="o">-&gt;</span><span class="n">comp</span> <span class="o">=</span> <span class="n">comp</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_first</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">?</span> <span class="n">node</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_last</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">?</span> <span class="n">node</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_next</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                  <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">!=</span><span class="n">null</span><span class="p">;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
+</span><span class='line'>      <span class="cm">/* void */</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">temp</span><span class="o">!=</span><span class="n">null</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">==</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">node</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">node</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">?</span> <span class="n">node</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_prev</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                  <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">!=</span><span class="n">null</span><span class="p">;</span> <span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
+</span><span class='line'>     <span class="cm">/* void */</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">register</span> <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">while</span> <span class="p">(</span><span class="n">temp</span><span class="o">!=</span><span class="n">null</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">==</span><span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="n">node</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="n">node</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">?</span> <span class="n">node</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pj_rbtree_insert</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">element</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">rv</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span><span class="p">,</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">,</span>
+</span><span class='line'>         <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_comp</span> <span class="o">*</span><span class="n">comp</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">comp</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>   
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">rv</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">comp</span><span class="p">)(</span><span class="n">element</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">rv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="cm">/* found match, i.e. entry with equal key already exist */</span>
+</span><span class='line'>      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">node</span> <span class="o">=</span> <span class="n">rv</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">:</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">element</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_RED</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">element</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">element</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">node</span> <span class="o">=</span> <span class="n">element</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">rv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>     <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">else</span>
+</span><span class='line'>     <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">insert_fixup</span><span class="p">(</span> <span class="n">tree</span><span class="p">,</span> <span class="n">node</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">null</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>    <span class="o">++</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_find</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                  <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">key</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">int</span> <span class="n">rv</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_comp</span> <span class="o">*</span><span class="n">comp</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">comp</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">while</span> <span class="p">(</span><span class="n">node</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">rv</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">comp</span><span class="p">)(</span><span class="n">key</span><span class="p">,</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">rv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">node</span> <span class="o">=</span> <span class="n">rv</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">:</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">?</span> <span class="n">node</span> <span class="o">:</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">pj_rbtree_node</span><span class="o">*</span> <span class="nf">pj_rbtree_erase</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                   <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">succ</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">null</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">child</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="n">null</span> <span class="o">||</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">succ</span> <span class="o">=</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">for</span> <span class="p">(</span><span class="n">succ</span><span class="o">=</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span> <span class="n">succ</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">!=</span><span class="n">null</span><span class="p">;</span> <span class="n">succ</span><span class="o">=</span><span class="n">succ</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
+</span><span class='line'>     <span class="cm">/* void */</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">child</span> <span class="o">=</span> <span class="n">succ</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">?</span> <span class="n">succ</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">:</span> <span class="n">succ</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">parent</span> <span class="o">=</span> <span class="n">succ</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">child</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="n">succ</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">else</span>
+</span><span class='line'>     <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">succ</span> <span class="o">!=</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">succ</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">succ</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">succ</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">succ</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">parent</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">==</span><span class="n">node</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">parent</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">=</span><span class="n">succ</span><span class="p">;</span>
+</span><span class='line'>     <span class="k">else</span>
+</span><span class='line'>      <span class="n">parent</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">=</span><span class="n">succ</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>     <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">succ</span><span class="p">;;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">succ</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">==</span> <span class="n">node</span><span class="p">)</span>
+</span><span class='line'>     <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span> <span class="o">=</span> <span class="n">succ</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">succ</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">child</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">delete_fixup</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">child</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">PJ_RBCOLOR_BLACK</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">--</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">node</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">unsigned</span> <span class="nf">pj_rbtree_max_height</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                     <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">==</span><span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">l</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span> <span class="o">?</span> <span class="n">pj_rbtree_max_height</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">r</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span> <span class="o">?</span> <span class="n">pj_rbtree_max_height</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="o">?</span> <span class="n">l</span> <span class="o">:</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">unsigned</span> <span class="nf">pj_rbtree_min_height</span><span class="p">(</span> <span class="n">pj_rbtree</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span>
+</span><span class='line'>                     <span class="n">pj_rbtree_node</span> <span class="o">*</span><span class="n">node</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PJ_CHECK_STACK</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="o">==</span><span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">node</span><span class="o">=</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">root</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span> <span class="o">?</span> <span class="n">pj_rbtree_max_height</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="n">tree</span><span class="o">-&gt;</span><span class="n">null</span><span class="p">)</span> <span class="o">?</span> <span class="n">pj_rbtree_max_height</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">l</span> <span class="o">&gt;</span> <span class="n">r</span> <span class="o">?</span> <span class="n">r</span> <span class="o">:</span> <span class="n">l</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 ]]></content>
   </entry>
   
@@ -265,19 +1454,6 @@
 <p>《深入理解计算机系统》的优化程序性能，存储体系结构，虚拟存储器这几章都是从程序员的角度看待计算机硬件的工作原理，利用其实现的原理，写出更加高效的程序。这几章与计算机硬件打交道，一定要看懂，作为以后工作的突破点。这本书将其作为计算机的圣经也不为过。</p>
 <p>今天也有看《量子物理史话》，似乎现在没有之前那么好看了。因为我似乎心不在焉，那就先看计算机相关的吧。</p>
 <p>无论日子怎么样，都要保持愉悦的心态。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[问心无愧 柳暗花明]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/19/firth-day/"/>
-    <updated>2013-07-19T23:45:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/19/firth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天是到tp-link的第五天，听了两个讲座，一个是关于tp-link的研发文化，另外一个是关于如何成为一名合格的研发工程师。说的清楚的，知其然,也要知其所以然。不要说“大概”，“似乎”这样的字眼。要有敬业精神，天下之事始于易，从懂得的下手，把难的事情做对，将易的事情做好。tp-link的研发氛围是不错的，只要肯攀登，肯定有自己表现的舞台。如果不是，那就是得过且过，终究在悔恨中消失。</p>
-<!-- more -->
-<p><strong>我都不知道自己哪一天会突然离开，但活在世上，要对得起自己，对得起父母，对得起周围关心自己的人，自己就算离开，也都问心无愧。而不要总是担心明天不确定的事情，担心自己没有完成心愿就离开，要积极，乐观，我不敢说山重水复疑无路，柳暗花明又一村，但只要每一天都过得充实，过得快乐。每一天都看作是自己生命中最后的一天，那么今天就会去做些什么，当自己离开时，自己还会不会带着遗憾离开。</strong></p>
-<p>今天主要看了《深入理解计算机系统》的第三章：程序机器级的表示。主要说的汇编语言，通过阅读和分析汇编语言，从而写出更为高效的C代码。switch语句应用的是跳转表的机制实现，比if-else语句执行要搞笑。union联合可以节省空间的使用，或者对struct结构体的字段的重新调整也可以减少空间的使用。最为紧要的是理解栈帧结构，在函数调用的栈进行的操作和递归函数的机制，了解到栈溢出，从而导致程序崩溃，找不到返回地址，或者跳转到去执行病毒的地址。</p>
-<p>从做书的练习可以看得出，我半桶水，有很多的知识都没有掌握，真不愧是大学连一本完整的书都没有读完出来的人。那么工作了，是否应该将这本书读透呢？是否好应该知耻而后勇呢？是否好应该知道时间不留人，自己的时间不多呢？</p></p></blockquote>
 ]]></content>
   </entry>
   
