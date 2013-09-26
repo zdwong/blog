@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="pjsip是实现sip的协议栈。相对于其它的sip协议栈，pjsip实现相对稳定且跨平台。首先分析pjlib基本库，其这些库的实现都比较精湛，是深入学习编程的好材料。并且设计了很多的测试用例，对函数的接口进行测试。
-pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信号量，事件， &hellip;">
+  <meta name="description" content="由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,54 @@ pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/26/regular-expression/">正则表达式</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-26T22:44:00+08:00" pubdate data-updated="true">Sep 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换，在Linux下的命令为：</p></p></blockquote>
+
+<figure class='code'><figcaption><span>批量替换  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;*.[c|h]&quot;</span> | xargs perl -pi -e <span class="s2">&quot;s|PJ_DEF\(([^\(]*)\)|$1|g&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>批量地找c和h文件，替换PJ_DEF宏，但保留参数不变。掌握正则表达式，对提高工作效率有比较大的帮助。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/26/regular-expression/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -443,46 +490,6 @@ pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/01/fourteenth-day/">感激涕零 不知所云</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-01T23:58:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误，是地址，而不是长度，一般用汇编写比较能提高效率，且可以利用流水线加速。每一条编程题都有改进的空间。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/08/01/fourteenth-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -503,7 +510,7 @@ pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 107.05882352941177%'>English</a>  <a href='/blog/categories/intern' style='font-size: 107.05882352941177%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 107.05882352941177%'>Library</a>  <a href='/blog/categories/life' style='font-size: 131.76470588235293%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 131.76470588235293%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 131.76470588235293%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 107.05882352941177%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 107.05882352941177%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 107.05882352941177%'>English</a>  <a href='/blog/categories/intern' style='font-size: 107.05882352941177%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 107.05882352941177%'>Library</a>  <a href='/blog/categories/life' style='font-size: 131.76470588235293%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 135.29411764705884%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 131.76470588235293%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 107.05882352941177%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 107.05882352941177%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -513,7 +520,7 @@ pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
 <li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (9)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (9)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (10)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
@@ -523,6 +530,10 @@ pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/26/regular-expression/">正则表达式</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/22/internet/">pjsip 初步分析</a>
@@ -538,10 +549,6 @@ pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信
     
       <li class="post">
         <a href="/blog/2013/08/08/eighteenth-day/">路漫漫其修远兮 吾将上下而求索</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/07/seventeenth-day/">屡败屡战 岁月如梭</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-26T00:31:55+08:00</updated>
+  <updated>2013-09-26T23:05:54+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,13 +14,33 @@
 
   
   <entry>
+    <title type="html"><![CDATA[正则表达式]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/09/26/regular-expression/"/>
+    <updated>2013-09-26T22:44:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/09/26/regular-expression</id>
+    <content type="html"><![CDATA[<blockquote><p><p>由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换，在Linux下的命令为：</p></p></blockquote>
+
+<figure class='code'><figcaption><span>批量替换  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;*.[c|h]&quot;</span> | xargs perl -pi -e <span class="s2">&quot;s|PJ_DEF\(([^\(]*)\)|$1|g&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>批量地找c和h文件，替换PJ_DEF宏，但保留参数不变。掌握正则表达式，对提高工作效率有比较大的帮助。</p>
+<!-- more -->
+<p>一般的正则表达式匹配：.代表的是任意字符，*代表的是多个，[a-z|A-Z]代表的是字母，<sup>[list]代表的是以list开头，[<sup>list]代表的是不是list的，[list]$代表的是以list为结尾，匹配一些特殊符号需要转义，如(,</sup></sup> \t;{1,15}代表的是1-15个。掌握正则表达式，并且配合grep，sed，awk，perl，python等工具一起使用，对于文本处理，威力就无穷大了。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[pjsip 初步分析]]></title>
     <link href="http://coolbrain.github.com/blog/2013/09/22/internet/"/>
     <updated>2013-09-22T19:43:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/09/22/internet</id>
     <content type="html"><![CDATA[<blockquote><p><p>pjsip是实现sip的协议栈。相对于其它的sip协议栈，pjsip实现相对稳定且跨平台。首先分析pjlib基本库，其这些库的实现都比较精湛，是深入学习编程的好材料。并且设计了很多的测试用例，对函数的接口进行测试。<p>
 <p>pjlib库包含操作系统的抽象，具体是可移植性的线程，锁，信号量，事件，高精度时间等；网络I/O,具体为socket抽象，网络地址解析，select I/O复用；时间管理；多种数据结构，字符串的操作，数组帮助，哈希表，链表，红黑树等；内存池管理的实现较为精湛。
-<!-- more --></p></blockquote>
+<!-- more -->
+<p></p></blockquote>
 ]]></content>
   </entry>
   
@@ -252,19 +272,6 @@
 <p><strong>我都不知道自己哪一天会突然离开，但活在世上，要对得起自己，对得起父母，对得起周围关心自己的人，自己就算离开，也都问心无愧。而不要总是担心明天不确定的事情，担心自己没有完成心愿就离开，要积极，乐观，我不敢说山重水复疑无路，柳暗花明又一村，但只要每一天都过得充实，过得快乐。每一天都看作是自己生命中最后的一天，那么今天就会去做些什么，当自己离开时，自己还会不会带着遗憾离开。</strong></p>
 <p>今天主要看了《深入理解计算机系统》的第三章：程序机器级的表示。主要说的汇编语言，通过阅读和分析汇编语言，从而写出更为高效的C代码。switch语句应用的是跳转表的机制实现，比if-else语句执行要搞笑。union联合可以节省空间的使用，或者对struct结构体的字段的重新调整也可以减少空间的使用。最为紧要的是理解栈帧结构，在函数调用的栈进行的操作和递归函数的机制，了解到栈溢出，从而导致程序崩溃，找不到返回地址，或者跳转到去执行病毒的地址。</p>
 <p>从做书的练习可以看得出，我半桶水，有很多的知识都没有掌握，真不愧是大学连一本完整的书都没有读完出来的人。那么工作了，是否应该将这本书读透呢？是否好应该知耻而后勇呢？是否好应该知道时间不留人，自己的时间不多呢？</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[亭亭玉立 洁白无瑕]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/18/fourth-day/"/>
-    <updated>2013-07-18T23:38:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/18/fourth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天是我来tp-link的第四天，培训内容是公司的计算机安全与管理制度。之后的自由支配时间都在看《深入了解计算机系统》的第三章：程序的机器级的表示，主要是汇编与C语言的转换，包括访问信息（内存或寄存器），算术和逻辑操作，控制和过程等。发现后面的习题很经典，相识恨晚，一定要实践的，不然就会悔恨了。不过下午到四点的时候就已经好似没有精神看下去了，中午休息不太好，一定要睡个好觉。于是浏览了公司相关的研发，行政等文件，发现公司好有规章制度和条理，在这么纯洁的公司做事，真是荣幸之至。</p>
-<!-- more -->
-<p>晚上继续看了《量子物理史话》，到对波尔模型的进一步解释，但一直解决不了与经典磁场直接的矛盾，光是波还是微粒的问题一直纠结下去，弄得科学家们焦头烂额。波尔都在苦思冥想，海森堡隆重登场了。面对光怪陆离的现象，海森堡又如何独辟蹊径，问鼎量子学呢？将在这一章节继续演绎。正所谓滚滚长江东逝水，浪花淘尽英雄。</p>
-<p>书看累了，就去操场跑步，大概跑了十几圈，就一直幻想参加马拉松，我的坏习惯又来了。我跑步是为了强身健体，不是为了展示自己，也不知天高地厚，也学起了沽名钓誉。</p>
-<p>回来就想冲个热水澡，就继续看《深入理解计算机系统》，可惜，接到一个同学电话，就和他聊了半个钟头，那看书就成为泡影了。聊天是必要的，别忘了正经事。就好似今日评论了同学的一条微博一样，搞到心神不定，最后以大话连篇，无厘头收场。也不知道是否同学相不相信我的话，其实是假话。</p></p></blockquote>
 ]]></content>
   </entry>
   

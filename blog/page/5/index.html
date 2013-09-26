@@ -9,8 +9,8 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。
-">
+  <meta name="description" content="查询处理步骤：1.语法分析与翻译 2.优化 3.执行 如图：
+用于执行一个查询的原语的操作序列称为查询执行计划（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/sql-proccessing/">SQL 处理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T23:45:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>查询处理步骤：1.语法分析与翻译 2.优化  3.执行 如图：</p>
+<p>用于执行一个查询的原语的操作序列称为<strong>查询执行计划</strong>（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划，。执行该计划并把结果返回给查询。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/28/sql-proccessing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -443,47 +484,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-main-features/">MonetDB 主要特征</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-22T22:37:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p><strong>以列存储数据库内核</strong></p>
-<p>MonetDB是建立在规范的以列存储的数据库关系表示。它们是相当大的实体，达到几百兆，通过操作系统交换到内存，实现的时候使用的mmap文件内存映射，这对于一个内存能装满整个数据库的系统来说，速度非常地快，如果数据库非常的庞大，那就会导致系统不断地换页，甚至抖动。有必要时，压缩存回磁盘，压缩的效率也很好，因为以列存储，相似程度很高，压缩率自然会高，这需要CPU的时间，但同时节省磁盘的空间，时间换空间，<strong>这有待商议</strong>。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/22/monetdb-main-features/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -506,7 +506,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 107.05882352941177%'>English</a>  <a href='/blog/categories/intern' style='font-size: 107.05882352941177%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 107.05882352941177%'>Library</a>  <a href='/blog/categories/life' style='font-size: 131.76470588235293%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 131.76470588235293%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 131.76470588235293%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 107.05882352941177%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 107.05882352941177%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 107.05882352941177%'>English</a>  <a href='/blog/categories/intern' style='font-size: 107.05882352941177%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 107.05882352941177%'>Library</a>  <a href='/blog/categories/life' style='font-size: 131.76470588235293%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 135.29411764705884%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 131.76470588235293%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 107.05882352941177%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 107.05882352941177%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
 </section>
 
 <section>
@@ -516,7 +516,7 @@
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
 <li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
 <li class='category'><a href='/blog/categories/life/'>Life (9)</a></li>
-<li class='category'><a href='/blog/categories/linux/'>Linux (9)</a></li>
+<li class='category'><a href='/blog/categories/linux/'>Linux (10)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
@@ -526,6 +526,10 @@
 </section><section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/26/regular-expression/">正则表达式</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/09/22/internet/">pjsip 初步分析</a>
@@ -541,10 +545,6 @@
     
       <li class="post">
         <a href="/blog/2013/08/08/eighteenth-day/">路漫漫其修远兮 吾将上下而求索</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/07/seventeenth-day/">屡败屡战 岁月如梭</a>
       </li>
     
   </ul>
