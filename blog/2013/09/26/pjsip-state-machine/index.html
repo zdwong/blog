@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="近期在voip skeleton上增加了一个简单地状态机，分别是当前的状态（current state），事件（event），新的状态（new state），操作（action），使用的是list链表的方式管理，实现动态注册状态的处理。在pjsip 事务（transation state &hellip;">
+  <meta name="description" content="近期在voip skeleton上增加了一个简单的状态机，分别是当前的状态（current state），事件（event），新的状态（new state），操作（action），使用的是list链表的方式管理，实现动态注册状态的处理。在pjsip 事务（transation state &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -105,11 +105,11 @@
   </header>
 
 
-<div class="entry-content"><blockquote><p><p>近期在voip skeleton上增加了一个简单地状态机，分别是当前的状态（current state），事件（event），新的状态（new state），操作（action），使用的是list链表的方式管理，实现动态注册状态的处理。在pjsip 事务（transation state machine）状态机使用的是用数组的方式来实现，数组的下标为状态，内容为操作handle。</p>
+<div class="entry-content"><blockquote><p><p>近期在voip skeleton上增加了一个简单的状态机，分别是当前的状态（current state），事件（event），新的状态（new state），操作（action），使用的是list链表的方式管理，实现动态注册状态的处理。在pjsip 事务（transation state machine）状态机使用的是用数组的方式来实现，数组的下标为状态，内容为操作handle。</p>
 <!-- more -->
-<p>pjsip的事务状态为以下集中，用枚举定义：</p></p></blockquote>
+<p>pjsip的事务状态用枚举定义：</p></p></blockquote>
 
-<figure class='code'><figcaption><span>transation状态声明 enum state  </span></figcaption>
+<figure class='code'><figcaption><span>transation状态声明  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -145,7 +145,7 @@
 
 <blockquote><p><p>pjsip状态处理函数的定义：</p></p></blockquote>
 
-<figure class='code'><figcaption><span>transation状态处理函数声明 enum state  </span></figcaption>
+<figure class='code'><figcaption><span>transation状态处理函数声明  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -191,7 +191,7 @@
 
 <blockquote><p><p>pjsip状态机的注册：</p></p></blockquote>
 
-<figure class='code'><figcaption><span>transation 状态注册 enum state  </span></figcaption>
+<figure class='code'><figcaption><span>transation 状态注册  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -251,7 +251,7 @@
 
 <blockquote><p><p>当相应的事件来临时，就调用相应的处理函数handle和改变自身的状态，如ack来临，或者超时重传：</p></p></blockquote>
 
-<figure class='code'><figcaption><span>transation调用相应的处理函数 enum state  </span></figcaption>
+<figure class='code'><figcaption><span>transation调用相应的处理函数  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -513,7 +513,7 @@
 
 <blockquote><p><p>pjsip 事务相应状态改变函数：</p></p></blockquote>
 
-<figure class='code'><figcaption><span>transation状态改变和改变相应处理函数 enum state  </span></figcaption>
+<figure class='code'><figcaption><span>transation状态改变和改变相应处理函数  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
