@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tp-link | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/tp-link/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-27T00:05:50+08:00</updated>
+  <updated>2013-09-29T23:29:03+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[train summary]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/09/29/train-summary/"/>
+    <updated>2013-09-29T22:57:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/09/29/train-summary</id>
+    <content type="html"><![CDATA[<blockquote><p><p>在TP-Link基础的培训基本结束了，培训的内容都浮于表面，要在工作时候才能真正地深入了解和掌握。在培训期间因为一些简单的问题而浪费时间的操作，在此记录，以此为戒。</p>
+<!-- more -->
+<p>window netsh是一个强大的网络配置工具，如配置IPv4的网络地址，掩码，网关：netsh interface IP addr address "本地连接“ 192.168.1.2 255.255.255.0 192.168.1.1.配置IPv6同样道理，还可以显示丰富的网络信息，如WLAN，LAN等，显示路由信息router print。相对于linux netstat工具，netsh interface IP show tcpconn 显示了tcp，udp的连接数目和所处的状态。</p>
+<p>linux下配置IP地址，ip addr add 803c::abcd:bcde:efce:1235 dev eth0(网络接口），添加路由表项：ip route add 192.168.1.1 dev eth0, 添加 ipv6的路由表项：route -A inet6 add  ... , 要学会man，且看得懂其命令的解释，了解iptables，iP6tables等。</p>
+<p>虚拟机网络适配器的理解：最简单的是桥接（bridge），与主机同一个网段，使用VMnet0虚拟网卡，相当于虚拟交换机。NAT,与主机共享网络，使用VMnet8虚拟网卡，相当于平时路由器的NAT功能；Host only，与主机同一个网络，但不具备NAT功能，所以不能与主机共享上网，使用的VMnet1，内部可自动分配IP地址，说明虚拟机具有DHCP服务器。</p>
+<p>IPv6的ping:ping -6 fe80::abcd:befe:dc12:3458%5, %后面指的是从计算机哪个网口出去，如果不再同一个网络，就会ping不通。<p>
+<p>无线中应该了解802.11b,g,n的区别；在DSL中了解到pppoe，pppoa，ipoa，static ip，dynamic ip的区别；在ipv6中了解到ipv6的地址的使用范围；在简单的局域网中了解arp的欺骗，arp协议中在以太网中的作用；学习了PPP协议，DHCP协议等协议；学习了NAT的几种类型，及其NAT的穿透；学习了转发规则：DMZ，virtual server, upnp, port trigger的区别。</p>
+<p>编程中学习到动态链接库的操作，共享内存的操作，网络帧的解析（注意网络字节序），函数分工，字节位操作（特别是乘法和除法），switch和if_else的区别，栈溢出的注意，按目录编译Makefile文件。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[井底之蛙 自筑围城 作茧自缚 自取灭亡]]></title>
@@ -58,18 +74,6 @@
 <!-- more -->
 <p>下午编程实现了进程间共享存储的信号互斥，使用的sem_open函数，之前找来找去都不知道用什么来实现，原来是用Posix的信号灯。规整化了时间的输出，还加了Delog输出的类型。就这样时间就无声无色地过去了。</p>
 <p>没有实现的要求是，在模块系统的时候，输入参数初始化，方知道我是用动态链接库的，都不知道怎样进行初始化，所以又卡在这里了。看来我的效率很低，今天才做了那么一点点事情。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[手高眼低 迎刃而解]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/08/02/fifteenth-day/"/>
-    <updated>2013-08-02T23:14:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/08/02/fifteenth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天主要是把之前写的DebugLog模块转变为可以多进程调用的共享模块，基本上测试成功，但还不知道怎样对共享内存区域进行加锁。另外，还要尝试将DebugLog模块做成内核模块，就如printf函数一样的模块。好多知识要学，踏实点，不要眼高手低。</p>
-<!-- more -->
-<p>将DebugLog模块编译成动态链接库，各个进程使用是独立的，包括模块中的全局变量，只有内存映射才是公共的，但各个进程来说，其地址又是不一样的，因为是进程使用的虚拟地址，所以存储在共享内存的数据,包含链表，都只能使用相对的地址，所有的操作都是利用指针进行相对地址的操作。</p>
-<p>今天有个关于MIPS架构的讲座，讲师很厉害，不过我也有几个不明白的地方，一：大小端问题，二：字节对齐问题 三：cache问题，以后还要慢慢弄懂这些问题，不要犯一些低级错误。如近期经常在while，或for循环后面加个“；”，其后面的代码根本就发挥不了作用，只执行了仅仅一次，就退出了。</p></p></blockquote>
 ]]></content>
   </entry>
   

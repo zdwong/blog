@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-09-27T00:05:50+08:00</updated>
+  <updated>2013-09-29T23:29:03+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[train summary]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/09/29/train-summary/"/>
+    <updated>2013-09-29T22:57:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/09/29/train-summary</id>
+    <content type="html"><![CDATA[<blockquote><p><p>在TP-Link基础的培训基本结束了，培训的内容都浮于表面，要在工作时候才能真正地深入了解和掌握。在培训期间因为一些简单的问题而浪费时间的操作，在此记录，以此为戒。</p>
+<!-- more -->
+<p>window netsh是一个强大的网络配置工具，如配置IPv4的网络地址，掩码，网关：netsh interface IP addr address &#8220;本地连接“ 192.168.1.2 255.255.255.0 192.168.1.1.配置IPv6同样道理，还可以显示丰富的网络信息，如WLAN，LAN等，显示路由信息router print。相对于linux netstat工具，netsh interface IP show tcpconn 显示了tcp，udp的连接数目和所处的状态。</p>
+<p>linux下配置IP地址，ip addr add 803c::abcd:bcde:efce:1235 dev eth0(网络接口），添加路由表项：ip route add 192.168.1.1 dev eth0, 添加 ipv6的路由表项：route -A inet6 add  &#8230; , 要学会man，且看得懂其命令的解释，了解iptables，iP6tables等。</p>
+<p>虚拟机网络适配器的理解：最简单的是桥接（bridge），与主机同一个网段，使用VMnet0虚拟网卡，相当于虚拟交换机。NAT,与主机共享网络，使用VMnet8虚拟网卡，相当于平时路由器的NAT功能；Host only，与主机同一个网络，但不具备NAT功能，所以不能与主机共享上网，使用的VMnet1，内部可自动分配IP地址，说明虚拟机具有DHCP服务器。</p>
+<p>IPv6的ping:ping -6 fe80::abcd:befe:dc12:3458%5, %后面指的是从计算机哪个网口出去，如果不再同一个网络，就会ping不通。<p>
+<p>无线中应该了解802.11b,g,n的区别；在DSL中了解到pppoe，pppoa，ipoa，static ip，dynamic ip的区别；在ipv6中了解到ipv6的地址的使用范围；在简单的局域网中了解arp的欺骗，arp协议中在以太网中的作用；学习了PPP协议，DHCP协议等协议；学习了NAT的几种类型，及其NAT的穿透；学习了转发规则：DMZ，virtual server, upnp, port trigger的区别。</p>
+<p>编程中学习到动态链接库的操作，共享内存的操作，网络帧的解析（注意网络字节序），函数分工，字节位操作（特别是乘法和除法），switch和if_else的区别，栈溢出的注意，按目录编译Makefile文件。</p></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[pjsip状态机]]></title>
@@ -2046,20 +2062,6 @@
 <!-- more -->
 <p>大概看了这一章，我问自己，何为系统？如现实的处理器就是很复杂的系统，有其基本执行的流程，如加法、乘法，也有提高其吞吐量的流水线管道，但同时也有其反馈机制和异常处理，保证其正确地执行和反应真实的运行情况。如初中生物学到人体的八大系统，有其正常的运作，也有其反馈机制和与其它系统沟通的接口。系统，我觉得是一个由内部机制控制运行的物体，同时提供与外部交流的接口。</p>
 <p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬又怎会有脸皮的？豁出去吧！</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[知甘苦 近情理 心平气和]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/20/be-happy/"/>
-    <updated>2013-07-20T23:51:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/20/be-happy</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天是星期六不用上班，在科技图书馆度过。不过，大概只看了半日的时间，又想起过去的事情来了。因为我在看的《深入理解计算机系统》，许多知识都是大学学过的，似曾相识，可惜我都没有掌握。越想，心情越不能平静下来，当想到大学居然没一件事做对的时候，自己就快要崩溃了。一直有个疑问，为什么那时候会犯这样的弥天大错？</p>
-<!-- more -->
-<p>过去的事情想得清楚当然去想，但不要影响自己的情绪，做一个积极的悲观主义者，Be Happy，积极去解决问题。</p>
-<p>《深入理解计算机系统》的优化程序性能，存储体系结构，虚拟存储器这几章都是从程序员的角度看待计算机硬件的工作原理，利用其实现的原理，写出更加高效的程序。这几章与计算机硬件打交道，一定要看懂，作为以后工作的突破点。这本书将其作为计算机的圣经也不为过。</p>
-<p>今天也有看《量子物理史话》，似乎现在没有之前那么好看了。因为我似乎心不在焉，那就先看计算机相关的吧。</p>
-<p>无论日子怎么样，都要保持愉悦的心态。</p></p></blockquote>
 ]]></content>
   </entry>
   
