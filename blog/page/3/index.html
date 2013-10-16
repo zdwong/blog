@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="今天的培训讲座分别是实验室管理的规章制度和嵌入式linux的开发。我有点担心我不会使用设备，这说明我不够自信心，也不够进取，单单使用设备都学不会，那不是简直笨得无法救药，如示波器。嵌入式开发之前也接触过一点，但是知识懂点皮毛，没有耐心地去学习。
-">
+  <meta name="description" content="今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,166 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/01/fourteenth-day/">感激涕零 不知所云</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T23:58:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误，是地址，而不是长度，一般用汇编写比较能提高效率，且可以利用流水线加速。每一条编程题都有改进的空间。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/01/fourteenth-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/01/thirteenth-day/">麻雀虽小 五脏俱全</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-01T00:24:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天有个讲座是IAD硬件基础，其实IAD是Integrated Access Device(综合接入设备），包含ADSL，route, VoIP(网络电话），USB，无线wifi。重点是说了网络IP电话（VOIP）技术，音频的编码，语音的控制（SIP协议），语音的传输（RTP，底层还是使用UDP协议），语音质量的保证（消除回声）等。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/01/thirteenth-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/31/twelveth-day/">循序渐进 步步为营</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-31T00:08:00+08:00" pubdate data-updated="true">Jul 31<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天写了memmove这样的函数，首先要检测内存覆盖问题，然后是考虑怎样加快移动的效率.因为传统的做法是以char一个字节的传送，而现在可以通过四个字节对齐的方式，通过int整型一次四个字节的传送。可以大大地加快了传送的效率，因为一次传送一个字节和一次传送四个字节是一样的。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/31/twelveth-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/29/eleventh-day/">阳春白雪 下里巴人</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-29T23:49:00+08:00" pubdate data-updated="true">Jul 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天的讲座是编程规范，统一的代码规格有利于后面的阅读和维护。我们的组长是我们没有按照规范来写代码的话，就是能力，工作态度都不行的人。因为那些规范只要用心注意下，就应该不会出什么问题。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/29/eleventh-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -321,166 +480,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/18/fourth-day/">亭亭玉立 洁白无瑕</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-18T23:38:00+08:00" pubdate data-updated="true">Jul 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是我来tp-link的第四天，培训内容是公司的计算机安全与管理制度。之后的自由支配时间都在看《深入了解计算机系统》的第三章：程序的机器级的表示，主要是汇编与C语言的转换，包括访问信息（内存或寄存器），算术和逻辑操作，控制和过程等。发现后面的习题很经典，相识恨晚，一定要实践的，不然就会悔恨了。不过下午到四点的时候就已经好似没有精神看下去了，中午休息不太好，一定要睡个好觉。于是浏览了公司相关的研发，行政等文件，发现公司好有规章制度和条理，在这么纯洁的公司做事，真是荣幸之至。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/18/fourth-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/17/third-day/">暴殄天物 回头是岸</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-17T23:51:00+08:00" pubdate data-updated="true">Jul 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是我在TP-Link的第三天，只有上午两个小时是用来上公共课，关于入职须知的。其余时间都是自由支配，重点是读《深入理解计算机》这本书，读完后，还要写读后感。可惜，我这种人最喜欢囫囵吞枣的，看完后，都不知道自己懂不懂，扮得很认真，就是不肯动手，不动手，又怎么会懂呢？敷衍自己，麻痹自己，以为自己很认真，学到很多所谓的知识，想做阿Q 也不至于如此吧！</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/17/third-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/16/second-day/">求知若渴 拜师学艺</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-16T23:48:00+08:00" pubdate data-updated="true">Jul 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是我入职TP-Link的第二天，我被分配到宽带接入产品线，我马上上网查了下其相关的内容，生怕自己一点都不懂这方面的知识，首先心理要有个底。公司为我们配备了一台电脑，我们就开始设置邮件，安装各种软件了。我的导师是南京大学毕业的女生，人还是很好沟通的，想不到工作还是女性做我的导师。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/16/second-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/15/induction-ceremony/">天地轮回 万物归一</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-15T23:43:00+08:00" pubdate data-updated="true">Jul 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是举行TP-Link2013应届毕业生入职典礼，虽然仪式很简朴，不过我们可以见到总经理和董事长（创始人），且听他们介绍创业历史和公司的状况。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/15/induction-ceremony/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -503,7 +502,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 140.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.66666666666666%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 150.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.66666666666666%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.33333333333333%'>Window</a> </span>
 </section>
 
 <section>
@@ -512,12 +511,13 @@
     <li class='category'><a href='/blog/categories/english/'>English (3)</a></li>
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
 <li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (12)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (15)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (11)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/tp-link/'>Tp-link (18)</a></li>
+<li class='category'><a href='/blog/categories/window/'>Window (1)</a></li>
 
   </ul>
 </section><section>
@@ -525,23 +525,23 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨是非</a>
+        <a href="/blog/2013/10/16/follow-version/">承上启下 向下兼容</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/05/swim-park-drink/">穿梭于都市 游走于海滨 休憩于公园</a>
+        <a href="/blog/2013/10/16/view-of-shenzhen/">依山伴水 绿水长流</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/02/splendid-china/">锦绣中华文化村之旅</a>
+        <a href="/blog/2013/10/15/live-by-yourself/">除了我的无知，我什么都不知道</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/29/funny-hero/">周星驰也只是一个噱头</a>
+        <a href="/blog/2013/10/14/fairy-story/">青衫磊落险峰行</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/29/train-summary/">接近尾声 两手空空</a>
+        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨事理</a>
       </li>
     
   </ul>

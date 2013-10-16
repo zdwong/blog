@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-10-13T00:25:55+08:00</updated>
+  <updated>2013-10-16T23:34:08+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,7 +14,80 @@
 
   
   <entry>
-    <title type="html"><![CDATA[鞭辟入里	明辨是非]]></title>
+    <title type="html"><![CDATA[承上启下 向下兼容]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/10/16/follow-version/"/>
+    <updated>2013-10-16T23:10:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/10/16/follow-version</id>
+    <content type="html"><![CDATA[<blockquote><p><p>window XP默认安装的.NET的2.0版本，window 7默认安装的是.NET4.0版本，而更新的系统就可能安装更新的.NET版本。但好不幸，假如你还在使用XP系统的话，但又想使用最新开发的程序，那么你就安装.NET的比较新的版本了，因为XP .NET2.0版本已经不能支持这些最新开发的程序。但在较新的系统跑较旧的程序，可能就会有些问题，因为有些API会被抛弃。</p>
+<!-- more -->
+<p>上面是对于在window的.NET平台上开发的程序来说。而在Java平台开发的，比较新的程序要需要运行在较新的JDK上，如JDK 7；较旧的程序也要求运行在较旧的JDK上，如JDK 5；用JDK 5开发的程序未必在JDK 7平台是那个跑，如上面提到的有些API已经被抛弃，可能还需要安装插件。因此下载程序的时候，看清楚所运行的环境，避免不必要的麻烦。</p>
+<p>而对于python这样的脚本语言，道理依然是一样，之前写出来的版本只对python2.7有效，对于python3.2就可能无效，除非进行接口的移植和升级。现在的web开发是考虑兼容性最多的，不同的浏览器有不同的实现和不同标准，程序员需要针对每个浏览器写出不同支持性的代码。人人都希望一份通用的代码就能到处跑。另一个方面是通信领域，同样的通信协议，不同的厂商对协议的理解和实现都不一样，导致不同厂商生产的设备直接的通信出现问题。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[依山伴水 绿水长流]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/10/16/view-of-shenzhen/"/>
+    <updated>2013-10-16T00:06:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/10/16/view-of-shenzhen</id>
+    <content type="html"><![CDATA[<blockquote><p><p>外人眼中的深圳是一夜之间崛起的城市。那已经是History了，我想说的Now。生活在深圳，究竟会是怎样？</p>
+<!-- more -->
+<p><strong>公共设施</strong></p>
+<p>按照广州生活的经验来说，广州没什么是触动心灵的，但也不是一无所长，广州在地铁指引方面比深圳做得好，但广州地铁比深圳拥挤。深圳是被称为“图书馆之城”，每个区都有几个图书馆，且有些图书馆设备、环境都是一流，只要有身份证，无论什么人，都可以办理借书证，且全城图书通借通还。深圳的公园搞得特别不错，周六日深圳人都会一家大小到公园玩，整个环境特别和谐。同样深圳的医疗也是相当不错，服务质量和服务态度比广州更上一层楼。</p>
+<p><strong>旅游景点</strong></p>
+<p>世界之窗（window of world)和锦绣中华(splendid of China)是深圳两大特色景点。</p>
+<p><strong>人的素质</strong></p>
+<p>深圳的人比较友好，讲文明，基本上的人都是从外面来的，而之后成为深圳人。杂居文化。</p>
+<p><strong>发展机会</strong></p>
+<p>政策相对好，改革开放的前沿阵地。名企云集之地。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[除了我的无知，我什么都不知道]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/10/15/live-by-yourself/"/>
+    <updated>2013-10-15T22:22:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/10/15/live-by-yourself</id>
+    <content type="html"><![CDATA[<blockquote><p><p>所谓活在这个世界上，许多的烦恼，快乐，平静，温馨，幸福都是由自己的看法所决定的，影响自己不是事情的本事，而是看待事情的方式。有许多次的时候都是“当局者迷旁观者清”的情况，为了避免被一些琐事所困，列出一些常见问题的处理：</p>
+<!-- more -->
+<p>1.如何做到学有所获？不是糊里糊涂,没有得过且过的感觉？</p>
+<p><strong>使用思维导图，层次级描述</strong></p>
+<p>2.如何做到自我管理、自我满足？</p>
+<p><strong>不蹉跎岁月，把握每分每秒，做一些有意义的事情</strong></p>
+<p>3.如何犯了错误时，如何做到不慌慌张张、自怨自艾，反而是淡淡定定地解决问题？</p>
+<p><strong>对事情的发生深入分析，做到心中有数</strong></p>
+<p>4.如何保证自己的身体健康?</p>
+<p><strong>关键是合理的饮食，次之是适当的放松（旅游、打球、看书），但强烈不建议听歌、看电影、看电视剧</strong></p>
+<p>5.如何丢弃心理压力的包袱？</p>
+<p><strong>看事情不能只从一个角度去看，要多角度分析。不然在一方面吃亏，就焦虑至死</strong></p>
+<p>6.平时做人的原则是什么?</p>
+<P><strong>论语十则中的：“与朋友交而不信乎？” “己所不欲勿施于人”</strong></p>
+<p>7.平时学习的原则是什么？</p>
+<p><strong>温故而知新；学而不思则罔思而不学则殆</strong></p>
+<p>8.平时如何去做人？</p>
+<p><strong>合理表达请求；婉转表达不满或拒绝；换位思考；三思而后讲</strong></p>
+<p>9.人存在的基础是什么？</p>
+<p><strong>身体；思想;价值观；世界观</strong></p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[青衫磊落险峰行]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/10/14/fairy-story/"/>
+    <updated>2013-10-14T23:10:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/10/14/fairy-story</id>
+    <content type="html"><![CDATA[<blockquote><p><p>之前两日去图书馆准备充电，恰好桌面有一本《天龙八部》，于是随便翻翻，手不释卷就到图书馆关门了。自己背包里的书深藏不露，可惜没有见到天日,还没有大展拳脚，就已经夭折了。</p>
+<!-- more -->
+<p>既然看了，那就写写关于《天龙八部》的故事吧。</p>
+<p>乔峰是个盖世英雄，只可惜被揭为契丹人，两国水火不容，群雄聚而攻之。种种的误解产生都由其父处处布局，让乔峰如老鼠过街人人喊打，考验其绝处逢生的能力。乔峰与阿朱&#8211;这个小丫头互生情愫，阿朱对乔峰的为人和英雄气概极为倾慕；而为身世所困，百思不得其解的乔峰，人人得而诛之的乔峰，心灵无尽空虚的乔峰，在这时，得到阿朱死心塌地的关心和约其到漠北放羊，长相厮守，远离中原的纷争和骚扰。</p>
+<p>段誉，人人都说其是书呆子，一心一意地钻研佛学，有普渡众生的理想。机缘巧合，与神仙姐姐塑像偶遇，对其简直是痴迷，向其叩了一千个响头。在曼陀山庄，见到现实之中的神仙&#8211;美丽与智慧的化身&#8211;王语嫣，所谓“窈窕淑女君子好逑”，可惜她心有所属，但对于段誉来说，虽然常被人说：“癞蛤蟆想吃天鹅肉”，但其很珍惜眼前与王语嫣相处的时间，常常寻找机会跟随左右。不是为了博取红颜一笑，而总是舍身相救。</p>
+<p>虚竹，一心向佛，心地善良，似笨头笨脑，也似大智若愚，也如郑板桥所说的难得糊涂，无人能解的棋局，其误打误撞创出一片天地，扭转乾坤。小事情糊涂，大事情明白。</p>
+<p>木婉清，一个从没见过世面的姑娘，认为吃人肉也是理所当然的，无任何伦理，道德的观念。不过，段誉却能对这个姑娘尊重有加。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[鞭辟入里	明辨事理]]></title>
     <link href="http://coolbrain.github.com/blog/2013/10/10/fact-opinion/"/>
     <updated>2013-10-10T22:36:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/10/10/fact-opinion</id>
@@ -2019,57 +2092,6 @@
 <!-- more -->
 <p>将DebugLog模块编译成动态链接库，各个进程使用是独立的，包括模块中的全局变量，只有内存映射才是公共的，但各个进程来说，其地址又是不一样的，因为是进程使用的虚拟地址，所以存储在共享内存的数据,包含链表，都只能使用相对的地址，所有的操作都是利用指针进行相对地址的操作。</p>
 <p>今天有个关于MIPS架构的讲座，讲师很厉害，不过我也有几个不明白的地方，一：大小端问题，二：字节对齐问题 三：cache问题，以后还要慢慢弄懂这些问题，不要犯一些低级错误。如近期经常在while，或for循环后面加个“；”，其后面的代码根本就发挥不了作用，只执行了仅仅一次，就退出了。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[感激涕零 不知所云]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/08/01/fourteenth-day/"/>
-    <updated>2013-08-01T23:58:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/08/01/fourteenth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误，是地址，而不是长度，一般用汇编写比较能提高效率，且可以利用流水线加速。每一条编程题都有改进的空间。</p>
-<!-- more -->
-<p>I spent two hours learning how to write Makefile. 懂得如何递归地执行Makefile文件和递归地删除目标文件，学习的时候需要带着问题去学习，这样效果会比较好。</p>
-<p>晚上回来还是不断地查找关于共享库全局变量的问题，原来每个进程执行的时候都有自己的副本。关于链接库，共享内存实现的机制，还有虚拟存储的理解又加深了，还要继续深究这些问题，因为还没有弄明白究竟是怎么一回事，不能糊里糊涂地让其过去。我受不了还没有理解，我受不了效率这么低。</p>
-<p><strong>PS:感谢张韵婷同学对我的help。同时自己要积极进取，努力去解决问题。keep optimistic and working hard to solve the facing problem.</strong></p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[麻雀虽小 五脏俱全]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/08/01/thirteenth-day/"/>
-    <updated>2013-08-01T00:24:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/08/01/thirteenth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天有个讲座是IAD硬件基础，其实IAD是Integrated Access Device(综合接入设备），包含ADSL，route, VoIP(网络电话），USB，无线wifi。重点是说了网络IP电话（VOIP）技术，音频的编码，语音的控制（SIP协议），语音的传输（RTP，底层还是使用UDP协议），语音质量的保证（消除回声）等。</p>
-<!-- more -->
-<p>这些功能都整合到路由器上，可惜中国都法定规定不允许使用IP电话，不然打电话就便宜了。这产品是外销到外国的。但从其配置上看，比较复杂，需要专业人士，不过外国人接触的东西比较多，按照说明书的指示，应该还是能够配置成功。其配置中可以通过传统的PSTN电信的通信网通信，也可以通过互联网（VOIP）语音聊天，就是语音质量会比传统的PSTN稍微差一些。增加了一个语音模块，就增加了五个芯片，布线也变得复杂，接口也增加了好几个。</p>
-<p>下午还是编程，主要是把代码改成符合编程规范，写单元测试用例，继续优化代码。还跟导师讨论了多进程的通信问题，引起了我的兴趣，我不断地看这进程通信，有很多东西还没理解，如mmap的实现机制是怎样的，如何正确地使用。</p>
-<p>要学如何写Makefile文件，不然怎么对得起自己呢？</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[循序渐进 步步为营]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/31/twelveth-day/"/>
-    <updated>2013-07-31T00:08:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/31/twelveth-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天写了memmove这样的函数，首先要检测内存覆盖问题，然后是考虑怎样加快移动的效率.因为传统的做法是以char一个字节的传送，而现在可以通过四个字节对齐的方式，通过int整型一次四个字节的传送。可以大大地加快了传送的效率，因为一次传送一个字节和一次传送四个字节是一样的。</p>
-<!-- more -->
-<p>另外是一个debuglog的模块，用链表实现，之前思路一直都不正确，之前写代码的经验又少，弄了好久才写出一个基本模型，以后要多多训练一下了，这么简单的问题都纠结了这么久，效率实在太低了。</p>
-<p>我要狂练代码。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[阳春白雪 下里巴人]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/29/eleventh-day/"/>
-    <updated>2013-07-29T23:49:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/29/eleventh-day</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天的讲座是编程规范，统一的代码规格有利于后面的阅读和维护。我们的组长是我们没有按照规范来写代码的话，就是能力，工作态度都不行的人。因为那些规范只要用心注意下，就应该不会出什么问题。</p>
-<!-- more -->
-<p>今天写代码发现写代码的能力好低，大学写的代码太少了，并且经常颓废，都不是一心一意地去解决问题，而是让问题积累。要努力写代码啦！ </p>
-<p>今天总算见识了shell的厉害，以前一直都不愿意学，原来其作用还是好大的。与makeFile文件，svn和平时的工作都有密切的关系，特别是利用shell可以提高工作的效率。一步步来，一定行的，功夫不负有心人。</p>
-<p>看了乔布斯的之前的采访，发现我们董事长跟我们说的话许多都是来自乔爷爷。看来乔爷爷是我们的好榜样，乔爷爷说要有点taste（品味）的，而不是什么都是随众的。乔爷爷也是很有好奇心的，并且也好有想法去解决问题。不过乔爷爷也善于学习，其实好多也都是不是乔爷爷做出来的，如图形界面，面向对象，但乔爷爷都察觉到这就是未来的方向。乔爷爷说，跟优秀的人工作很happy，也不会有太多烦恼。</p></p></blockquote>
 ]]></content>
   </entry>
   

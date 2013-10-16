@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Window | ForgeBrain]]></title>
+  <link href="http://coolbrain.github.com/blog/categories/window/atom.xml" rel="self"/>
+  <link href="http://coolbrain.github.com/"/>
+  <updated>2013-10-16T23:34:08+08:00</updated>
+  <id>http://coolbrain.github.com/</id>
+  <author>
+    <name><![CDATA[ForgeBrain]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[承上启下 向下兼容]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/10/16/follow-version/"/>
+    <updated>2013-10-16T23:10:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/10/16/follow-version</id>
+    <content type="html"><![CDATA[<blockquote><p><p>window XP默认安装的.NET的2.0版本，window 7默认安装的是.NET4.0版本，而更新的系统就可能安装更新的.NET版本。但好不幸，假如你还在使用XP系统的话，但又想使用最新开发的程序，那么你就安装.NET的比较新的版本了，因为XP .NET2.0版本已经不能支持这些最新开发的程序。但在较新的系统跑较旧的程序，可能就会有些问题，因为有些API会被抛弃。</p>
+<!-- more -->
+<p>上面是对于在window的.NET平台上开发的程序来说。而在Java平台开发的，比较新的程序要需要运行在较新的JDK上，如JDK 7；较旧的程序也要求运行在较旧的JDK上，如JDK 5；用JDK 5开发的程序未必在JDK 7平台是那个跑，如上面提到的有些API已经被抛弃，可能还需要安装插件。因此下载程序的时候，看清楚所运行的环境，避免不必要的麻烦。</p>
+<p>而对于python这样的脚本语言，道理依然是一样，之前写出来的版本只对python2.7有效，对于python3.2就可能无效，除非进行接口的移植和升级。现在的web开发是考虑兼容性最多的，不同的浏览器有不同的实现和不同标准，程序员需要针对每个浏览器写出不同支持性的代码。人人都希望一份通用的代码就能到处跑。另一个方面是通信领域，同样的通信协议，不同的厂商对协议的理解和实现都不一样，导致不同厂商生产的设备直接的通信出现问题。</p></p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

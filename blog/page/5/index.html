@@ -9,7 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="大学里面的最后一年半的时间是在看电视剧过来的。为什么浪费“一寸光阴一寸金”的时间来看电视剧？是遭受了挫折后的堕落，是心智的幼稚，还是思路的混乱和目标的迷失？人生不如意之事十有八九。在遇到挫折时，我显得脆弱不堪，悠游寡断，自暴自弃。就大学那么的一个挫折，就把自己的人生搞得乱七八糟，不堪回首，如同烂泥 &hellip;">
+  <meta name="description" content="Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,172 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/09/traceroute/">Traceroute源码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T12:31:00+08:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in transmit&#8221;(传输中超时）错误。接着它递增TTL一次发送一个UDP数据报，从而逐步确定下一跳路由器。当某个UDP数据报到达最终目的地时，目标是由这个主机返送一个ICMP“port unreachable(端口不可达）“错误。这个目标通过向一个随机选取的（但愿）未被目的主机使用的端口发送UDP数据报得以实现。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/09/traceroute/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/09/ping/">Ping 源码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-09T11:57:00+08:00" pubdate data-updated="true">Jul 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>ping程序操作非常简单，往某个IP地址发送一个ICMP回射请求，该节点则以一个ICMP回射应答响应。此程序用到原始套接字。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/09/ping/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/07/i-slash-o-multiplexing/">I/O 复用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-07T22:57:00+08:00" pubdate data-updated="true">Jul 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。</p>
+<p>I/O复用典型应用在下列的网络场合：</p>
+<p>1.当客户处理多个描述符（通常是交互式输入和网络套接字）时，必须使用I/O 复用。</p>
+<p>2.如果一个TCP服务器既要处理监听套接字，又要处理已连接套接字，一般就要使用I/O复用。</p>
+<p>3.如果一个服务器既要处理TCP，又要处理UDP，一般使用I/O复用。</p>
+<p>4.如果服务器要处理多个服务或者多个协议（inetd守护进程），一般使用I/O复用。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/07/i-slash-o-multiplexing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/05/movies/">电影评析</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-05T09:51:00+08:00" pubdate data-updated="true">Jul 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>大学看的电影比较多，不过能在脑海中留下印记的只有那些能够触动心灵的经典，所以对于其它一般的电影，又何必浪费时间去看？因为其一文不值、一无是处。</p>
+<p>《毕业生》展示了一个大学生毕业后的迷惘，在受到性的诱惑下，居然和你一个有夫之妇搞上关系。而后来这个毕业生追求其女儿，但东窗事发，此家庭坚决拒绝他。但他坚定不移，最终有情人终成眷属。背景音乐是《斯卡布罗集市》，he once was a true love of mine.</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/07/05/movies/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -322,168 +488,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/28/sql-proccessing/">SQL 处理</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-28T23:45:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>查询处理步骤：1.语法分析与翻译 2.优化  3.执行 如图：</p>
-<p>用于执行一个查询的原语的操作序列称为<strong>查询执行计划</strong>（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划，。执行该计划并把结果返回给查询。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/28/sql-proccessing/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/28/monetdb-vs-postgresql/">MonetDB vs PostgreSQL数据库</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-28T19:43:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/28/monetdb-vs-postgresql/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/26/memo-based-query-execution/">基于Memo-based(日志)的查询执行</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-26T22:57:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/26/memo-based-query-execution/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/26/sql-reference/">SQL 文法参考</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-26T21:46:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>如果编译原理学得不错的话，根据sql的文法就可以写个程序来解析了,最简单的莫过于自顶向下递归解析。</p>
-<p>sql数据定义:表定义，更改语句，删除语句和模式定义</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/04/26/sql-reference/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -506,7 +510,7 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 140.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.66666666666666%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 150.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.66666666666666%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.33333333333333%'>Window</a> </span>
 </section>
 
 <section>
@@ -515,12 +519,13 @@
     <li class='category'><a href='/blog/categories/english/'>English (3)</a></li>
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
 <li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (12)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (15)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (11)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/tp-link/'>Tp-link (18)</a></li>
+<li class='category'><a href='/blog/categories/window/'>Window (1)</a></li>
 
   </ul>
 </section><section>
@@ -528,23 +533,23 @@
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨是非</a>
+        <a href="/blog/2013/10/16/follow-version/">承上启下 向下兼容</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/05/swim-park-drink/">穿梭于都市 游走于海滨 休憩于公园</a>
+        <a href="/blog/2013/10/16/view-of-shenzhen/">依山伴水 绿水长流</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/02/splendid-china/">锦绣中华文化村之旅</a>
+        <a href="/blog/2013/10/15/live-by-yourself/">除了我的无知，我什么都不知道</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/29/funny-hero/">周星驰也只是一个噱头</a>
+        <a href="/blog/2013/10/14/fairy-story/">青衫磊落险峰行</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/29/train-summary/">接近尾声 两手空空</a>
+        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨事理</a>
       </li>
     
   </ul>

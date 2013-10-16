@@ -9,7 +9,8 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="The famous song BOAST of Eason origin from Depression which was written the night of April 1st,2003 by C.Y.Kong who was one of best friends of Leslie &hellip;">
+  <meta name="description" content="查询处理步骤：1.语法分析与翻译 2.优化 3.执行 如图：
+用于执行一个查询的原语的操作序列称为查询执行计划（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,168 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/sql-proccessing/">SQL 处理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T23:45:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>查询处理步骤：1.语法分析与翻译 2.优化  3.执行 如图：</p>
+<p>用于执行一个查询的原语的操作序列称为<strong>查询执行计划</strong>（query-excution plan）或查询计算计划（query-evaluation plan）。查询执行计划引擎（query-execution engine）接受一个查询执行计划，。执行该计划并把结果返回给查询。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/28/sql-proccessing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/28/monetdb-vs-postgresql/">MonetDB vs PostgreSQL数据库</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-28T19:43:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>MonetDB与PostgreSQL数据库的架构比较，虽然它们存储结构有本质的区别，一个以列存储，一个以行存储；一个没有索引，一个有多种类型的索引，B+树索引，Hash索引，GiST索引等。但它们也有很多的类似之处。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/28/monetdb-vs-postgresql/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/26/memo-based-query-execution/">基于Memo-based(日志)的查询执行</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-26T22:57:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>现代以代价为基础的查询优化器使用备忘录结构为一个有效的查询运行计划组织搜索空间。例如，考虑一个oid连接路径‘A.B.C.D’.我们可以在这条路径任何点启动计算。它的备忘录结构可以用一个（大）MAL程序来表示。备忘录的水平用choice运算封装。第二个参数指示哪些指令去被考虑代价计算。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/26/memo-based-query-execution/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/26/sql-reference/">SQL 文法参考</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-26T21:46:00+08:00" pubdate data-updated="true">Apr 26<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>如果编译原理学得不错的话，根据sql的文法就可以写个程序来解析了,最简单的莫过于自顶向下递归解析。</p>
+<p>sql数据定义:表定义，更改语句，删除语句和模式定义</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/26/sql-reference/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -321,169 +484,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-main-features/">MonetDB 主要特征</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-22T22:37:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p><strong>以列存储数据库内核</strong></p>
-<p>MonetDB是建立在规范的以列存储的数据库关系表示。它们是相当大的实体，达到几百兆，通过操作系统交换到内存，实现的时候使用的mmap文件内存映射，这对于一个内存能装满整个数据库的系统来说，速度非常地快，如果数据库非常的庞大，那就会导致系统不断地换页，甚至抖动。有必要时，压缩存回磁盘，压缩的效率也很好，因为以列存储，相似程度很高，压缩率自然会高，这需要CPU的时间，但同时节省磁盘的空间，时间换空间，<strong>这有待商议</strong>。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/22/monetdb-main-features/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-architecture-overview/">MonetDB 架构模型</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-22T20:04:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p><strong>总体概览</strong></p>
-<p>MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。设计的目的反应在架构的各个层次和提供给用户的功能。尽管MonetDB/SQL提供了完善的SQL接口，但是在大容量，且需要保存不同层次的ACID属性的事务处理能力有点欠缺。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/22/monetdb-architecture-overview/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/21/monetdbs-debugging/">MonetDB 调试</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-21T21:39:00+08:00" pubdate data-updated="true">Mar 21<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB can run in different platform,including linux&#8217;s  and window&#8217;s series.Because I want to learn how to use gdb to debug,thus, MonetDB&#8217;s installed on Unbuntu12.10 and &#8211;debug&#8211;init set on true</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/21/monetdbs-debugging/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/16/monetdbs-structure-analysis/">MonetDB 结构体分析</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-16T17:04:00+08:00" pubdate data-updated="true">Mar 16<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>MonetDB belongs to the class of database management systems designed primarilly for datawarehouse evironment.It has many components to construct.According to my ability I only focus myself on the kernel structure.</p>
-MALBLK is used as the MonetDB Assembly language Block which store the instructions which will be executed.
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/03/16/monetdbs-structure-analysis/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/7/">&larr; Older</a>
@@ -506,7 +506,7 @@ MALBLK is used as the MonetDB Assembly language Block which store the instructio
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 140.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.66666666666666%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 150.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 136.66666666666666%'>Linux</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.33333333333333%'>Window</a> </span>
 </section>
 
 <section>
@@ -515,12 +515,13 @@ MALBLK is used as the MonetDB Assembly language Block which store the instructio
     <li class='category'><a href='/blog/categories/english/'>English (3)</a></li>
 <li class='category'><a href='/blog/categories/intern/'>Intern (2)</a></li>
 <li class='category'><a href='/blog/categories/library/'>Library (2)</a></li>
-<li class='category'><a href='/blog/categories/life/'>Life (12)</a></li>
+<li class='category'><a href='/blog/categories/life/'>Life (15)</a></li>
 <li class='category'><a href='/blog/categories/linux/'>Linux (11)</a></li>
 <li class='category'><a href='/blog/categories/monetdb/'>MonetDB (9)</a></li>
 <li class='category'><a href='/blog/categories/psychology/'>Psychology (2)</a></li>
 <li class='category'><a href='/blog/categories/sql/'>SQL (2)</a></li>
 <li class='category'><a href='/blog/categories/tp-link/'>Tp-link (18)</a></li>
+<li class='category'><a href='/blog/categories/window/'>Window (1)</a></li>
 
   </ul>
 </section><section>
@@ -528,23 +529,23 @@ MALBLK is used as the MonetDB Assembly language Block which store the instructio
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨是非</a>
+        <a href="/blog/2013/10/16/follow-version/">承上启下 向下兼容</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/05/swim-park-drink/">穿梭于都市 游走于海滨 休憩于公园</a>
+        <a href="/blog/2013/10/16/view-of-shenzhen/">依山伴水 绿水长流</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/10/02/splendid-china/">锦绣中华文化村之旅</a>
+        <a href="/blog/2013/10/15/live-by-yourself/">除了我的无知，我什么都不知道</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/29/funny-hero/">周星驰也只是一个噱头</a>
+        <a href="/blog/2013/10/14/fairy-story/">青衫磊落险峰行</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/09/29/train-summary/">接近尾声 两手空空</a>
+        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨事理</a>
       </li>
     
   </ul>
