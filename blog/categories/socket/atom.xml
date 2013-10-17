@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Socket | ForgeBrain]]></title>
+  <link href="http://coolbrain.github.com/blog/categories/socket/atom.xml" rel="self"/>
+  <link href="http://coolbrain.github.com/"/>
+  <updated>2013-10-17T04:34:25+08:00</updated>
+  <id>http://coolbrain.github.com/</id>
+  <author>
+    <name><![CDATA[ForgeBrain]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Traceroute源码]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/09/traceroute/"/>
+    <updated>2013-07-09T12:31:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/09/traceroute</id>
+    <content type="html"><![CDATA[<blockquote><p><p>Traceroute允许确定IP数据报从本地主机游历到某个远程主机所经过的路径。traceroute使用IPv4的TTL字段或IPv6的跳限字段以及两种ICMP消息。它一开始向目的地发送一个TTL(或跳限）为1的数据报。这个数据报导致第一跳路由器返送一个ICMP“time exceeded in transmit"(传输中超时）错误。接着它递增TTL一次发送一个UDP数据报，从而逐步确定下一跳路由器。当某个UDP数据报到达最终目的地时，目标是由这个主机返送一个ICMP“port unreachable(端口不可达）“错误。这个目标通过向一个随机选取的（但愿）未被目的主机使用的端口发送UDP数据报得以实现。</p>
+<!-- more -->
+{% codeblock traceroute lang:c %}</p>
+
+<h1>include &lt;netinet/in_systm.h></h1>
+
+<h1>include &lt;netinet/ip.h></h1>
+
+<h1>include &lt;netinet/ip_icmp.h></h1>
+
+<h1>include &lt;netinet/udp.h></h1></blockquote>
+
+<h1>define BUFSIZE  1500</h1>
+
+<p>struct rec{</p>
+
+<pre><code>u_short rec_seq;
+u_short rec_ttl;
+struct timeval  rec_tv;
+</code></pre>
+
+<p>};</p>
+
+<p>char recvbuf[BUFSIZE];
+char sendbuf[BUFSIZE];</p>
+
+<p>int     datalen;
+char *host;
+u_short sport, dport;
+int     nsent;
+pid_t  pid;
+int     probe, nprobes;
+int     sendfd, recvfd;
+int     ttl, max_ttl;
+int     verbose;
+int     gotalarm;</p>
+
+<p>const char <em>icmpcode_v4(int);
+const char </em>icmpcode_v6(int);
+int recv_v4(int ,struct timeval <em>);
+int recv_v6(int ,struct timeval </em>);
+void sig_alrm(int );
+void traceloop(void);
+void tv_sub(struct timeval <em>, struct timeval </em>);</p>
+
+<p>struct proto {</p>
+
+<pre><code>const char *(*icmpcode)(int);
+int             (*recv)(int , struct timeval *);
+struct        sockaddr *sasend;
+struct        sockaddr *sarecv;
+struct        sockaddr *salast;
+struct        sockaddr *sabind;
+socklen_t    salen;
+int             icmpproto;
+int             ttllevel;
+int             ttloptname;
+</code></pre>
+
+<p>}*pr;</p>
+
+<h1>ifdef  IPV6</h1>
+
+<h1>include &lt;netinet/ip6.h></h1>
+
+<h1>include &lt;netinet/icmp6.h></h1>
+
+<h1>endif</h1>
+
+<p>struct proto proto_v4 = { icmpcode_v4, recv_v4, NULL, NULL, NULL, NULL, 0,</p>
+
+<pre><code>    IPPROTO_ICMP, IPPROTO_IP, IP_TTL};
+</code></pre>
+
+<h1>ifdef IPV6</h1>
+
+<p>struct proto proto_v6 ={icmpcode_v6, recv_v6, NULL, NULL, NULL, 0,</p>
+
+<pre><code>    IPPROTO_ICMPV6, IPPROTO_IPV6, IPV6_UNICAST_HOPS};
+</code></pre>
+
+<h1>endif</h1>
+
+<p>int datalen = sizeof(struct rec);
+int max_ttl = 30;
+int nprobes = 3;
+u_short dport = 32768 + 666;</p>
+
+<p>int main(int argc, char **argv)
+{</p>
+
+<pre><code>int c;
+struct addrinfo *a;
+char *h;
+
+opterr = 0;
+while( ( c = getopt(argc, argv, "m:v")) != -1)
+    {
+        switch(c)
+            {
+                case 'm':
+                    if( ( max_ttl = atoi(optarg)) &lt;= 1)
+                        printf("invalid -m value");
+                    break;
+                case 'v':
+                    verbose++;
+                    break;
+                case '?':
+                    printf("unrecognized option:%c", c);
+            }
+    }
+
+if( optind != argc -1)
+    printf("usage : traceroute [ -m &lt;maxttl&gt; -v] &lt;hostname&gt;");
+host = argv[optind];
+
+pid = getpid();
+signal(SIGALRM, sig_alrm);
+
+ai = host_serv(host, NULL, 0, 0);
+
+  h = sock_ntop_host(ai-&gt;ai_addr, ai-&gt;ai_addrlen);
+printf("traceroute to %s (%s): %d hops max, %d data bytes \n", ai-&gt;ai_canonname? ai-&gt;ai_canonname:h, h,max_ttl, datalen);
+
+if ( ai-&gt;ai_family == AF_INET  )
+    {
+        pr = &amp;proto_v4;
+</code></pre>
+
+<h1>ifdef  IPV6</h1>
+
+<pre><code>     }
+else if (ai-&gt;ai_family == AF_INET6)
+    {
+        pr = &amp;proto_v6;
+        if(IN6_IS_ADDR_V4MAPPED(&amp;(((struct sockaddr_in6 *) ai-&gt;ai_addr)-&gt;sin6_addr)))
+            printf("cannot traceroute IPV4-mapped IPV6 address");
+</code></pre>
+
+<h1>endif</h1>
+
+<pre><code>    }
+else
+    printf("unknown address family  %d", ai-&gt;ai_family);
+pr-&gt;sasend = ai-&gt;si_addr;
+pr-&gt;sarecv = calloc(1, ai-&gt;ai_addrlen);
+pr-&gt;salast = calloc(1, ai-&gt;ai_addrlen);
+pr-&gt;sabind = calloc(1, ai-&gt;ai_addrlen);
+pr-&gt;salen =ai-&gt;ai_addrlen;
+
+traceloop();
+
+exit();
+</code></pre>
+
+<p>}</p>
+
+<p>void traceloop(void)
+{</p>
+
+<pre><code>int seq, code, done;
+double rtt;
+struct rec *rec;
+struct timeval tvrecv;
+
+recvfd = socket(pr-&gt;sasend-&gt;sa_family, SOCK_RAW, pr-&gt;icmpproto);    /*创建两个套接字*/
+setuid(getuid());
+</code></pre>
+
+<h1>ifdef IPV6</h1>
+
+<pre><code>if ( pr-&gt;sasend-&gt;sa_family == AF_INET6 &amp;&amp; verbose == 0)                  /*设置ICMPv6接收过滤器*/
+    {
+        struct icmp6_filter myfilt;
+        ICMP6_FILTER_SETBLOCKALL(&amp;myfilt);
+        ICMP6_FILTER_SETPASS(ICMP6_TIME_EXCEEDED, &amp;myfilt);
+        ICMP6_FILTER_SETPASS(ICMP6_DST_UNREACH, &amp;myfilt);
+        setsockopt(recvfd, IPPROTO_IPV6, ICMP6_FILTER, 
+                &amp;myfilt, sizeof(myfilt));
+    }
+</code></pre>
+
+<h1>endif</h1>
+
+<pre><code>sendfd = socket(pr-&gt;sasend-&gt;sa_family,SOCK_DGRAM, 0);               /*给UDP套接字捆绑源端口*/
+
+pr-&gt;sabind-&gt;sa_family = pr-&gt;sasend-&gt;sa_family;
+sport = (getpid() &amp;0xffff) | 0x8000;
+sock_set_port(pr-&gt;sabind, pr-&gt;salen, htons(sport));
+bind(sendfd, pr-&gt;sabind,  pr-&gt;salen);
+
+sig_alrm(SIGALRM);        /*建立SIGALRM的信号处理函数*/
+
+seq = 0;
+done = 0;
+for (ttl = 1; ttl &lt; max_ttl &amp;&amp; done ==0; ttl ++)        /*主循环,设置TTL或跳限并发送3个探测分组*/
+    {
+        setsockopt(sendfd, pr-&gt;ttllevel, pr-&gt;ttloptname, &amp;ttl, sizeof(int));
+        bzero( pr-&gt;salast , pr-&gt;salen);
+
+        printf("%2d", ttl );
+        fflush(stdout);
+
+        for( probe = 0; probe &lt; nprobes; probe ++)
+            {
+                rec = (struct rec*) sendbuf;
+                rec-&gt;rec_seq = ++seq;
+                rec-&gt;rec_ttl = ttl;
+                gettimeofday(&amp;rec-&gt;rec_tv, NULL);
+
+                sock_set_port(pr-&gt;sasend, pr-&gt;salen, htons(dport+ seq));     /*设置目的端口并发送UDP数据报*/
+                sendto(sendfd, sendbuf,datalen, 0, pr-&gt;sasend, pr-&gt;salen);
+
+                if( ( code = (*pr-&gt;recv)(seq, &amp;tvrecv)) == -3)    /*读取ICMP消息*/
+                    printf(" * ");
+                else                     /*显示应答*/
+                    {
+                        char str[NI_MAXHOST];
+
+                        if( sock_cmp_addr( pr-&gt;sarecv, pr-&gt;salast, pr-&gt;salen ) != 0)
+                            {
+                                if( getnameinfo(pr-&gt;sarecv, pr-&gt;salen, str, sizeof(str),NULL, 0, 0) == 0)
+                                    {
+                                        printf(" %s (%s)", str, sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen));
+                                    }
+                                else
+                                    printf("%s", sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen));
+                                memcpy( pr-&gt;salast, pr-&gt;sarecv, pr-&gt;salen);
+                            }
+                        tv_sub(&amp;tvrecv, &amp;rec-&gt;rec_tv);
+                        rtt = tvrecv.tv_sec*1000.0 + tvrecv.tv_usec/1000.0;
+                        printf(" %.3f ms", rtt);
+
+                        if( code == -1)
+                            done++;
+                        else if(code &gt;= 0)
+                            printf(" (ICMP %s)", (*pr-&gt;icmpcode)(code));
+                    }
+                fflush(stdout);
+            }
+        printf("\n");
+    }
+</code></pre>
+
+<p>}</p>
+
+<p>int recv_v4(int seq, struct timeval *tv)
+{</p>
+
+<pre><code>int hlen1, hlen2, icmplen ,ret;
+socklen_t len;
+ssize_t n;
+struct ip *ip, *hip;
+struct icmp *icmp;
+struct udphdr *udp;
+
+gotalarm = 0;
+alarm(3);           /*设置报警时钟并读入每个ICMP消息*/
+for( ; ;)
+    {
+        if(gotalarm)
+            return (-3);
+        len = pr-&gt;salen;
+        n = recvfrom(recvfd, recvbuf, sizeof(recvbuf), 0, pr-&gt;sarecv, &amp;len);
+        if( n &lt; 0)
+            {
+                if ( errno == EINTR)
+                    continue;
+                else
+                    printf("recvfrom error");
+            }
+        ip = (struct ip *) recvbuf;                /*获取ICMP首部指针*/
+        hlen1 = ip-&gt;ip_hl &lt;&lt; 2;
+
+        icmp = (struct icmp *) (recvbuf + hlen1);
+        if( (icmplen = n - hlen1 ) &lt; 8)
+            continue;
+
+        if( icmp-&gt;icmp_type == ICMP_TIMXCEED &amp;&amp; 
+                            icmp-&gt;icmp_code == ICMP_TIMXCEED_INTRANS)   /*处理ICMP传输中超时错误*/
+            {
+                if( icmplen &lt; 8 + sizeof(struct ip))
+                    continue;
+
+                hip = (struct ip *)( recvbuf + hlen1 + 8);
+                hlen2 = hip-&gt;ip_hl &lt;&lt; 2;
+                if( icmplen &lt; 8 + hlen2 + 4)
+                    continue;
+
+                udp = (struct udphdr *) (recvbuf + hlen1 + 8 + hlen2);
+                if( hip-&gt;ip_p == IPPROTO_UDP &amp;&amp; udp-&gt;uh_sport == htons(sport) 
+                            &amp;&amp; udp-&gt;uh_dport == htons(dport + seq))
+                    {
+                        ret = -2;
+                        break;
+                    }
+                }
+        else if ( icmp-&gt;icmp_type == ICMP_UNREACH)/*处理ICMP传输中不可达错误*/
+            {
+                if ( icmplen &lt; 8 + sizeof( struct ip) )
+                    continue;
+
+                hip = (struct ip *)(recvbuf + hlen1 + 8);
+                hlen2 = hip-&gt;ip_hl &lt;&lt; 2;
+                if( icmplen &lt; 8 + hlen2 + 4)
+                    continue;
+
+                udp = (struct udphdr *) (recvbuf + hlen1 + 8 + hlen2);
+                if( hip-&gt;ip_p == IPPROTO_UDP &amp;&amp; udp-&gt;uh_sport == htons(sport) 
+                                    &amp;&amp; udp-&gt;uh_dport == htons(dport + seq))
+                    {
+                        if( icmp-&gt;icmp_code == ICMP_UNREACH_PORT)
+                            ret = -1;
+                        else 
+                            ret = icmp-&gt;icmp_code;
+                        break;
+                    }
+            }
+        if( verbose)
+            {
+                printf(" (from %s: type = %d, code = %d)\n",sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen),
+                    icmp-&gt;icmp_type, icmp-&gt;icmp_code);
+
+            }
+      }
+alarm(0);
+gettimeofday(tv, NULL);
+return (ret);
+</code></pre>
+
+<p>}</p>
+
+<p>void sig_alrm(int signo)
+{</p>
+
+<pre><code>gotalarm = 1;
+return;
+</code></pre>
+
+<p>}</p>
+
+<p>int recv_v6(int seq, struct timeval *tv)
+{</p>
+
+<h1>ifdef IPV6</h1>
+
+<pre><code>int  hlen2, icmp6len ,ret;
+socklen_t len;
+ssize_t n;
+struct ip6_hdr  *hip6;
+struct icmp6_hdr  *icmp6;
+struct udphdr *udp;
+
+gotalarm = 0;
+alarm(3);
+for( ; ;)
+    {
+        if(gotalarm)
+            return (-3);
+        len = pr-&gt;salen;
+        n = recvfrom(recvfd, recvbuf, sizeof(recvbuf), 0, pr-&gt;sarecv, &amp;len);
+        if( n &lt; 0)
+            {
+                if ( errno == EINTR)
+                    continue;
+                else
+                    printf("recvfrom error");
+            }
+
+        icmp6 = (struct icmp6_hdr *) recvbuf ;
+        if( (icmp6len = n ) &lt; 8)
+            continue;
+
+        if( icmp6-&gt;icmp6_type == ICMP6_TIME_EXCEEDED &amp;&amp; 
+                icmp6-&gt;icmp6_code == CMP6_TIME_EXCEEDED_INTRANS)
+            {
+                if( icmp6len &lt; 8 + sizeof(struct ip6_hdr) + 4)
+                    continue;
+
+                hip6 = (struct ip6_hdr *)( recvbuf+ 8);
+                hlen2 = sizeof( struct ip6_hdr);
+
+                udp = (struct udphdr *) (recvbuf  + 8 + hlen2);
+                if( hip6-&gt;ip6_nxt == IPPROTO_UDP &amp;&amp; udp-&gt;uh_sport == htons(sport) 
+                            &amp;&amp; udp-&gt;uh_dport == htons(dport + seq))
+                    {
+                        ret = -2;
+                        break;
+                    }
+                }
+        else if ( icmp6-&gt;icmp6_type == ICMP6_DST_UNREACH)
+            {
+                if ( icmp6len &lt; 8 + sizeof( struct ip6_hdr) + 4) )
+                    continue;
+
+               hip6 = (struct ip6_hdr *)( recvbuf+ 8);
+                hlen2 = sizeof( struct ip6_hdr);
+
+                udp = (struct udphdr *) (recvbuf  + 8 + hlen2);
+                if( hip6-&gt;ip6_nxt == IPPROTO_UDP &amp;&amp; udp-&gt;uh_sport == htons(sport) 
+                            &amp;&amp; udp-&gt;uh_dport == htons(dport + seq))
+                    {
+                        if( icmp6-&gt;icmp6_code == ICMP6_DST_UNREACH_NOPORT)
+                            ret = -1;
+                        else
+                            ret = icmp6-&gt;icmp6_code;
+                        break;
+                    }
+                }
+        if( verbose)
+            {
+                printf(" (from %s: type = %d, code = %d)\n",sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen),
+                    icmp6-&gt;icmp6_type, icmp6-&gt;icmp6_code);
+
+            }
+      }
+alarm(0);
+gettimeofday(tv, NULL);
+return (ret);
+</code></pre>
+
+<h1>endif</h1>
+
+<p>}
+{% endcodeblock %}</p>
+
+<blockquote><p><p>原始套接字提供3个能力：1.进程可以读写ICMPv4、IGMPv4和ICMPv6等分组； 2.进程可以读写内核不处理其协议字段的IP数据报； 3.进程可以自行构造IPv4首部，通常用于诊断目的（亦或不幸地被黑客们所利用).</p></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ping 源码]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/07/09/ping/"/>
+    <updated>2013-07-09T11:57:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/07/09/ping</id>
+    <content type="html"><![CDATA[<blockquote><p><p>ping程序操作非常简单，往某个IP地址发送一个ICMP回射请求，该节点则以一个ICMP回射应答响应。此程序用到原始套接字。</p>
+<!-- more -->
+{% codeblock ping lang:c %}</p>
+
+<h1>include &lt;netinet/in_systm.h></h1>
+
+<h1>include &lt;netinet/ip.h></h1>
+
+<h1>include &lt;netinet/ip_icmp.h></h1>
+
+<h1>include &lt;netdb.h></h1>
+
+<h1>include &lt;sys/socket.h></h1>
+
+<h1>include &lt;arpa/inet.h></h1>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>include &lt;errno.h></h1>
+
+<h1>include &lt;unistd.h></h1>
+
+<h1>include &lt;sys/types.h></h1>
+
+<h1>include &lt;sys/time.h></h1>
+
+<h1>include &lt;signal.h></h1></blockquote>
+
+<h1>define  BUFSIZE  1500</h1>
+
+<p>char  sendbuf[BUFSIZE];</p>
+
+<p>char    *host;
+int     nsent;
+pid_t   pid;
+int     sockfd;
+int     verbose;</p>
+
+<p>void    init_v6(void);
+void    proc_v4(char <em>, ssize_t, struct msghdr </em>, struct timeval <em>);
+void    proc_v6(char </em>, ssize_t, struct msghdr <em>, struct timeval </em>);
+void    send_v4(void);
+void    send_v6(void);
+void    readloop(void);
+void    sig_alrm(int);
+void    tv_sub(struct timeval <em>, struct timeval </em>);</p>
+
+<p>struct   proto{</p>
+
+<pre><code>void    (*fproc)(char *, ssize_t, struct msghdr *, struct timeval *);
+void    (*fsend)(void);
+void    (*finit)(void);
+struct  sockaddr *sasend;
+struct  sockaddr *sarecv;
+socklen_t   salen;
+int     icmpproto;
+</code></pre>
+
+<p>}*pr;</p>
+
+<h1>ifdef IPV6</h1>
+
+<h1>include    &lt;netinet/ip6.h></h1>
+
+<h1>include    &lt;netinet/icmp6.h></h1>
+
+<h1>endif</h1>
+
+<p>/<em>定义IPv4和IPv6的proto结构</em>/
+struct proto proto_v4 =</p>
+
+<pre><code>{proc_v4, send_v4, NULL, NULL, NULL ,0, IPPROTO_ICMP};
+</code></pre>
+
+<h1>ifdef  IPV6</h1>
+
+<p>struct proto proto_v6 =</p>
+
+<pre><code>{proc_v6, send_v6, init_v6, NULL, NULL ,0, IPPROTO_ICMP6};
+</code></pre>
+
+<h1>endif</h1>
+
+<p>int datalen =56;</p>
+
+<p>/<em>获取主机和相关信息</em>/
+struct addrinfo <em>host_serv(const char </em>host, const char *serv, int family, int socktype)
+{</p>
+
+<pre><code>int  n;
+struct addrinfo hints, *res;
+
+bzero(&amp;hints, sizeof(struct addrinfo));
+hints.ai_flags = AI_CANONNAME;
+hints.ai_family = family;
+hints.ai_socktype = socktype;
+
+if( ( n = getaddrinfo( host, serv, &amp;hints, &amp;res)) != 0)
+    return (NULL);
+
+return (res);
+</code></pre>
+
+<p>}</p>
+
+<p>/<em>将ip地址值形式转变为表达形式</em>/
+char <em>sock_ntop_host(const struct sockaddr </em>sa, socklen_t salen)
+{</p>
+
+<pre><code>char portstr[8];
+static char str[128];
+
+switch( sa-&gt;sa_family)
+    {
+        case AF_INET:
+             {
+                    struct sockaddr_in *sin = (struct sockaddr_in *)sa;
+
+                    if(inet_ntop(AF_INET, &amp;sin-&gt;sin_addr, str, sizeof(str)) == NULL)
+                        return (NULL);
+                    if(ntohs(sin-&gt;sin_port) != 0)
+                        {
+                            snprintf(portstr, sizeof(portstr), ":%d", ntohs(sin-&gt;sin_port));
+                            strcat(str, portstr);
+                        }
+                    return (str);
+            }
+        case AF_INET6:
+                {
+                    struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *)sa;
+
+                    if(inet_ntop(AF_INET6, &amp;sin6-&gt;sin6_addr, str,sizeof(str)) == NULL)
+                        return (NULL);
+                    if(ntohs(sin6-&gt;sin6_port) != 0)
+                        {
+                            snprintf(portstr, sizeof(portstr), ":%d", ntohs(sin6-&gt;sin6_port));
+                            strcat(str, portstr);
+                        }
+                    return (str);
+
+            }          
+    }
+</code></pre>
+
+<p>}</p>
+
+<p>int main(int argc, char **argv)
+{</p>
+
+<pre><code>int c;
+struct addrinfo *ai;
+char *h;
+
+opterr = 0;
+while( ( c = getopt(argc, argv, "v")) != -1)           /*处理命令行选项*/
+    {
+        switch(c)
+            {
+                case 'v':
+                    verbose++;
+                    break;
+                case '?':
+                    printf("unrecognized option:%c", c);
+            }
+    }
+
+if( optind != argc-1)
+    printf("usage:ping [ -v ] &lt;hostname&gt;");
+host = argv[optind];
+
+pid = getpid()&amp;0xffff;
+signal(SIGALRM, sig_alrm);
+
+ai = host_serv(host, NULL, 0, 0);                            /*处理主机名参数*/
+
+h = sock_ntop_host(ai-&gt;ai_addr, ai-&gt;ai_addrlen);
+printf("PING %s (%s): %d data bytes \n", ai-&gt;ai_canonname? ai-&gt;ai_canonname:h, h, datalen);
+
+if ( ai-&gt;ai_family == AF_INET  )
+    {
+        pr = &amp;proto_v4;
+</code></pre>
+
+<h1>ifdef  IPV6</h1>
+
+<pre><code>     }
+else if (ai-&gt;ai_family == AF_INET6)
+    {
+        pr = &amp;proto_v6;
+        if(IN6_IS_ADDR_V4MAPPED(&amp;(((struct sockaddr_in6 *) ai-&gt;ai_addr)-&gt;sin6_addr)))
+            printf("cannot ping IPV4-mapped IPV6 address");
+</code></pre>
+
+<h1>endif</h1>
+
+<pre><code>    }
+else
+    printf("unknown address family  %d", ai-&gt;ai_family);
+
+pr-&gt;sasend = ai-&gt;ai_addr;
+pr-&gt;sarecv = calloc(1, ai-&gt;ai_addrlen);
+pr-&gt;salen = ai-&gt;ai_addrlen;
+
+readloop();
+
+exit(0);
+</code></pre>
+
+<p>}</p>
+
+<p>void readloop(void)
+{</p>
+
+<pre><code>int size;
+char recvbuf[BUFSIZE];
+char controlbuf[BUFSIZE];
+struct msghdr msg;
+struct iovec    iov;
+ssize_t n;
+struct timeval tval;
+
+sockfd = socket(pr-&gt;sasend-&gt;sa_family, SOCK_RAW, pr-&gt;icmpproto);  /*创建原始的套接字*/
+setuid(getuid());                                       /*不需要特殊的允许*/
+if( pr-&gt;finit)
+    (*pr-&gt;finit)();
+
+size = 60*1024;
+setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &amp;size, sizeof(size));  /*设置套接字接受缓冲区的大小*/
+
+sig_alrm(SIGALRM);                                  /*发送第一个分组*/
+
+iov.iov_base = recvbuf;                               /*为recvmsg设置msghdr结构*/
+iov.iov_len = sizeof(recvbuf);
+msg.msg_name = pr-&gt;sarecv;
+msg.msg_iov = &amp;iov;
+msg.msg_iovlen = 1;
+msg.msg_control = controlbuf;
+for( ; ;)                                                    /*读取 所有ICMP消息的无限循环*/
+    {
+        msg.msg_namelen = pr-&gt;salen;
+        msg.msg_controllen = sizeof(controlbuf);
+        n = recvmsg(sockfd, &amp;msg, 0);
+        if( n &lt; 0)
+            {
+                if( errno == EINTR)
+                    continue;
+                else
+                    printf("recvmsg error");
+            }
+    }
+
+gettimeofday(&amp;tval, NULL);
+(*pr-&gt;fproc)(recvbuf, n, &amp;msg, &amp;tval);
+</code></pre>
+
+<p>}</p>
+
+<p>void tv_sub(struct timeval <em>out, struct timeval </em>in)
+{</p>
+
+<pre><code>if ( ( out-&gt;tv_usec -= in-&gt;tv_usec) &lt; 0) /*out -=in*/
+    {
+        --out-&gt;tv_sec;
+        out-&gt;tv_usec += 1000000;
+    }
+out-&gt;tv_sec -= in-&gt;tv_sec;
+</code></pre>
+
+<p>}</p>
+
+<p>void proc_v4(char <em>ptr, ssize_t len, struct msghdr </em>msg, struct timeval *tvrecv)
+{</p>
+
+<pre><code>int hlen1, icmplen;
+double  rtt;
+struct ip *ip;
+struct icmp *icmp;
+struct timeval *tvsend;
+
+ip = (struct ip*)ptr;                 /*IP节的头*/
+hlen1 = ip-&gt;ip_hl &lt;&lt; 2;            /*IP节的长度*/
+if( ip-&gt;ip_p != IPPROTO_ICMP)
+    return;                                 /*没有ICMP*/
+
+icmp = (struct icmp*) (ptr + hlen1);   /*ICMP节的头*/
+if( (icmplen = len -hlen1) &lt; 8)
+    return;                               
+
+if(icmp-&gt;icmp_type == ICMP_ECHOREPLY)
+    {
+        if( icmp-&gt;icmp_id != pid)          /*不是对我们的ECHO_REQUEST进行回复*/
+            return;
+        if( icmplen &lt; 16)
+            return;                                 /*没有足够数据可用*/
+
+        tvsend = (struct timeval *)icmp-&gt;icmp_data;
+        tv_sub(tvrecv, tvsend);
+        rtt = tvrecv-&gt;tv_sec*1000.0 + tvrecv-&gt;tv_usec/1000.0;
+
+        printf("%d bytes from %s: seq=%u, ttl=%d, rtt=%.3f ms\n",icmplen, sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen),
+            icmp-&gt;icmp_seq, ip-&gt;ip_ttl, rtt);
+    }
+else if(verbose)
+    {
+        printf("%d bytes from %s: type = %d, code = %d\n", icmplen, sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen),
+            icmp-&gt;icmp_type, icmp-&gt;icmp_code);
+    }
+</code></pre>
+
+<p>}</p>
+
+<p>void init_v6()
+{</p>
+
+<h1>ifdef  IPV6</h1>
+
+<pre><code>int     on = 1;
+
+if ( verbose == 0)              /*设置ICMPv6接收过滤器*/
+    {
+        struct icmp6_filter myfilt;
+        ICMP6_FILTER_SETBLOCKALL(&amp;myflit);
+        ICMP6_FILTER_SETPASS(ICMP6_ECHO_REPLY, &amp;myflit);
+        setsockopt(sockfd, IPPROTO_IPV6, ICMP6_FILTER, &amp;myflit, sizeof(myflit));
+    }
+</code></pre>
+
+<h1>ifdef IPV6_RECVHOPLIMIT</h1>
+
+<pre><code>setsockopt(sockfd, IPPROTO_IPV6, IPV6_RECVHOPLIMIT, &amp;on, sizeof(on));
+</code></pre>
+
+<h1>else</h1>
+
+<pre><code>setsockopt(sockfd, IPPROTO_IPV6, IPV6_HOPLIMIT, &amp;on, sizeof(on));
+</code></pre>
+
+<h1>endif</h1>
+
+<h1>endif</h1>
+
+<p>}</p>
+
+<p>void proc_v6(char <em>ptr, ssize_t len, struct msghdr </em>msg, struct timeval *tvrecv)
+{</p>
+
+<h1>ifdef  IPV6</h1>
+
+<pre><code>double rtt;
+struct icmp6_hdr* icmp6;
+struct timeval * tvsend;
+struct cmsghdr *cmsg;
+int hlim;
+
+icmp6 = (struct icmp6_hdr *)ptr;                 /*获取ICMPV6首部的指针*/
+if( len &lt; 8)
+    return;
+
+if(icmp6-&gt;icmp6_type == ICMP6_ECHO_REPLY)  /*检查ICMP回射应答*/
+    {
+        if( icmp6-&gt;icmp6_id != pid)     /*不是对我们的ECHO_REQUEST进行回复*/
+            return;
+        if(len &lt; 16)
+            return;                                /*没有足够数据可用*/
+
+        tvsend = (struct timeval *)(icmp6 + 1);
+        tv_sub(tvrecv, tvsend);
+        rtt = tvrecv-&gt;tv_sec*1000.0 + tvrecv-&gt;tv_usec/1000.0;
+
+        hlim = -1;
+        for(cmsg = CMSG_FIRSTHDR(msg); cmsg != NULL; cmsg = CMSG_NXTHDR(msg,cmsg))
+            {
+                if(cmsg-&gt;cmsg_level == IPPROTO_IPv6 &amp;&amp; cmsg-&gt;cmsg_type == IPV6_HOPLIMIT)
+                    {
+                        hlim = *(u_int32_t*)CMSG_DATA(cmsg);
+                        break;
+                    }
+
+            }
+        printf("%d bytes from %s:seq = %u, hlim =", len,sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen), icmp6-&gt;icmp6_seq);
+        if(hlim == -1)
+            printf("???");
+        else
+            printf("%d",hlim);
+        printf(", rtt=%.3f ms\n", rtt);
+    }
+else if( verbose)     /*若指定-v则显示所有接收ICMP消息*/
+    {
+        printf(" %d bytes from %s: type = %d, code = %d\n", len, sock_ntop_host(pr-&gt;sarecv, pr-&gt;salen),
+                icmp6-&gt;icmp6_type, icmp6-&gt;icmp6_code);
+    }
+</code></pre>
+
+<h1>endif</h1>
+
+<p>}</p>
+
+<p>void sig_alrm(int   signo)
+{</p>
+
+<pre><code>(*pr-&gt;fsend)();
+
+alarm(1);
+return;
+</code></pre>
+
+<p>}</p>
+
+<p>uint16_t in_cksum(uint16_t *addr, int len)
+{</p>
+
+<pre><code>int nleft = len;
+uint32_t sum = 0;
+uint16_t *w = addr;
+uint16_t answer = 0;
+
+while ( nleft &gt; 1)
+    {
+        sum+=*w++;
+        nleft -= 2;
+    }
+
+if( nleft == 1)
+    {
+        *(unsigned char *)(&amp;answer) = *(unsigned char *)w;
+        sum += answer;
+    }
+
+sum = (sum &gt;&gt;16) + (sum&amp;0xffff);
+sum += (sum &gt;&gt;16);
+answer = ~sum;
+return (answer);
+</code></pre>
+
+<p>}</p>
+
+<p>void send_v4(void)
+{</p>
+
+<pre><code>int len;
+struct icmp *icmp;
+
+icmp = (struct icmp *)sendbuf;                   /*构造ICMPV4消息*/
+icmp-&gt;icmp_type = ICMP_ECHO;
+icmp-&gt;icmp_code = 0;
+icmp-&gt;icmp_id  = pid;
+icmp-&gt;icmp_seq = nsent++;
+memset(icmp-&gt;icmp_data, 0xa5, datalen);    /*按照icmp模式来填写*/
+gettimeofday( ( struct timeval *) icmp-&gt;icmp_data, NULL);
+
+len = 8+ datalen;                                       /*校验ICMP 节和数据*/
+icmp-&gt;icmp_cksum = 0;
+icmp-&gt;icmp_cksum = in_cksum(( u_short *)icmp, len);
+
+sendto(sockfd, sendbuf, len, 0, pr-&gt;sasend, pr-&gt;salen);  /*发送数据报*/
+</code></pre>
+
+<p>}</p>
+
+<p>void send_v6(void)
+{</p>
+
+<h1>ifdef  IPV6</h1>
+
+<pre><code>int len;
+struct icmp6_hdr  *icmp6;
+
+icmp6 = (struct icmp6_hdr *)sendbuf;
+icmp6-&gt;icmp6_type = ICMP6_ECHO_REQUEST;
+icmp6-&gt;icmp6_code = 0;
+icmp6-&gt;icmp6_id  = pid;
+icmp6-&gt;icmp6_seq = nsent++;
+memset((icmp6+1), 0xa5, datalen);
+gettimeofday( ( struct timeval *) (icmp6+1), NULL);
+
+len = 8+ datalen;
+
+sendto(sockfd, sendbuf, len, 0, pr-&gt;sasend, pr-&gt;salen);
+</code></pre>
+
+<h1>endif</h1>
+
+<p>}
+{% endcodeblock %}</p>
+]]></content>
+  </entry>
+  
+</feed>

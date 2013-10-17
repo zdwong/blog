@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SQL | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/sql/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-10-17T00:06:35+08:00</updated>
+  <updated>2013-10-17T04:34:25+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -45,1107 +45,579 @@
     <content type="html"><![CDATA[<blockquote><p><p>如果编译原理学得不错的话，根据sql的文法就可以写个程序来解析了,最简单的莫过于自顶向下递归解析。</p>
 <p>sql数据定义:表定义，更改语句，删除语句和模式定义</p>
 <!-- more -->
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql创建语句  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">create_statement</span><span class="p">:</span>
-</span><span class='line'> <span class="k">create</span> <span class="err">{</span><span class="n">role_def</span> <span class="o">|</span> <span class="n">table_def</span> <span class="o">|</span> <span class="n">view_def</span> <span class="o">|</span> <span class="n">type_def</span> <span class="o">|</span> <span class="n">func_def</span> <span class="o">|</span> <span class="n">index_def</span> <span class="o">|</span> <span class="n">trigger_def</span> <span class="o">|</span> <span class="n">sequence_def</span><span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表定义的文法  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">table_def</span><span class="p">:</span>
-</span><span class='line'>  <span class="k">CREATE</span> <span class="p">[</span> <span class="k">TEMPORARY</span> <span class="o">|</span> <span class="k">LOCAL</span> <span class="k">TEMPORARY</span> <span class="o">|</span> <span class="k">GLOBAL</span> <span class="k">TEMPORARY</span> <span class="p">]</span> <span class="k">TABLE</span> <span class="k">table_name</span><span class="s1">&#39;(&#39;</span> <span class="n">table_content_source</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'>   <span class="p">[</span> <span class="k">ON</span> <span class="k">COMMIT</span> <span class="k">DELETE</span> <span class="k">ROWS</span> <span class="o">|</span> <span class="k">ON</span> <span class="k">COMMIT</span> <span class="k">PRESERVE</span> <span class="k">ROWS</span> <span class="o">|</span> <span class="k">ON</span> <span class="k">COMMIT</span> <span class="k">DROP</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_content_source</span><span class="p">:</span>
-</span><span class='line'>   <span class="n">table_element</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="o">|</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="k">AS</span> <span class="n">select_query</span> <span class="p">[</span><span class="k">WITH</span> <span class="k">NO</span> <span class="k">DATA</span> <span class="o">|</span> <span class="k">WITH</span> <span class="k">DATA</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_element</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">column_name</span> <span class="n">data_type</span> <span class="p">[</span><span class="n">column_option</span> <span class="p">...]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="n">table_constraint_type</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">column_name</span> <span class="k">WITH</span> <span class="k">OPTIONS</span> <span class="s1">&#39;(&#39;</span> <span class="n">column_option</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">LIKE</span> <span class="k">table_name</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">column_name</span> <span class="nb">SERIAL</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">column_name</span> <span class="n">BIGSERIAL</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_constraint_type</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">UNIQUE</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="k">REFERENCES</span> <span class="k">table_name</span> <span class="p">[</span><span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span><span class="p">]</span> <span class="p">[</span> <span class="n">match_options</span> <span class="p">]</span> <span class="p">[</span> <span class="n">ref_actions</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">column_option</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">DEFAULT</span> <span class="n">default_value</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="p">[</span> <span class="k">constraint_name</span> <span class="p">]</span> <span class="n">column_constraint_type</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">GENERATED</span> <span class="n">ALWAYS</span> <span class="k">AS</span> <span class="k">IDENTITY</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="n">serial_parameters</span> <span class="s1">&#39;)&#39;</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="n">AUTO_INCREMENT</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">column_constraint_type</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">NOT</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">UNIQUE</span> <span class="o">|</span> <span class="k">PRIMARY</span> <span class="k">KEY</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">REFERENCES</span> <span class="k">table_name</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="p">]</span> <span class="p">[</span> <span class="n">match_options</span> <span class="p">]</span> <span class="p">[</span> <span class="n">ref_actions</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">serial_parameters</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span><span class="k">START</span> <span class="k">WITH</span> <span class="n">nonzero</span><span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="p">[</span><span class="k">RESTART</span> <span class="o">|</span> <span class="k">RESTART</span> <span class="k">WITH</span> <span class="n">subquery</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">RESTART</span> <span class="k">WITH</span> <span class="n">nonzero</span><span class="p">]</span>
-</span><span class='line'>  <span class="o">|</span> <span class="p">[</span><span class="k">INCREMENT</span> <span class="k">BY</span> <span class="n">nonzero</span><span class="p">]</span>
-</span><span class='line'>  <span class="o">|</span> <span class="p">[</span><span class="k">MINVALUE</span> <span class="n">nonzero</span> <span class="o">|</span> <span class="n">NOMINVALUE</span><span class="p">]</span> <span class="o">|</span> <span class="p">[</span><span class="k">MAXVALUE</span> <span class="n">nonzero</span> <span class="o">|</span> <span class="n">NOMAXVALUE</span> <span class="p">]</span> <span class="o">|</span> <span class="p">[</span><span class="k">CACHE</span> <span class="n">nonzero</span> <span class="p">]</span> <span class="o">|</span> <span class="p">[</span><span class="k">CYCLE</span> <span class="o">|</span> <span class="n">NONCYCLE</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">match_options</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">MATCH</span> <span class="err">{</span> <span class="k">FULL</span> <span class="o">|</span> <span class="k">PARTIAL</span> <span class="o">|</span> <span class="k">SIMPLE</span> <span class="err">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ref_actions</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">ON</span> <span class="k">UPDATE</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span><span class='line'>  <span class="o">|</span> <span class="err">{</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="o">|</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="err">}</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="n">CASCASDE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span><span class='line'>  <span class="o">|</span> <span class="err">{</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="o">|</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="err">}</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="n">CASCASDE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock sql创建语句 lang:sql %}
+create_statement:
+ create {role_def | table_def | view_def | type_def | func_def | index_def | trigger_def | sequence_def}
+{% endcodeblock %}
+{% codeblock sql表定义的文法 lang:sql %}
+table_def:
+  CREATE [ TEMPORARY | LOCAL TEMPORARY | GLOBAL TEMPORARY ] TABLE table_name'(' table_content_source ')'
+   [ ON COMMIT DELETE ROWS | ON COMMIT PRESERVE ROWS | ON COMMIT DROP ]</p></blockquote>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表的标识列  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">table_name</span> <span class="n">table_content_source</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_content_source</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="s1">&#39;(&#39;</span> <span class="n">table_element</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="p">[</span><span class="s1">&#39;(&#39;</span><span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span><span class="s1">&#39;)&#39;</span><span class="p">]</span> <span class="k">AS</span> <span class="n">select_query</span> <span class="p">[</span><span class="k">WITH</span> <span class="k">NO</span> <span class="k">DATA</span> <span class="o">|</span> <span class="k">WITH</span> <span class="k">DATA</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_element</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">column_name</span> <span class="n">data_type</span> <span class="p">[</span> <span class="n">column_option</span> <span class="p">...]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">column_name</span> <span class="k">WITH</span> <span class="k">OPTIONS</span> <span class="s1">&#39;(&#39;</span> <span class="n">column_option</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">column_option</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">DEFAULT</span> <span class="n">default_value</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">GENERATED</span> <span class="n">ALWAYS</span> <span class="k">AS</span> <span class="k">IDENTITY</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="n">serial_parameters</span> <span class="s1">&#39;)&#39;</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="n">AUTO_INCREMENT</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">serial_parameters</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="p">[</span> <span class="k">START</span> <span class="k">WITH</span> <span class="n">nonzero</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="p">[</span> <span class="k">RESTART</span> <span class="o">|</span> <span class="k">RESTART</span> <span class="k">WITH</span> <span class="n">subquery</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">RESTART</span> <span class="k">WITH</span> <span class="n">nonzero</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="p">[</span><span class="k">INCREMENT</span> <span class="k">BY</span> <span class="n">nonzero</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="p">[</span><span class="k">MINVALUE</span> <span class="n">nonzero</span> <span class="o">|</span> <span class="n">NOMINVALUE</span><span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="p">[</span><span class="k">MAXVALUE</span> <span class="n">nonzero</span> <span class="o">|</span> <span class="n">NOMAXVALUE</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="p">[</span><span class="k">CACHE</span> <span class="n">nonzero</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="p">[</span><span class="k">CYCLE</span> <span class="o">|</span> <span class="n">NONCYCLE</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>table_content_source:
+   table_element ',' ... | column_name ',' ... AS select_query [WITH NO DATA | WITH DATA]</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表的限制  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">table_name</span> <span class="n">table_content_source</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_content_source</span><span class="p">:</span>
-</span><span class='line'>   <span class="s1">&#39;(&#39;</span>  <span class="n">table_element</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span>  <span class="s1">&#39;)&#39;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_element</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">column_name</span> <span class="n">data_type</span> <span class="p">[</span> <span class="n">column_option</span> <span class="p">...</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="n">table_constraint_type</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">column_name</span> <span class="k">WITH</span> <span class="k">OPTIONS</span> <span class="p">(</span> <span class="n">column_option</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">table_constraint_type</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">UNIQUE</span> <span class="p">(</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...)</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span>  <span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span>  <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="k">REFERENCES</span> <span class="k">table_name</span>
-</span><span class='line'>   <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span><span class="s1">&#39;)&#39;</span><span class="p">]</span> <span class="p">[</span> <span class="n">match_options</span> <span class="p">]</span> <span class="p">[</span> <span class="n">ref_actions</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">column_option</span><span class="p">:</span>
-</span><span class='line'>   <span class="p">[</span> <span class="k">constraint_name</span> <span class="p">]</span> <span class="n">column_constraint_type</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">column_constraint_type</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">NOT</span> <span class="k">NULL</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">NULL</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">UNIQUE</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">PRIMARY</span> <span class="k">KEY</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">REFERENCES</span> <span class="k">table_name</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span><span class="s1">&#39;)&#39;</span> <span class="p">]</span> <span class="p">[</span><span class="n">match_options</span><span class="p">]</span> <span class="p">[</span> <span class="n">ref_actions</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">match_options</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">MATCH</span> <span class="err">{</span> <span class="k">FULL</span> <span class="o">|</span> <span class="k">PARTIAL</span> <span class="o">|</span> <span class="k">SIMPLE</span> <span class="err">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ref_actions</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="n">CASCASDE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="n">CASCASDE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span><span class='line'>   <span class="o">|</span> <span class="err">{</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="o">|</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="err">}</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="n">CASCASDE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span><span class='line'>   <span class="o">|</span> <span class="err">{</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="o">|</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="err">}</span> <span class="err">{</span> <span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="n">CASCASDE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="err">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>table_element:</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql创建表索引  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">index_def</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span> <span class="k">UNIQUE</span> <span class="o">|</span> <span class="n">CLUSTERED</span> <span class="p">]</span> <span class="k">INDEX</span> <span class="n">ident</span> <span class="k">ON</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="n">ident</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">CLUSTER</span> <span class="n">ident</span> <span class="k">ON</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="n">ident</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="err">&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql创建表的视图  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">view_def</span><span class="p">:</span> <span class="k">CREATE</span> <span class="k">VIEW</span> <span class="n">view_name</span> <span class="p">[</span><span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span><span class="s1">&#39;)&#39;</span><span class="p">]</span> <span class="k">AS</span> <span class="n">select_query</span> <span class="p">[</span><span class="k">WITH</span> <span class="k">CHECK</span> <span class="k">OPTION</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql更改语句  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">alter_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">qname</span> <span class="k">ADD</span> <span class="p">[</span> <span class="k">COLUMN</span> <span class="p">]</span> <span class="n">add_table_element</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">qname</span> <span class="k">ALTER</span> <span class="n">alter_table_element</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">qname</span> <span class="k">DROP</span> <span class="n">drop_table_element</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">qname</span> <span class="k">SET</span> <span class="k">READ</span> <span class="k">ONLY</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="n">ident</span> <span class="n">passwd_schema</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="n">ident</span> <span class="k">RENAME</span> <span class="k">TO</span> <span class="n">ident</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="k">SET</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="p">[</span> <span class="k">ENCRYPTED</span> <span class="o">|</span> <span class="k">UNENCRYPTED</span> <span class="p">]</span> <span class="n">PASSWORD</span> <span class="n">string</span> <span class="k">USING</span> <span class="k">OLD</span> <span class="n">PASSWORD</span> <span class="n">string</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">ALTER</span> <span class="n">SEQUENCE</span> <span class="n">name</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="p">[</span> <span class="k">RESTART</span> <span class="p">[</span> <span class="k">WITH</span> <span class="p">[</span> <span class="n">poslng</span> <span class="o">|</span> <span class="n">subqeury</span> <span class="p">]</span> <span class="p">]</span> <span class="p">]</span>
-</span><span class='line'> <span class="p">[</span> <span class="k">INCREMENT</span> <span class="k">BY</span> <span class="n">nonzerolng</span> <span class="p">]</span>
-</span><span class='line'> <span class="p">[</span> <span class="k">MINVALUE</span> <span class="n">nonzerolng</span> <span class="o">|</span> <span class="k">NO</span> <span class="k">MINVALUE</span> <span class="p">]</span>
-</span><span class='line'> <span class="p">[</span> <span class="k">MAXVALUE</span> <span class="n">nonzerolng</span> <span class="o">|</span> <span class="k">NO</span> <span class="k">MAXVALUE</span> <span class="p">]</span>
-</span><span class='line'> <span class="p">[</span> <span class="k">CACHE</span> <span class="n">nonzerolng</span> <span class="p">]</span>
-</span><span class='line'> <span class="p">[</span> <span class="p">[</span> <span class="k">NO</span> <span class="p">]</span> <span class="k">CYCLE</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">ALTER</span> <span class="n">SEQUENCE</span> <span class="n">qname</span> <span class="n">opt_alt_seq_params</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">alter_table_element</span><span class="p">:</span> <span class="p">[</span> <span class="k">COLUMN</span> <span class="p">]</span> <span class="n">ident</span> <span class="k">SET</span> <span class="p">[</span> <span class="k">NOT</span> <span class="p">]</span> <span class="k">NULL</span> <span class="o">|</span> <span class="p">[</span> <span class="k">COLUMN</span> <span class="p">]</span> <span class="n">ident</span> <span class="k">SET</span> <span class="k">DEFAULT</span> <span class="p">[</span> <span class="n">default_value</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">drop_table_element</span><span class="p">:</span> <span class="p">[</span> <span class="k">COLUMN</span> <span class="p">]</span> <span class="n">ident</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span> <span class="o">|</span> <span class="k">CONSTRAINT</span> <span class="n">ident</span> <span class="n">drop_action</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">constraint_type</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">UNIQUE</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span><span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="s1">&#39;(&#39;</span><span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span><span class="s1">&#39;)&#39;</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="s1">&#39;(&#39;</span><span class="k">column_name</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span><span class="s1">&#39;)&#39;</span> <span class="n">PEFERENCES</span> <span class="k">table_name</span> <span class="p">[</span><span class="s1">&#39;(&#39;</span><span class="k">column_name</span><span class="s1">&#39;,&#39;</span><span class="p">...</span><span class="s1">&#39;)&#39;</span><span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="p">[</span><span class="k">MATCH</span> <span class="p">[</span> <span class="k">FULL</span> <span class="o">|</span> <span class="k">PARTIAL</span> <span class="o">|</span> <span class="k">SIMPLE</span> <span class="p">]</span> <span class="p">]</span> <span class="p">[</span> <span class="n">ref_action</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">CHECK</span> <span class="s1">&#39;(&#39;</span> <span class="n">search_condition</span> <span class="s1">&#39;)&#39;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ref_action</span><span class="p">:</span> <span class="k">ON</span> <span class="err">{</span><span class="k">DELETE</span> <span class="o">|</span> <span class="k">UPDATE</span><span class="err">}</span> <span class="err">{</span><span class="k">NO</span> <span class="n">ACTION</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="o">|</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">SET</span> <span class="k">DEFAULT</span><span class="err">}</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">passwd_schema</span><span class="p">:</span> <span class="k">SET</span> <span class="k">SCHEMA</span> <span class="n">ident</span> <span class="o">|</span> <span class="k">WITH</span> <span class="p">[</span> <span class="k">ENCRYPTED</span> <span class="o">|</span> <span class="k">UNENCRYPTED</span> <span class="p">]</span> <span class="n">PASSWORD</span> <span class="n">string</span> <span class="p">[</span> <span class="k">SET</span> <span class="k">SCHEMA</span> <span class="n">ident</span> <span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<pre><code>column_name data_type [column_option ...]
+</code></pre>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql删除语句  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">drop_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">DROP</span> <span class="k">TABLE</span> <span class="n">qname</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">data_type</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">PROCEDURE</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">data_type</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">ALL</span> <span class="k">FUNCTION</span> <span class="n">qname</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">ALL</span> <span class="k">PROCEDURE</span> <span class="n">qname</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">VIEW</span> <span class="n">qname</span> <span class="p">[</span> <span class="k">RESTRICT</span> <span class="o">|</span> <span class="k">CASCADE</span> <span class="p">]</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">ROLE</span> <span class="n">qname</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">USER</span> <span class="n">ident</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">INDEX</span> <span class="n">qname</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">CLUSTER</span> <span class="n">qname</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">qname</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">DROP</span> <span class="n">SEQUENCE</span> <span class="n">qname</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql创建模式  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">schema</span><span class="p">:</span>
-</span><span class='line'>   <span class="k">CREATE</span> <span class="k">SCHEMA</span> <span class="n">schema_name_clause</span>
-</span><span class='line'>  <span class="p">[</span> <span class="k">DEFAULT</span> <span class="nb">CHARACTER</span> <span class="k">SET</span> <span class="n">ident</span> <span class="p">]</span>
-</span><span class='line'>  <span class="p">[</span> <span class="n">PATH</span> <span class="k">schema_name</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="p">]</span>
-</span><span class='line'>  <span class="p">[</span> <span class="n">schema_element</span> <span class="p">...</span> <span class="p">]</span>
-</span><span class='line'><span class="o">|</span> <span class="k">DROP</span> <span class="k">SCHEMA</span> <span class="n">qname</span> <span class="n">drop_action</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">schema_name_clause</span><span class="p">:</span> <span class="n">ident</span> <span class="o">|</span> <span class="p">[</span> <span class="n">ident</span> <span class="p">]</span> <span class="k">AUTHORIZATION</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">ident</span> <span class="n">schema_element</span><span class="p">:</span> <span class="k">grant</span> <span class="o">|</span> <span class="k">revoke</span> <span class="o">|</span> <span class="n">create_statement</span> <span class="o">|</span> <span class="n">drop_statement</span> <span class="o">|</span> <span class="n">alter_statement</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>  | CONSTRAINT constraint_name table_constraint_type
+  | column_name WITH OPTIONS '(' column_option ','... ')'
+  | LIKE table_name
+  | column_name SERIAL
+  | column_name BIGSERIAL</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql用户验证  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">user_stmt</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">CREATE</span> <span class="k">USER</span> <span class="ss">&quot;user_name&quot;</span> <span class="k">WITH</span> <span class="n">PASSWORD</span> <span class="s1">&#39;user_password&#39;</span> <span class="n">NAME</span> <span class="s1">&#39;name&#39;</span> <span class="k">SCHEMA</span> <span class="ss">&quot;schema_name&quot;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="ss">&quot;user_name&quot;</span> <span class="p">[</span> <span class="k">WITH</span> <span class="p">[</span> <span class="k">ENCRYPTED</span> <span class="o">|</span> <span class="n">UNENCRYPYED</span> <span class="p">]</span> <span class="n">PASSWORD</span> <span class="s1">&#39;user_password&#39;</span> <span class="p">]</span>  <span class="p">[</span> <span class="k">SET</span> <span class="k">SCHEMA</span> <span class="ss">&quot;new_schema_name&quot;</span> <span class="p">]</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="k">SET</span> <span class="p">[</span> <span class="k">ENCRYPTED</span> <span class="o">|</span> <span class="n">UNENCRYPYED</span> <span class="p">]</span> <span class="n">PASSWORD</span> <span class="s1">&#39;new_password&#39;</span> <span class="k">USING</span> <span class="k">OLD</span> <span class="n">PASSWORD</span> <span class="s1">&#39;cur_password&#39;</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">DROP</span> <span class="k">USER</span> <span class="ss">&quot;user_name&quot;</span>
-</span><span class='line'>  <span class="o">|</span> <span class="k">ALTER</span> <span class="k">USER</span> <span class="ss">&quot;user_name&quot;</span> <span class="k">RENAME</span> <span class="k">TO</span> <span class="ss">&quot;new_user_name&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql角色  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">role_def</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">ROLE</span> <span class="n">qname</span> <span class="p">[</span> <span class="k">WITH</span> <span class="k">ADMIN</span> <span class="n">grantor</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">USER</span> <span class="n">ident</span> <span class="k">WITH</span> <span class="p">[</span> <span class="k">ENCRYPTED</span> <span class="o">|</span> <span class="k">UNENCRYPTED</span> <span class="p">]</span> <span class="n">PASSWORD</span> <span class="n">string</span> <span class="n">NAME</span> <span class="n">string</span> <span class="k">SCHEMA</span> <span class="n">ident</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">grantor</span><span class="p">:</span> <span class="k">CURRENT_USER</span> <span class="o">|</span> <span class="k">CURRENT_ROLE</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>table_constraint_type:</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql授权  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">grant</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">GRANT</span> <span class="k">privileges</span> <span class="k">TO</span> <span class="n">grantees</span> <span class="p">[</span> <span class="k">WITH</span> <span class="k">GRANT</span> <span class="k">OPTION</span> <span class="p">]</span> <span class="p">[</span> <span class="k">WITH</span> <span class="k">ADMIN</span> <span class="n">grantor</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">GRANT</span> <span class="n">authid_list</span> <span class="k">TO</span> <span class="n">grantees</span> <span class="p">[</span> <span class="k">WITH</span> <span class="k">ADMIN</span> <span class="k">OPTION</span> <span class="p">]</span> <span class="p">[</span> <span class="k">WITH</span> <span class="k">ADMIN</span> <span class="n">grantor</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">revoke</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">REVOKE</span> <span class="p">[</span> <span class="k">GRANT</span> <span class="k">OPTION</span> <span class="k">FOR</span> <span class="p">]</span> <span class="k">privileges</span> <span class="k">FROM</span> <span class="n">grantees</span> <span class="p">[</span> <span class="k">FROM</span> <span class="n">grantor</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">REVOKE</span> <span class="p">[</span> <span class="k">ADMIN</span> <span class="k">OPTION</span> <span class="k">FOR</span> <span class="p">]</span> <span class="n">authid</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="k">FROM</span> <span class="n">grantees</span> <span class="p">[</span> <span class="k">FROM</span> <span class="n">grantor</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">grantor</span><span class="p">:</span> <span class="k">CURRENT_USER</span> <span class="o">|</span> <span class="k">CURRENT_ROLE</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">privileges</span><span class="p">:</span> <span class="n">object_privileges</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="p">[</span> <span class="n">ident</span> <span class="o">|</span> <span class="n">ident</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">object_privileges</span><span class="p">:</span> <span class="k">ALL</span> <span class="p">[</span> <span class="k">PRIVILEGES</span> <span class="p">]</span> <span class="o">|</span> <span class="k">operation</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">operation</span><span class="p">:</span> <span class="k">INSERT</span> <span class="o">|</span> <span class="k">DELETE</span> <span class="o">|</span> <span class="p">[</span> <span class="k">UPDATE</span> <span class="o">|</span> <span class="k">SELECT</span> <span class="o">|</span> <span class="k">REFERENCES</span> <span class="p">]</span> <span class="n">opt_column_list</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;|</span> <span class="k">EXECUTE</span> <span class="n">grantees</span><span class="p">:</span> <span class="p">[</span> <span class="k">PUBLIC</span> <span class="o">|</span> <span class="n">authid</span> <span class="p">]</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<pre><code>UNIQUE '(' column_name ',' ... ')' 
+</code></pre>
+
+<p>   | PRIMARY KEY '(' column_name ',' ... ')'
+   | FOREIGN KEY '(' column_name ',' ... ')' REFERENCES table_name ['(' column_name ',' ... ')'] [ match_options ] [ ref_actions ]</p>
+
+<p>column_option:</p>
+
+<pre><code>DEFAULT default_value 
+</code></pre>
+
+<p>   | [ constraint_name ] column_constraint_type
+   | GENERATED ALWAYS AS IDENTITY [ '(' serial_parameters ')' ]
+   | AUTO_INCREMENT</p>
+
+<p>column_constraint_type:</p>
+
+<pre><code>NOT NULL | NULL | UNIQUE | PRIMARY KEY 
+</code></pre>
+
+<p>  | REFERENCES table_name [ '(' column_name ',' ... ')' ] [ match_options ] [ ref_actions ]</p>
+
+<p>serial_parameters:</p>
+
+<pre><code>[START WITH nonzero] 
+</code></pre>
+
+<p>  | [RESTART | RESTART WITH subquery
+  | RESTART WITH nonzero]
+  | [INCREMENT BY nonzero]
+  | [MINVALUE nonzero | NOMINVALUE] | [MAXVALUE nonzero | NOMAXVALUE ] | [CACHE nonzero ] | [CYCLE | NONCYCLE]</p>
+
+<p>match_options:</p>
+
+<pre><code>MATCH { FULL | PARTIAL | SIMPLE }
+</code></pre>
+
+<p>ref_actions:</p>
+
+<pre><code>ON UPDATE { NO ACTION | CASCADE | RESTRICT | SET NULL | SET DEFAULT }
+</code></pre>
+
+<p>  | ON DELETE { NO ACTION | CASCADE | RESTRICT | SET NULL | SET DEFAULT }
+  | { ON DELETE | ON UPDATE } { NO ACTION | CASCASDE | RESTRICT | SET NULL | SET DEFAULT }
+  | { ON UPDATE | ON DELETE } { NO ACTION | CASCASDE | RESTRICT | SET NULL | SET DEFAULT }
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql表的标识列 lang:sql %}
+CREATE TABLE table_name table_content_source</p></blockquote>
+
+<p>table_content_source:</p>
+
+<pre><code>'(' table_element ',' ... ')'
+</code></pre>
+
+<p>  | ['('column_name ',' ...')'] AS select_query [WITH NO DATA | WITH DATA]</p>
+
+<p>table_element:</p>
+
+<pre><code> column_name data_type [ column_option ...] 
+</code></pre>
+
+<p>   | column_name WITH OPTIONS '(' column_option ',' ... ')'</p>
+
+<p>column_option:</p>
+
+<pre><code> DEFAULT default_value 
+</code></pre>
+
+<p>   | GENERATED ALWAYS AS IDENTITY [ '(' serial_parameters ')' ]
+   | AUTO_INCREMENT</p>
+
+<p>serial_parameters:</p>
+
+<pre><code> [ START WITH nonzero ] 
+</code></pre>
+
+<p>   | [ RESTART | RESTART WITH subquery
+   | RESTART WITH nonzero ]
+   | [INCREMENT BY nonzero ]
+   | [MINVALUE nonzero | NOMINVALUE]
+   | [MAXVALUE nonzero | NOMAXVALUE ]
+   | [CACHE nonzero ]
+   | [CYCLE | NONCYCLE]
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql表的限制 lang:sql %}</p></blockquote>
+
+<p>CREATE TABLE table_name table_content_source</p>
+
+<p>table_content_source:
+   '('  table_element ',' ...  ')'</p>
+
+<p>table_element:</p>
+
+<pre><code> column_name data_type [ column_option ... ]
+</code></pre>
+
+<p>   | CONSTRAINT constraint_name table_constraint_type
+   | column_name WITH OPTIONS ( column_option ',' ... )</p>
+
+<p>table_constraint_type:</p>
+
+<pre><code> UNIQUE ( column_name ',' ...)
+</code></pre>
+
+<p>   | PRIMARY KEY '(' column_name ','  ... ')'
+   | FOREIGN KEY '(' column_name ','  ... ')' REFERENCES table_name
+   [ '(' column_name ',' ...')'] [ match_options ] [ ref_actions ]</p>
+
+<p>column_option:
+   [ constraint_name ] column_constraint_type</p>
+
+<p>column_constraint_type:</p>
+
+<pre><code> NOT NULL
+</code></pre>
+
+<p>   | NULL
+   | UNIQUE
+   | PRIMARY KEY
+   | REFERENCES table_name [ '(' column_name ',' ...')' ] [match_options] [ ref_actions ]</p>
+
+<p>match_options:</p>
+
+<pre><code> MATCH { FULL | PARTIAL | SIMPLE }
+</code></pre>
+
+<p>ref_actions:</p>
+
+<pre><code> ON UPDATE { NO ACTION | CASCASDE | RESTRICT | SET NULL | SET DEFAULT }
+</code></pre>
+
+<p>   | ON DELETE { NO ACTION | CASCASDE | RESTRICT | SET NULL | SET DEFAULT }
+   | { ON DELETE | ON UPDATE } { NO ACTION | CASCASDE | RESTRICT | SET NULL | SET DEFAULT }
+   | { ON UPDATE | ON DELETE } { NO ACTION | CASCASDE | RESTRICT | SET NULL | SET DEFAULT }
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql创建表索引 lang:sql %}
+index_def:</p>
+
+<pre><code>[ UNIQUE | CLUSTERED ] INDEX ident ON qname '(' ident ','... ')' 
+</code></pre>
+
+<p>   | CLUSTER ident ON qname '(' ident ','... ')
+{% endcodeblock %}
+{% codeblock sql创建表的视图 lang:sql %}
+view_def: CREATE VIEW view_name ['(' column_name ',' ...')'] AS select_query [WITH CHECK OPTION]
+{% endcodeblock %}
+{% codeblock sql更改语句 lang:sql %}
+alter_statement:</p>
+
+<pre><code> ALTER TABLE qname ADD [ COLUMN ] add_table_element 
+</code></pre>
+
+<p>   | ALTER TABLE qname ALTER alter_table_element
+   | ALTER TABLE qname DROP drop_table_element
+   | ALTER TABLE qname SET READ ONLY
+   | ALTER USER ident passwd_schema
+   | ALTER USER ident RENAME TO ident
+   | ALTER USER SET</p>
+
+<pre><code> [ ENCRYPTED | UNENCRYPTED ] PASSWORD string USING OLD PASSWORD string 
+</code></pre>
+
+<p>   | ALTER SEQUENCE name</p>
+
+<pre><code> [ RESTART [ WITH [ poslng | subqeury ] ] ] 
+ [ INCREMENT BY nonzerolng ] 
+ [ MINVALUE nonzerolng | NO MINVALUE ]
+ [ MAXVALUE nonzerolng | NO MAXVALUE ]
+ [ CACHE nonzerolng ]
+ [ [ NO ] CYCLE ] 
+</code></pre>
+
+<p>   | ALTER SEQUENCE qname opt_alt_seq_params</p></blockquote>
+
+<p>alter_table_element: [ COLUMN ] ident SET [ NOT ] NULL | [ COLUMN ] ident SET DEFAULT [ default_value ]</p>
+
+<p>drop_table_element: [ COLUMN ] ident [ RESTRICT | CASCADE ] | CONSTRAINT ident drop_action</p>
+
+<p>constraint_type:</p>
+
+<pre><code> UNIQUE '(' column_name ',' ...')' 
+</code></pre>
+
+<p>   | PRIMARY KEY '('column_name ',' ...')'
+   | FOREIGN KEY '('column_name ','...')' PEFERENCES table_name ['('column_name','...')']</p>
+
+<pre><code>  [MATCH [ FULL | PARTIAL | SIMPLE ] ] [ ref_action ] 
+</code></pre>
+
+<p>   | CHECK '(' search_condition ')'</p>
+
+<p>ref_action: ON {DELETE | UPDATE} {NO ACTION | CASCADE | RESTRICT | SET NULL | SET DEFAULT}</p>
+
+<p>passwd_schema: SET SCHEMA ident | WITH [ ENCRYPTED | UNENCRYPTED ] PASSWORD string [ SET SCHEMA ident ]
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql删除语句 lang:sql %}
+drop_statement:</p>
+
+<pre><code> DROP TABLE qname [ RESTRICT | CASCADE ]
+</code></pre>
+
+<p>   | DROP FUNCTION qname '(' [ data_type ','... ] ')' [ RESTRICT | CASCADE ]
+   | DROP PROCEDURE qname '(' [ data_type ','... ] ')' [ RESTRICT | CASCADE ]
+   | DROP ALL FUNCTION qname [ RESTRICT | CASCADE ]
+   | DROP ALL PROCEDURE qname [ RESTRICT | CASCADE ]
+   | DROP VIEW qname [ RESTRICT | CASCADE ]
+   | DROP ROLE qname
+   | DROP USER ident
+   | DROP INDEX qname
+   | DROP CLUSTER qname
+   | DROP TRIGGER qname
+   | DROP SEQUENCE qname
+{% endcodeblock %}
+{% codeblock sql创建模式 lang:sql %}
+schema:
+   CREATE SCHEMA schema_name_clause
+  [ DEFAULT CHARACTER SET ident ]
+  [ PATH schema_name ','... ]
+  [ schema_element ... ]
+| DROP SCHEMA qname drop_action</p></blockquote>
+
+<p>schema_name_clause: ident | [ ident ] AUTHORIZATION</p>
+
+<p>ident schema_element: grant | revoke | create_statement | drop_statement | alter_statement
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql用户验证 lang:sql %}
+user_stmt:</p>
+
+<pre><code>CREATE USER "user_name" WITH PASSWORD 'user_password' NAME 'name' SCHEMA "schema_name"
+</code></pre>
+
+<p>  | ALTER USER "user_name" [ WITH [ ENCRYPTED | UNENCRYPYED ] PASSWORD 'user_password' ]  [ SET SCHEMA "new_schema_name" ]
+  | ALTER USER SET [ ENCRYPTED | UNENCRYPYED ] PASSWORD 'new_password' USING OLD PASSWORD 'cur_password'
+  | DROP USER "user_name"
+  | ALTER USER "user_name" RENAME TO "new_user_name"
+{% endcodeblock %}
+{% codeblock sql角色 lang:sql %}
+role_def:</p>
+
+<pre><code>ROLE qname [ WITH ADMIN grantor ] 
+</code></pre>
+
+<p>   | USER ident WITH [ ENCRYPTED | UNENCRYPTED ] PASSWORD string NAME string SCHEMA ident</p></blockquote>
+
+<p>grantor: CURRENT_USER | CURRENT_ROLE
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql授权 lang:sql %}
+grant:</p>
+
+<pre><code>GRANT privileges TO grantees [ WITH GRANT OPTION ] [ WITH ADMIN grantor ] 
+</code></pre>
+
+<p>  | GRANT authid_list TO grantees [ WITH ADMIN OPTION ] [ WITH ADMIN grantor ]</p></blockquote>
+
+<p>revoke:</p>
+
+<pre><code>REVOKE [ GRANT OPTION FOR ] privileges FROM grantees [ FROM grantor ] 
+</code></pre>
+
+<p>  | REVOKE [ ADMIN OPTION FOR ] authid ','... FROM grantees [ FROM grantor ]</p>
+
+<p>grantor: CURRENT_USER | CURRENT_ROLE</p>
+
+<p>privileges: object_privileges ON TABLE [ ident | ident ]</p>
+
+<p>object_privileges: ALL [ PRIVILEGES ] | operation ','...</p>
+
+<p>operation: INSERT | DELETE | [ UPDATE | SELECT | REFERENCES ] opt_column_list</p>
+
+<pre><code>| EXECUTE grantees: [ PUBLIC | authid ] ','...
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <blockquote><p><p>数据操作：1.表更新 2.表操作 3.批量输入输出</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表更新  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="k">table_name</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="p">]</span> <span class="p">[</span> <span class="k">VALUES</span> <span class="s1">&#39;(&#39;</span><span class="n">value_expression</span><span class="s1">&#39;,&#39;</span><span class="p">...</span><span class="s1">&#39;)&#39;</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="o">|</span> <span class="n">select_query</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="k">assignment</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">[</span><span class="k">WHERE</span> <span class="n">search_condition</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">assignment</span> <span class="p">:</span> <span class="k">column_name</span> <span class="s1">&#39;=&#39;</span>  <span class="p">(</span> <span class="n">scalar_exp</span>  <span class="o">|</span> <span class="n">search_condition</span> <span class="o">|</span> <span class="k">NULL</span> <span class="p">)</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">DELETE</span> <span class="k">FROM</span> <span class="k">table_name</span> <span class="p">[</span><span class="k">WHERE</span> <span class="n">search_condition</span> <span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock sql表更新 lang:sql %}
+INSERT INTO table_name [ '(' column_name ',' ... ')' ] [ VALUES '('value_expression','...')' ',' ... | select_query ]</p></blockquote>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表join操作  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">table_reference</span><span class="p">:</span> <span class="n">simple_table</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;|</span> <span class="s1">&#39;(&#39;</span> <span class="n">select_query</span> <span class="s1">&#39;)&#39;</span> <span class="p">[</span><span class="k">AS</span><span class="p">]</span> <span class="k">table_name</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="p">]</span>
-</span><span class='line'><span class="o">|</span> <span class="s1">&#39;(&#39;</span> <span class="n">select_query</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="n">joined_table</span> <span class="o">|</span> <span class="s1">&#39;(&#39;</span> <span class="n">joined_table</span> <span class="s1">&#39;)&#39;</span> <span class="p">[</span><span class="k">AS</span><span class="p">]</span> <span class="k">table_name</span> <span class="p">[</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">joined_table</span><span class="p">:</span> <span class="s1">&#39;(&#39;</span> <span class="n">joined_table</span> <span class="s1">&#39;)&#39;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;|</span> <span class="n">table_reference</span> <span class="err">{</span> <span class="k">CROSS</span> <span class="o">|</span> <span class="k">NATURAL</span> <span class="err">}</span> <span class="k">JOIN</span> <span class="n">table_reference</span>
-</span><span class='line'><span class="o">|</span> <span class="n">table_reference</span> <span class="err">{</span> <span class="k">JOIN</span> <span class="o">|</span> <span class="n">UNIONJOIN</span><span class="err">}</span> <span class="n">table_reference</span> <span class="n">join_spec</span>
-</span><span class='line'><span class="o">|</span> <span class="n">table_reference</span> <span class="n">join_type</span> <span class="k">JOIN</span> <span class="n">table_reference</span> <span class="n">join_spec</span>
-</span><span class='line'><span class="o">|</span> <span class="n">table_reference</span> <span class="k">NATURAL</span> <span class="n">join_type</span> <span class="k">JOIN</span> <span class="n">table_reference</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">join_spec</span> <span class="p">:</span> <span class="k">ON</span> <span class="n">search_condition</span> <span class="o">|</span> <span class="k">USING</span> <span class="s1">&#39;(colunm_name &#39;</span><span class="p">,</span><span class="s1">&#39; ...&#39;</span> <span class="p">)</span><span class="err">&#39;</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">join_type</span><span class="p">:</span> <span class="k">INNER</span> <span class="o">|</span> <span class="err">{</span> <span class="k">LEFT</span> <span class="o">|</span> <span class="k">RIGHT</span> <span class="o">|</span> <span class="k">FULL</span> <span class="err">}</span> <span class="p">[</span><span class="k">OUTER</span><span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>UPDATE table_name SET assignment ',' ... [WHERE search_condition ]</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表select操作  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">select_query</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">SELECT</span> <span class="p">[</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">DISTINCT</span> <span class="p">]</span>  <span class="p">(</span> <span class="s1">&#39;*&#39;</span> <span class="o">|</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">)</span> <span class="p">[</span> <span class="k">INTO</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">]</span>
-</span><span class='line'><span class="p">[</span> <span class="k">FROM</span> <span class="k">table_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">]</span>
-</span><span class='line'><span class="p">[</span> <span class="k">WHERE</span> <span class="n">search_condition</span> <span class="p">]</span>
-</span><span class='line'><span class="p">[</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">]</span>
-</span><span class='line'><span class="p">[</span> <span class="k">HAVING</span> <span class="n">search_condition</span><span class="p">]</span>
-</span><span class='line'><span class="p">[</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">ordering_spec</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="p">]</span>
-</span><span class='line'><span class="p">[</span> <span class="k">LIMIT</span> <span class="n">posint</span> <span class="p">]</span> <span class="p">[</span> <span class="k">OFFSET</span> <span class="n">posint</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表with操作  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">with_clause</span> <span class="p">:</span>  <span class="k">WITH</span> <span class="n">with_element</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="n">select_query</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">with_element</span><span class="p">:</span> <span class="k">table_name</span> <span class="s1">&#39;(&#39;</span> <span class="k">column_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="k">AS</span> <span class="s1">&#39;(&#39;</span> <span class="n">select_query</span> <span class="s1">&#39;)&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>assignment : column_name '='  ( scalar_exp  | search_condition | NULL )</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表各种其他类型的操作  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">predicate</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">comparison_predicate</span>
-</span><span class='line'><span class="o">|</span> <span class="n">between_predicate</span>
-</span><span class='line'><span class="o">|</span> <span class="n">like_predicate</span>
-</span><span class='line'><span class="o">|</span> <span class="n">test_for_null</span>
-</span><span class='line'><span class="o">|</span> <span class="n">in_predicate</span>
-</span><span class='line'><span class="o">|</span> <span class="n">all_or_any_predicate</span>
-</span><span class='line'><span class="o">|</span> <span class="n">existence_test</span>
-</span><span class='line'><span class="o">|</span> <span class="s1">&#39;(&#39;</span> <span class="n">predicate</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">comparison_predicate</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">pred_expr</span> <span class="n">COMPARISON</span> <span class="n">pred_expr</span>
-</span><span class='line'><span class="o">|</span> <span class="n">pred_expr</span> <span class="o">=</span> <span class="n">pred_exp</span> <span class="n">between_predicate</span><span class="p">:</span>
-</span><span class='line'><span class="n">pred_expr</span> <span class="p">[</span><span class="k">NOT</span><span class="p">]</span> <span class="k">BETWEEN</span> <span class="p">[</span><span class="k">SYMMETRIC</span> <span class="o">|</span> <span class="k">ASYMMETRIC</span><span class="p">]</span> <span class="n">pred_expr</span> <span class="k">AND</span> <span class="n">pred_expr</span> <span class="n">like_predicate</span><span class="p">:</span>
-</span><span class='line'><span class="n">pred_expr</span> <span class="p">[</span><span class="k">NOT</span><span class="p">]</span> <span class="k">LIKE</span> <span class="n">atom_expr</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">test_for_null</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">column_name</span> <span class="k">IS</span> <span class="p">[</span><span class="k">NOT</span><span class="p">]</span> <span class="k">NULL</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">in_predicate</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">pred_expr</span> <span class="p">[</span><span class="k">NOT</span><span class="p">]</span> <span class="k">IN</span> <span class="s1">&#39;(&#39;</span> <span class="n">element_name</span> <span class="s1">&#39;,&#39;</span> <span class="p">...</span> <span class="s1">&#39;)&#39;</span> <span class="n">all_or_any_predicate</span> <span class="p">:</span>
-</span><span class='line'><span class="n">pred_expr</span> <span class="n">COMPARISON</span> <span class="err">{</span> <span class="k">ANY</span> <span class="o">|</span> <span class="k">ALL</span> <span class="o">|</span> <span class="k">SOME</span> <span class="err">}</span> <span class="n">subquery</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">existence_test</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span><span class="k">NOT</span><span class="p">]</span> <span class="k">EXISTS</span> <span class="n">subquery</span> <span class="n">pred_expr</span><span class="p">:</span>
-</span><span class='line'><span class="n">scalar_expr</span>
-</span><span class='line'><span class="o">|</span> <span class="n">predicate</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">atom_expr</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span><span class="s1">&#39;(&#39;</span><span class="p">]</span> <span class="n">atom</span> <span class="p">[</span><span class="s1">&#39;)&#39;</span><span class="p">]</span>
-</span><span class='line'><span class="o">|</span> <span class="p">[</span><span class="s1">&#39;(&#39;</span><span class="p">]</span> <span class="n">atom</span> <span class="p">[</span><span class="s1">&#39;)&#39;</span><span class="p">]</span> <span class="k">ESCAPE</span> <span class="n">string</span>
-</span><span class='line'><span class="o">|</span> <span class="s1">&#39;?&#39;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>DELETE FROM table_name [WHERE search_condition ]
+{% endcodeblock %}</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql表string类型的操作  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">string_funcs</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="k">SUBSTRING</span> <span class="p">(</span> <span class="n">scalar_expr</span> <span class="k">FROM</span> <span class="n">scalar_expr</span> <span class="k">FOR</span> <span class="n">scalar_expr</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="k">SUBSTRING</span> <span class="s1">&#39;(&#39;</span> <span class="n">scalar_expr</span> <span class="s1">&#39;,&#39;</span> <span class="n">scalar_expr</span> <span class="s1">&#39;,&#39;</span> <span class="n">scalar_expr</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="k">SUBSTRING</span> <span class="s1">&#39;(&#39;</span> <span class="n">scalar_exprFROM</span> <span class="n">scalar_expr</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="k">SUBSTRING</span> <span class="s1">&#39;(&#39;</span> <span class="n">scalar_expr</span> <span class="s1">&#39;,&#39;</span> <span class="n">scalar_expr</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="k">SUBSTRING</span> <span class="s1">&#39;(&#39;</span> <span class="n">scalar_expr</span> <span class="n">int_value</span> <span class="n">scalar_expr</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="n">scalar_expr</span> <span class="s1">&#39;||&#39;</span> <span class="n">scalar_expr</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql过程定义  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">func_def</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">paramlist</span><span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="k">EXTERNAL</span> <span class="n">NAME</span> <span class="n">external_function_name</span>
-</span><span class='line'> <span class="o">|</span> <span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">paramlist</span><span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="n">routine_body</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">routine_body</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="n">procedure_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="k">BEGIN</span> <span class="n">procedure_statement_list</span> <span class="k">END</span>
-</span><span class='line'> <span class="o">|</span> <span class="k">BEGIN</span> <span class="k">ATOMIC</span> <span class="n">procedure_statement_list</span> <span class="k">END</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">procedure_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>   <span class="n">transaction_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">update_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="k">schema</span>
-</span><span class='line'> <span class="o">|</span> <span class="k">grant</span>
-</span><span class='line'> <span class="o">|</span> <span class="k">revoke</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">create_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">drop_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">alter_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">declare_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">set_statement</span>
-</span><span class='line'> <span class="o">|</span> <span class="n">control_statement</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<blockquote><p>{% codeblock sql表join操作 lang:sql %}
+table_reference: simple_table</p>
+
+<pre><code>| '(' select_query ')' [AS] table_name [ '(' column_name ',' ... ')' ] 
+| '(' select_query ')' 
+| joined_table | '(' joined_table ')' [AS] table_name [ '(' column_name ',' ... ')' ]
+</code></pre></blockquote>
+
+<p>joined_table: '(' joined_table ')'</p>
+
+<pre><code>| table_reference { CROSS | NATURAL } JOIN table_reference
+| table_reference { JOIN | UNIONJOIN} table_reference join_spec 
+| table_reference join_type JOIN table_reference join_spec 
+| table_reference NATURAL join_type JOIN table_reference
+</code></pre>
+
+<p>join_spec : ON search_condition | USING '(colunm_name ',' ...' )'</p>
+
+<p>join_type: INNER | { LEFT | RIGHT | FULL } [OUTER]
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql表select操作 lang:sql %}
+select_query:</p>
+
+<pre><code>SELECT [ ALL | DISTINCT ]  ( '*' | column_name ',' ... ) [ INTO column_name ',' ... ] 
+[ FROM table_name ',' ... ]
+[ WHERE search_condition ]
+[ GROUP BY column_name ',' ... ]
+[ HAVING search_condition]
+[ ORDER BY ordering_spec ',' ... ]
+[ LIMIT posint ] [ OFFSET posint ]
+</code></pre>
+
+<p>{% endcodeblock %}
+{% codeblock sql表with操作 lang:sql %}
+with_clause :  WITH with_element ',' ... select_query</p></blockquote>
+
+<p>with_element: table_name '(' column_name ',' ... ')' AS '(' select_query ')'
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql表各种其他类型的操作 lang:sql %}
+predicate:</p>
+
+<pre><code>comparison_predicate 
+| between_predicate 
+| like_predicate 
+| test_for_null 
+| in_predicate 
+| all_or_any_predicate 
+| existence_test 
+| '(' predicate ')'
+</code></pre></blockquote>
+
+<p>comparison_predicate:</p>
+
+<pre><code>pred_expr COMPARISON pred_expr 
+| pred_expr = pred_exp between_predicate: 
+pred_expr [NOT] BETWEEN [SYMMETRIC | ASYMMETRIC] pred_expr AND pred_expr like_predicate: 
+pred_expr [NOT] LIKE atom_expr
+</code></pre>
+
+<p>test_for_null:</p>
+
+<pre><code>column_name IS [NOT] NULL
+</code></pre>
+
+<p>in_predicate:</p>
+
+<pre><code>pred_expr [NOT] IN '(' element_name ',' ... ')' all_or_any_predicate : 
+pred_expr COMPARISON { ANY | ALL | SOME } subquery
+</code></pre>
+
+<p>existence_test:</p>
+
+<pre><code>[NOT] EXISTS subquery pred_expr: 
+scalar_expr 
+| predicate
+</code></pre>
+
+<p>atom_expr:</p>
+
+<pre><code>['('] atom [')'] 
+| ['('] atom [')'] ESCAPE string 
+| '?'
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql表string类型的操作 lang:sql %}
+string_funcs:</p>
+
+<pre><code>  SUBSTRING ( scalar_expr FROM scalar_expr FOR scalar_expr ')' 
+| SUBSTRING '(' scalar_expr ',' scalar_expr ',' scalar_expr ')'
+| SUBSTRING '(' scalar_exprFROM scalar_expr ')'
+| SUBSTRING '(' scalar_expr ',' scalar_expr ')'
+| SUBSTRING '(' scalar_expr int_value scalar_expr ')'
+| scalar_expr '||' scalar_expr
+</code></pre>
+
+<p>{% endcodeblock %}
+{% codeblock sql过程定义 lang:sql %}
+func_def:</p>
+
+<pre><code> CREATE PROCEDURE qname '(' [ paramlist] ')' EXTERNAL NAME external_function_name 
+ | CREATE PROCEDURE qname '(' [ paramlist] ')' routine_body 
+</code></pre>
+
+<p>routine_body:</p>
+
+<pre><code>  procedure_statement 
+ | BEGIN procedure_statement_list END 
+ | BEGIN ATOMIC procedure_statement_list END
+</code></pre></blockquote>
+
+<p>procedure_statement:</p>
+
+<pre><code>   transaction_statement 
+ | update_statement 
+ | schema 
+ | grant 
+ | revoke 
+ | create_statement 
+ | drop_statement 
+ | alter_statement 
+ | declare_statement 
+ | set_statement 
+ | control_statement
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <blockquote><p><p>sql程序模块定义：1.过程定义 2.函数定义 3.触发器定义 4.变量定义 5.控制流</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql函数定义  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">unc_def</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">FUNCTION</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">paramlist</span><span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="k">RETURNS</span> <span class="n">func_data_type</span> <span class="k">EXTERNAL</span> <span class="n">NAME</span> <span class="n">external_function_name</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">FUNCTION</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">paramlist</span> <span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="k">RETURNS</span> <span class="n">func_data_type</span> <span class="n">routine_body</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">AGGREGATE</span> <span class="n">qname</span> <span class="s1">&#39;(&#39;</span> <span class="p">[</span> <span class="n">paramlist</span> <span class="p">]</span> <span class="s1">&#39;)&#39;</span> <span class="k">RETURNS</span> <span class="n">func_data_type</span> <span class="k">EXTERNAL</span> <span class="n">NAME</span> <span class="n">external_function_name</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">func_data_type</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="k">TABLE</span> <span class="s1">&#39;(&#39;</span> <span class="k">column</span> <span class="n">data_type</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'><span class="o">|</span> <span class="n">data_type</span> <span class="n">type_def</span><span class="p">:</span> <span class="k">TYPE</span> <span class="n">qname</span> <span class="k">EXTERNAL</span> <span class="n">NAME</span> <span class="n">ident</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock sql函数定义 lang:sql %}
+unc_def:</p>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql触发器定义  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">trigger_def</span><span class="p">:</span> <span class="k">TRIGGER</span> <span class="n">qname</span> <span class="n">trigger_action_time</span> <span class="n">trigger_event</span> <span class="k">ON</span> <span class="n">ident</span> <span class="n">opt_referencing_list</span> <span class="n">triggered_action</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">trigger_action_time</span><span class="p">:</span> <span class="k">BEFORE</span> <span class="o">|</span> <span class="k">AFTER</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">trigger_event</span><span class="p">:</span> <span class="k">INSERT</span> <span class="o">|</span> <span class="k">DELETE</span> <span class="o">|</span> <span class="k">UPDATE</span> <span class="o">|</span> <span class="k">UPDATE</span> <span class="k">OF</span> <span class="n">ident</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">opt_referencing_list</span><span class="p">:</span> <span class="p">[</span> <span class="k">REFERENCING</span> <span class="n">old_or_new_values_alias</span> <span class="p">...</span> <span class="p">]</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">old_or_new_values_alias</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="k">OLD</span> <span class="p">[</span> <span class="k">ROW</span> <span class="p">]</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="n">ident</span> <span class="o">|</span> <span class="k">NEW</span> <span class="p">[</span> <span class="k">ROW</span> <span class="p">]</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="n">ident</span>
-</span><span class='line'><span class="o">|</span> <span class="k">OLD</span> <span class="k">TABLE</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="n">ident</span> <span class="o">|</span> <span class="k">NEW</span> <span class="k">TABLE</span> <span class="p">[</span> <span class="k">AS</span> <span class="p">]</span> <span class="n">ident</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">triggered_action</span><span class="p">:</span> <span class="n">opt_for_each</span>  <span class="p">[</span> <span class="k">WHEN</span> <span class="n">search_condition</span> <span class="p">]</span> <span class="n">triggered_statement</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">opt_for_each</span><span class="p">:</span> <span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="k">default</span> <span class="k">for</span> <span class="k">each</span> <span class="k">statement</span><span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span> <span class="o">|</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="o">|</span> <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">STATEMENT</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">triggered_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">trigger_procedure_statement</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">BEGIN</span> <span class="k">ATOMIC</span> <span class="n">trigger_procedure_statement_list</span> <span class="k">END</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">trigger_procedure_statement</span><span class="p">:</span> <span class="n">transaction_statement</span> <span class="o">|</span> <span class="n">update_statement</span> <span class="o">|</span> <span class="k">grant</span> <span class="o">|</span> <span class="k">revoke</span> <span class="o">|</span> <span class="n">declare_statement</span> <span class="o">|</span> <span class="n">set_statement</span> <span class="o">|</span> <span class="n">control_statement</span> <span class="o">|</span> <span class="n">select_statement_single_row</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<pre><code> FUNCTION qname '(' [ paramlist] ')' RETURNS func_data_type EXTERNAL NAME external_function_name
+</code></pre>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql变量定义  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">declare_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">DECLARE</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">DECLARE</span> <span class="n">table_def</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">variable_list</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="n">ident</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="n">data_type</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="n">variable_list</span> <span class="s1">&#39;,&#39;</span> <span class="n">ident</span> <span class="s1">&#39;,&#39;</span><span class="p">...</span> <span class="n">data_type</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">set_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">SET</span> <span class="n">ident</span> <span class="s1">&#39;=&#39;</span> <span class="n">simple_atom</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">SET</span> <span class="k">SESSION</span> <span class="k">AUTHORIZATION</span> <span class="n">ident</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">SET</span> <span class="k">SCHEMA</span> <span class="n">ident</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">SET</span> <span class="k">user</span> <span class="s1">&#39;=&#39;</span> <span class="n">ident</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">SET</span> <span class="k">ROLE</span> <span class="n">ident</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">SET</span> <span class="n">TIME</span> <span class="k">ZONE</span> <span class="k">LOCAL</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">SET</span> <span class="n">TIME</span> <span class="k">ZONE</span> <span class="n">interval_expression</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">user</span><span class="p">:</span> <span class="p">[</span> <span class="k">USER</span> <span class="o">|</span> <span class="k">SESSION_USER</span> <span class="o">|</span> <span class="k">CURRENT_USER</span> <span class="p">]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>   | FUNCTION qname '(' [ paramlist ] ')' RETURNS func_data_type routine_body
+   | AGGREGATE qname '(' [ paramlist ] ')' RETURNS func_data_type EXTERNAL NAME external_function_name</p></blockquote>
 
-<blockquote><p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>sql控制流  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">control_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span> <span class="k">CALL</span> <span class="n">func_ref</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">CALL</span> <span class="k">routine_name</span> <span class="s1">&#39;(&#39;</span> <span class="n">argument_list</span> <span class="s1">&#39;)&#39;</span>
-</span><span class='line'>   <span class="o">|</span> <span class="n">while_statement</span>
-</span><span class='line'>   <span class="o">|</span> <span class="n">if_statement</span>
-</span><span class='line'>   <span class="o">|</span> <span class="n">case_statement</span>
-</span><span class='line'>   <span class="o">|</span> <span class="k">RETURN</span> <span class="n">return_value</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;&lt;/</span><span class="n">blockquote</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">case_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="k">CASE</span> <span class="n">scalar_exp</span> <span class="n">when_statement</span><span class="p">...</span> <span class="p">[</span> <span class="k">ELSE</span> <span class="n">procedure_statement_list</span> <span class="p">]</span> <span class="k">END</span> <span class="k">CASE</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="o">|</span> <span class="k">CASE</span> <span class="n">when_search_statement</span><span class="p">...</span> <span class="p">[</span> <span class="k">ELSE</span> <span class="n">procedure_statement_list</span> <span class="p">]</span> <span class="k">END</span> <span class="k">CASE</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">when_statement</span><span class="p">:</span> <span class="k">WHEN</span> <span class="n">scalar_exp</span> <span class="k">THEN</span> <span class="n">procedure_statement_list</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">when_search_statement</span><span class="p">:</span> <span class="k">WHEN</span> <span class="n">search_condition</span> <span class="k">THEN</span> <span class="n">procedure_statement_list</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">if_statement</span><span class="p">:</span> <span class="n">IF</span> <span class="n">search_condition</span> <span class="k">THEN</span> <span class="n">procedure_statement_list</span> <span class="n">if_opt_else</span> <span class="k">END</span> <span class="n">IF</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">if_opt_else</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="cm">/* empty */</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>   <span class="o">|</span> <span class="k">ELSE</span> <span class="n">procedure_statement_list</span>
-</span><span class='line'>   <span class="o">|</span> <span class="n">ELSEIF</span> <span class="n">search_condition</span> <span class="k">THEN</span> <span class="n">procedure_statement_list</span> <span class="n">if_opt_else</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">while_statement</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="p">[</span> <span class="n">ident</span> <span class="s1">&#39;:&#39;</span> <span class="p">]</span> <span class="n">WHILE</span> <span class="n">search_condition</span> <span class="k">DO</span> <span class="n">procedure_statement_list</span> <span class="k">END</span> <span class="n">WHILE</span> <span class="p">[</span> <span class="n">ident</span> <span class="p">]</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">return_statement</span><span class="p">:</span> <span class="k">RETURN</span> <span class="n">return_value</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">return_value</span><span class="p">:</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>  <span class="n">select_no_parens_orderby</span>
-</span><span class='line'><span class="o">|</span> <span class="n">search_condition</span>
-</span><span class='line'><span class="o">|</span> <span class="k">TABLE</span> <span class="s1">&#39;(&#39;</span> <span class="n">select_no_parens_orderby</span> <span class="s1">&#39;)&#39;</span> <span class="o">|</span> <span class="k">NULL</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>func_data_type:</p>
+
+<pre><code>  TABLE '(' column data_type ','... ')' 
+| data_type type_def: TYPE qname EXTERNAL NAME ident
+</code></pre>
+
+<p>{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql触发器定义 lang:sql %}</p></blockquote>
+
+<p>trigger_def: TRIGGER qname trigger_action_time trigger_event ON ident opt_referencing_list triggered_action</p>
+
+<p>trigger_action_time: BEFORE | AFTER</p>
+
+<p>trigger_event: INSERT | DELETE | UPDATE | UPDATE OF ident ','...</p>
+
+<p>opt_referencing_list: [ REFERENCING old_or_new_values_alias ... ]</p>
+
+<p>old_or_new_values_alias:</p>
+
+<pre><code>  OLD [ ROW ] [ AS ] ident | NEW [ ROW ] [ AS ] ident 
+| OLD TABLE [ AS ] ident | NEW TABLE [ AS ] ident
+</code></pre>
+
+<p>triggered_action: opt_for_each  [ WHEN search_condition ] triggered_statement</p>
+
+<p>opt_for_each: /<em>default for each statement</em>/ | FOR EACH ROW | FOR EACH STATEMENT</p>
+
+<p>triggered_statement:</p>
+
+<pre><code> trigger_procedure_statement 
+</code></pre>
+
+<p>   | BEGIN ATOMIC trigger_procedure_statement_list END</p>
+
+<p>trigger_procedure_statement: transaction_statement | update_statement | grant | revoke | declare_statement | set_statement | control_statement | select_statement_single_row
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql变量定义 lang:sql %}
+declare_statement:</p>
+
+<pre><code> DECLARE 
+</code></pre>
+
+<p>   | DECLARE table_def</p></blockquote>
+
+<p>variable_list:</p>
+
+<pre><code> ident ','... data_type
+</code></pre>
+
+<p>   | variable_list ',' ident ','... data_type</p>
+
+<p>set_statement:</p>
+
+<pre><code> SET ident '=' simple_atom
+</code></pre>
+
+<p>   | SET SESSION AUTHORIZATION ident
+   | SET SCHEMA ident
+   | SET user '=' ident
+   | SET ROLE ident
+   | SET TIME ZONE LOCAL
+   | SET TIME ZONE interval_expression</p>
+
+<p>user: [ USER | SESSION_USER | CURRENT_USER ]
+{% endcodeblock %}</p>
+
+<blockquote><p>{% codeblock sql控制流 lang:sql %}
+control_statement:</p>
+
+<pre><code> CALL func_ref 
+</code></pre>
+
+<p>   | CALL routine_name '(' argument_list ')'
+   | while_statement
+   | if_statement
+   | case_statement
+   | RETURN return_value</p></blockquote>
+
+<p>case_statement:</p>
+
+<pre><code>CASE scalar_exp when_statement... [ ELSE procedure_statement_list ] END CASE
+</code></pre>
+
+<p>  | CASE when_search_statement... [ ELSE procedure_statement_list ] END CASE</p>
+
+<p>when_statement: WHEN scalar_exp THEN procedure_statement_list</p>
+
+<p>when_search_statement: WHEN search_condition THEN procedure_statement_list</p>
+
+<p>if_statement: IF search_condition THEN procedure_statement_list if_opt_else END IF</p>
+
+<p>if_opt_else:</p>
+
+<pre><code>  /* empty */
+</code></pre>
+
+<p>   | ELSE procedure_statement_list
+   | ELSEIF search_condition THEN procedure_statement_list if_opt_else</p>
+
+<p>while_statement:</p>
+
+<pre><code>[ ident ':' ] WHILE search_condition DO procedure_statement_list END WHILE [ ident ]
+</code></pre>
+
+<p>return_statement: RETURN return_value</p>
+
+<p>return_value:</p>
+
+<pre><code>  select_no_parens_orderby 
+| search_condition 
+| TABLE '(' select_no_parens_orderby ')' | NULL
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <blockquote><p><p>SQL标准定义了三种弱一致性级别以及一致性的可串行化级别。违反可串行性的三种现象：不可重复读、读脏数据和读幻想。定义如下：</p>
 <p><strong>不可重复读</strong>（nonrepeatable read)。一个事务在执行过程中对同一对象读两次。第二次得到不同的值，尽管在此期间该事务并没有改变其值。</p>
