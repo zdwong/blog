@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Intern | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/intern/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-10-17T04:34:25+08:00</updated>
+  <updated>2013-11-05T00:18:07+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -26,12 +26,20 @@
 <p>4.客户端在传送数据时突然关闭，服务端就突然无故退出。后来用gdb调试，才发现SIGPIPE信号，因为在客户端关闭后，服务端还在给客户端在send（）数据，当管道已经破坏。当时解决是：忽略SIGPIPE信号，调用signal(SIGPIPE,SIG_IGN),且检测管道损坏后，不再往管道发送数据。</p>
 <p>5.本来是浮点型，直接乘以1000，转换为长整型，数值失真。后来通过floor函数来解决</p>
 对函数的使用不太熟悉，如recv函数
-{% codeblock recv函数 lang:c %}</p>
-
-<pre><code>ssize_t recv(int sockfd, void *buf, size_t nbytes, int flags);
-</code></pre>
-
-<p>{% endcodeblock %}
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>recv函数  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">ssize_t</span> <span class="n">recv</span><span class="p">(</span><span class="kt">int</span> <span class="n">sockfd</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">buf</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">nbytes</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>6.recv的返回值有正数，0，-1，-2，每一种返回都有其含义，整数代表接收到数据的长度，0代表断开连接，-1代表超时，-2代表错误。对于每一种的返回有其相应的处理。因为当时有个线程没有退出，是因为少考虑了一种情况。其实这个函数有更多的返回。</p>
 <p>7.网络上传输的数据不能用strlen函数来得出长度，而应该根据recv函数返回的长度.</p>
 <p>8.使用inet_addr()函数是把IP地址转化为网络序，而不是主机序长整形。自己实现函数转换，熟悉位操作。</p>
@@ -76,103 +84,193 @@
 <img src="/assets/images/sip.png" alt="&quot;SIP&quot;" />
 <p>现成已经有实现SIP协议解析的库，比较短小精悍的osip和其扩展的Exosip。我们的项目就是基于Exosip的基础上进行开发的。</p>
 osip比较重要的一个数据结构osip_message,用于封装发送和接受的数据。
-{% codeblock osip_message lang:c %}
-struct osip_message {</p>
-
-<pre><code>char *sip_version;
-osip_uri_t *req_uri;
-char *sip_method;           /**&lt;METHOD(SIP request only)*/
-int statue_code;            /**&lt;status Code(SIP answer only)*/
-char *reason_phrase;        /**&lt;Reason Phrase(SIP answer only)*/
-osip_from_t *from;          /**&lt;From header **/
-osip_to_t   *to;            /**&lt;To header**/
-......
-</code></pre>
-
-<p>} <br/>
-{% endcodeblock %}
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>osip_message  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">struct</span> <span class="n">osip_message</span> <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">char</span> <span class="o">*</span><span class="n">sip_version</span><span class="p">;</span>
+</span><span class='line'><span class="n">osip_uri_t</span> <span class="o">*</span><span class="n">req_uri</span><span class="p">;</span>
+</span><span class='line'><span class="kt">char</span> <span class="o">*</span><span class="n">sip_method</span><span class="p">;</span>           <span class="cm">/**&amp;lt;METHOD(SIP request only)*/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">statue_code</span><span class="p">;</span>            <span class="cm">/**&amp;lt;status Code(SIP answer only)*/</span>
+</span><span class='line'><span class="kt">char</span> <span class="o">*</span><span class="n">reason_phrase</span><span class="p">;</span>        <span class="cm">/**&amp;lt;Reason Phrase(SIP answer only)*/</span>
+</span><span class='line'><span class="n">osip_from_t</span> <span class="o">*</span><span class="n">from</span><span class="p">;</span>          <span class="cm">/**&amp;lt;From header **/</span>
+</span><span class='line'><span class="n">osip_to_t</span>   <span class="o">*</span><span class="n">to</span><span class="p">;</span>            <span class="cm">/**&amp;lt;To header**/</span>
+</span><span class='line'><span class="p">......</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span> <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 EXoisp扩展库支持事件类型的数据结构，用于识别状态的转移，到什么状态。
-{% codeblock osip_event lang:c %}
-struct eXosip_event{</p>
-
-<pre><code>eXosip_event_type_t type;
-char    textinfo[256];
-void*   external_reference;
-osip_message_t * request;
-osip_message_t * response;
-osip_message_t * ack;
-int tid;        /**unique id for transations(to be used for answers)**/
-int did;        /**unique id for SIP dialogs**/
-int rid;        /**unique id for registration**/
-int cid;        /**unique id for calls(but multiple dialogs!)**/
-int sid;        /**unique id for outgoing subscriptions*/
-int nid;        /**unique id for incoming subscription*/
-int ss_status;  
-int ss_reason;
-</code></pre>
-
-<p>}
-{% endcodeblock %}
-{% codeblock 库的使用：初始化eXosip lang:c %}</p>
-
-<h1>include &lt;eXosip2/eXosip.h></h1>
-
-<p>eXosip_t <em>ctx;
-int i;
-int port=5060;
-TRACE_INITIALIZE (6, NULL);
-ctx = eXosip_malloc();
-if (ctx==NULL)
-  return -1;
-i=eXosip_init(ctx);
-if (i!=0)
-  return -1;
-i = eXosip_listen_addr (ctx, IPPROTO_UDP, NULL, port, AF_INET, 0);/</em>Open a UDP socket for signalling*/
-if (i!=0)
-  {</p>
-
-<pre><code>eXosip_quit(ctx);
-fprintf (stderr, "could not initialize transport layer\n");
-return -1;
-</code></pre>
-
-<p>  }
-{% endcodeblock %}
-{% codeblock 处理eXosip2事件 lang:c %}
-eXosip_event_t *evt;                          <br/>
-for (;;)
-{</p>
-
-<pre><code>evt = eXosip_event_wait (ctx, 0, 50);
-eXosip_lock(ctx);
-eXosip_automatic_action (ctx);
-eXosip_unlock(ctx);
-if (evt == NULL)
-  continue;
-if (evt-&gt;type == EXOSIP_CALL_NEW)  /**Answer 180 Ringing to an incoming INVITE**/
-  {    
-    eXosip_lock (ctx);
-    eXosip_call_send_answer (ctx, evt-&gt;tid, 180, NULL);
-    eXosip_unlock (ctx);
-  }
-else if (evt-&gt;type == EXOSIP_CALL_ACK)
-  {
-  ....
-  ....
-  }
-else if (evt-&gt;type == EXOSIP_CALL_ANSWERED)
-  {
-  ....
-  ....
-  }
-else .....
-....
-....
-eXosip_event_free(evt);
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p></blockquote>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>osip_event  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">struct</span> <span class="n">eXosip_event</span><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">eXosip_event_type_t</span> <span class="n">type</span><span class="p">;</span>
+</span><span class='line'><span class="kt">char</span>    <span class="n">textinfo</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+</span><span class='line'><span class="kt">void</span><span class="o">*</span>   <span class="n">external_reference</span><span class="p">;</span>
+</span><span class='line'><span class="n">osip_message_t</span> <span class="o">*</span> <span class="n">request</span><span class="p">;</span>
+</span><span class='line'><span class="n">osip_message_t</span> <span class="o">*</span> <span class="n">response</span><span class="p">;</span>
+</span><span class='line'><span class="n">osip_message_t</span> <span class="o">*</span> <span class="n">ack</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">tid</span><span class="p">;</span>        <span class="cm">/**unique id for transations(to be used for answers)**/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">did</span><span class="p">;</span>        <span class="cm">/**unique id for SIP dialogs**/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">rid</span><span class="p">;</span>        <span class="cm">/**unique id for registration**/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">cid</span><span class="p">;</span>        <span class="cm">/**unique id for calls(but multiple dialogs!)**/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">sid</span><span class="p">;</span>        <span class="cm">/**unique id for outgoing subscriptions*/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">nid</span><span class="p">;</span>        <span class="cm">/**unique id for incoming subscription*/</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">ss_status</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">ss_reason</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>库的使用：初始化eXosip  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="n">include</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="n">eXosip2</span><span class="o">/</span><span class="n">eXosip</span><span class="p">.</span><span class="n">h</span><span class="o">&gt;&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">eXosip_t</span> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">ctx</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">port</span><span class="o">=</span><span class="mi">5060</span><span class="p">;</span>
+</span><span class='line'><span class="n">TRACE_INITIALIZE</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'><span class="n">ctx</span> <span class="o">=</span> <span class="n">eXosip_malloc</span><span class="p">();</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">ctx</span><span class="o">==</span><span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="n">i</span><span class="o">=</span><span class="n">eXosip_init</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="n">i</span> <span class="o">=</span> <span class="n">eXosip_listen_addr</span> <span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">IPPROTO_UDP</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">AF_INET</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span><span class="o">/&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">Open</span> <span class="n">a</span> <span class="n">UDP</span> <span class="n">socket</span> <span class="k">for</span> <span class="n">signalling</span><span class="err">*/</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">eXosip_quit</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'><span class="n">fprintf</span> <span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&quot;could not initialize transport layer</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>处理eXosip2事件  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="n">eXosip_event_t</span> <span class="o">*</span><span class="n">evt</span><span class="p">;</span>                          <span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">for</span> <span class="p">(;;)</span>
+</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">evt</span> <span class="o">=</span> <span class="n">eXosip_event_wait</span> <span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+</span><span class='line'><span class="n">eXosip_lock</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'><span class="n">eXosip_automatic_action</span> <span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'><span class="n">eXosip_unlock</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">evt</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">continue</span><span class="p">;</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">evt</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">EXOSIP_CALL_NEW</span><span class="p">)</span>  <span class="cm">/**Answer 180 Ringing to an incoming INVITE**/</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">eXosip_lock</span> <span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">eXosip_call_send_answer</span> <span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">evt</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">tid</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">eXosip_unlock</span> <span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evt</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">EXOSIP_CALL_ACK</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>  <span class="p">....</span>
+</span><span class='line'>  <span class="p">....</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">evt</span><span class="o">-&amp;</span><span class="n">gt</span><span class="p">;</span><span class="n">type</span> <span class="o">==</span> <span class="n">EXOSIP_CALL_ANSWERED</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>  <span class="p">....</span>
+</span><span class='line'>  <span class="p">....</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">else</span> <span class="p">.....</span>
+</span><span class='line'><span class="p">....</span>
+</span><span class='line'><span class="p">....</span>
+</span><span class='line'><span class="n">eXosip_event_free</span><span class="p">(</span><span class="n">evt</span><span class="p">);</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p></blockquote>
 ]]></content>
   </entry>
   

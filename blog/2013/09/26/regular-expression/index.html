@@ -126,6 +126,26 @@
 </span><span class='line'>如<span class="se">\(</span>, <span class="se">\t</span>;<span class="se">\{</span>1,15<span class="se">\}</span>代表的是1-15个。
 </span></code></pre></td></tr></table></div></figure>
 
+
+<blockquote><p><p>匹配host的IP地址的方式：</p></p></blockquote>
+
+<figure class='code'><figcaption><span>匹配host的IP地址的方式：  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/http:\/\/([\d.]*):[\d]*\/\S*/&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">&#39;http://192.168.1.100:8080/tr069&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">result</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">ip</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 

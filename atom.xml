@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-10-17T04:34:02+08:00</updated>
+  <updated>2013-11-05T00:18:07+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -160,7 +160,10 @@
 <p>虚拟机网络适配器的理解：最简单的是桥接（bridge），与主机同一个网段，使用VMnet0虚拟网卡，相当于虚拟交换机。NAT,与主机共享网络，使用VMnet8虚拟网卡，相当于平时路由器的NAT功能；Host only，与主机同一个网络，但不具备NAT功能，所以不能与主机共享上网，使用的VMnet1，内部可自动分配IP地址，说明虚拟机具有DHCP服务器。</p>
 <p>IPv6的ping:ping -6 fe80::abcd:befe:dc12:3458%5, %后面指的是从计算机哪个网口出去，如果不再同一个网络，就会ping不通。<p>
 <p>无线中应该了解802.11b,g,n的区别；在DSL中了解到pppoe，pppoa，ipoa，static ip，dynamic ip的区别；在ipv6中了解到ipv6的地址的使用范围；在简单的局域网中了解arp的欺骗，arp协议中在以太网中的作用；学习了PPP协议，DHCP协议等协议；学习了NAT的几种类型，及其NAT的穿透；学习了转发规则：DMZ，virtual server, upnp, port trigger的区别。</p>
-<p>编程中学习到动态链接库的操作，共享内存的操作，网络帧的解析（注意网络字节序），函数分工，字节位操作（特别是乘法和除法），switch和if_else的区别，栈溢出的注意，按目录编译Makefile文件。</p></p></blockquote>
+<p>编程中学习到动态链接库的操作，共享内存的操作，网络帧的解析（注意网络字节序），函数分工，字节位操作（特别是乘法和除法），switch和if_else的区别，栈溢出的注意，按目录编译Makefile文件。</p></p>
+
+<p><p>这个星期前三天主要是依据TR069的英文文档写中文文档，主要还是翻译，以加强对协议的理解。同时也对TD-8968的对TR069的测试，以进一步了解TD-8968对协议的支持情况，主要是了解其支持的TR098数据模型。</p>
+<p>之后也就是OpenACS，了解了基本操作，同时也有一些问题存在。也看了openACS的代码，</p></p></blockquote>
 ]]></content>
   </entry>
   
@@ -803,6 +806,26 @@
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>.代表的是任意字符，*代表的是多个，<span class="o">[</span>a-z|A-Z<span class="o">]</span>代表的是字母，^<span class="o">[</span>list<span class="o">]</span>代表的是以list开头，
 </span><span class='line'><span class="o">[</span>^list<span class="o">]</span>代表的是不是list的，<span class="o">[</span>list<span class="o">]</span><span class="nv">$代</span>表的是以list为结尾，匹配一些特殊符号需要转义，
 </span><span class='line'>如<span class="se">\(</span>, <span class="se">\t</span>;<span class="se">\{</span>1,15<span class="se">\}</span>代表的是1-15个。
+</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p><p>匹配host的IP地址的方式：</p></p></blockquote>
+
+<figure class='code'><figcaption><span>匹配host的IP地址的方式：  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/http:\/\/([\d.]*):[\d]*\/\S*/&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">&#39;http://192.168.1.100:8080/tr069&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">result</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nx">ip</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
