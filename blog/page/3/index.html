@@ -9,7 +9,8 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="今天没有training,arrange time by ourselves. 发现之前写的代码太没水平了，找素数的居然筛选法比传统方法还要慢，重复赋值太多和没有利用CPU的流水线。模式替换，发现自己居然整数选择时没有用switch代替if-else语句。memmove内存复制的字节对齐理解错误， &hellip;">
+  <meta name="description" content="今天主要是把之前写的DebugLog模块转变为可以多进程调用的共享模块，基本上测试成功，但还不知道怎样对共享内存区域进行加锁。另外，还要尝试将DebugLog模块做成内核模块，就如printf函数一样的模块。好多知识要学，踏实点，不要眼高手低。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +80,46 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/08/02/fifteenth-day/">手高眼低 迎刃而解</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-02T23:14:00+08:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>今天主要是把之前写的DebugLog模块转变为可以多进程调用的共享模块，基本上测试成功，但还不知道怎样对共享内存区域进行加锁。另外，还要尝试将DebugLog模块做成内核模块，就如printf函数一样的模块。好多知识要学，踏实点，不要眼高手低。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/08/02/fifteenth-day/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -440,46 +481,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/19/firth-day/">问心无愧 柳暗花明</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-19T23:45:00+08:00" pubdate data-updated="true">Jul 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><blockquote><p><p>今天是到tp-link的第五天，听了两个讲座，一个是关于tp-link的研发文化，另外一个是关于如何成为一名合格的研发工程师。说的清楚的，知其然,也要知其所以然。不要说“大概”，“似乎”这样的字眼。要有敬业精神，天下之事始于易，从懂得的下手，把难的事情做对，将易的事情做好。tp-link的研发氛围是不错的，只要肯攀登，肯定有自己表现的舞台。如果不是，那就是得过且过，终究在悔恨中消失。</p>
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/07/19/firth-day/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -502,12 +503,16 @@
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 110.0%'>English</a>  <a href='/blog/categories/entertainment' style='font-size: 110.0%'>Entertainment</a>  <a href='/blog/categories/health' style='font-size: 103.33333333333333%'>Health</a>  <a href='/blog/categories/intern' style='font-size: 106.66666666666667%'>Intern</a>  <a href='/blog/categories/journey' style='font-size: 110.0%'>Journey</a>  <a href='/blog/categories/library' style='font-size: 106.66666666666667%'>Library</a>  <a href='/blog/categories/life' style='font-size: 120.0%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 123.33333333333333%'>Linux</a>  <a href='/blog/categories/literature' style='font-size: 106.66666666666667%'>Literature</a>  <a href='/blog/categories/monetdb' style='font-size: 130.0%'>Monetdb</a>  <a href='/blog/categories/pjsip' style='font-size: 106.66666666666667%'>Pjsip</a>  <a href='/blog/categories/psychology' style='font-size: 106.66666666666667%'>Psychology</a>  <a href='/blog/categories/socket' style='font-size: 106.66666666666667%'>Socket</a>  <a href='/blog/categories/sql' style='font-size: 106.66666666666667%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.33333333333333%'>Window</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 109.47368421052632%'>English</a>  <a href='/blog/categories/entertainment' style='font-size: 109.47368421052632%'>Entertainment</a>  <a href='/blog/categories/health' style='font-size: 103.15789473684211%'>Health</a>  <a href='/blog/categories/intern' style='font-size: 106.3157894736842%'>Intern</a>  <a href='/blog/categories/journey' style='font-size: 109.47368421052632%'>Journey</a>  <a href='/blog/categories/library' style='font-size: 106.3157894736842%'>Library</a>  <a href='/blog/categories/life' style='font-size: 118.94736842105263%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 122.10526315789474%'>Linux</a>  <a href='/blog/categories/literature' style='font-size: 106.3157894736842%'>Literature</a>  <a href='/blog/categories/monetdb' style='font-size: 128.42105263157896%'>Monetdb</a>  <a href='/blog/categories/pjsip' style='font-size: 106.3157894736842%'>Pjsip</a>  <a href='/blog/categories/psychology' style='font-size: 106.3157894736842%'>Psychology</a>  <a href='/blog/categories/socket' style='font-size: 106.3157894736842%'>Socket</a>  <a href='/blog/categories/sql' style='font-size: 106.3157894736842%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.15789473684211%'>Window</a> </span>
 </section>
 
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/01/intern-summary/">你知道了你 你就不是你</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/10/16/follow-version/">承上启下 向下兼容</a>
@@ -523,10 +528,6 @@
     
       <li class="post">
         <a href="/blog/2013/10/14/fairy-story/">青衫磊落险峰行</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/10/fact-opinion/">鞭辟入里	明辨事理</a>
       </li>
     
   </ul>
