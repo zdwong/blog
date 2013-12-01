@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-12-01T23:46:45+08:00</updated>
+  <updated>2013-12-02T00:05:26+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -20,6 +20,8 @@
     <id>http://coolbrain.github.com/blog/2013/12/01/intern-summary</id>
     <content type="html"><![CDATA[<p>实习期间我被分配完成的项目是openACS开发，可是openACS是Java开发，且是J2EE的范畴。我之前以为自己来这个公司是做C语言，网络方面的开发的，但却分配到做Java的，当时就不想在上面花时间，因此开始做的两个星期都是敷衍了事，再继续了两个星期，却发现Java易用，有丰富的类库API，J2EE框架清晰。与之前对Java的印象截然不同，于是才开始不断学习Java，继续openACS的开发。显然，在刚开始之前，我没有转变自己的观念，其实编程，在于的不是使用哪一种语言，而是在于从整体上把握编程思想。不论对于何种语言，都适用。在时间安排上，只要及早地改变心态，可以提前地完成任务，做更多的工作。</p>
 
+
+<blockquote><p><!-- more --></p></blockquote>
 
 <p>对于答辩，有几点需要改进：</p>
 
