@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Java | ForgeBrain]]></title>
+  <link href="http://coolbrain.github.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://coolbrain.github.com/"/>
+  <updated>2013-12-02T22:00:01+08:00</updated>
+  <id>http://coolbrain.github.com/</id>
+  <author>
+    <name><![CDATA[ForgeBrain]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Java的菜鸟]]></title>
+    <link href="http://coolbrain.github.com/blog/2013/12/02/newbie-of-java/"/>
+    <updated>2013-12-02T20:05:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2013/12/02/newbie-of-java</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+</feed>
