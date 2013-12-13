@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2013-12-13T00:08:14+08:00</updated>
+  <updated>2013-12-13T21:55:28+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -18,7 +18,23 @@
     <link href="http://coolbrain.github.com/blog/2013/12/02/newbie-of-java/"/>
     <updated>2013-12-02T20:05:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/12/02/newbie-of-java</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<p>做了一个多月的Java的感受：</p>
+
+
+<p>Java的正则表达式的易用性</p>
+
+
+<p>Java的容器Collection类库，String、Array，list，map等，相当好用</p>
+
+
+<p>Java的servlet技术，request，response，session等</p>
+
+
+<p>Java的JSF使用，不过我比较讨厌控件的使用。因为我不愿意学这些东西。</p>
+
+
+<p>Java的EJB企业服务Bean，Java的soap类库，Java的JMS通信。</p>
+
 ]]></content>
   </entry>
   
