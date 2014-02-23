@@ -469,15 +469,7 @@
   </header>
 
 
-  <div class="entry-content"><blockquote><p><p>由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换，在Linux下的命令为：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>批量替换  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;*.[c|h]&quot;</span> | xargs perl -pi -e <span class="s2">&quot;s|PJ_DEF\(([^\(]*)\)|$1|g&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>批量地找c和h文件，替换PJ_DEF宏，但保留参数不变。掌握正则表达式，对提高工作效率有比较大的帮助。</p>
+  <div class="entry-content"><blockquote><p><p>由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换，在Linux下的命令为：</p>
 </div>
   
   
