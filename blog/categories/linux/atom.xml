@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2014-02-23T16:22:56+08:00</updated>
+  <updated>2014-02-23T23:36:40+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -18,7 +18,15 @@
     <link href="http://coolbrain.github.com/blog/2014/02/23/nginx-web-server/"/>
     <updated>2014-02-23T11:31:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2014/02/23/nginx-web-server</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<blockquote><p><p>nginx是高性能的代理服务器，可支持web和mail两种代理，多进程多线程的模块化的服务端设计。</p>
+<!-- more -->
+<p>1.nginx的主进程与工作进程的通信方式，域套接字；</p>
+<p>2.采用的是事件驱动模型，epoll模型，包括网络事件和时钟事件；</p>
+<p>3.对http请求的处理类似于管道的处理，模块拓展性好；</p>
+<p>4.配置文件通过命令解析，存储到对应的结构体，且配置文件有分层的配置，http，server，location的配置，在不同的情况下，使用不同的
+处理方式，配置文件如同指示牌，控制着程序的执行流程和一些属性。</p>
+<p>5.基于有多少个CPU核，配置多少个工作进程，以免在Linux抢占式方式下，导致进程上下文切换，导致性能的降低；</p>
+<p>6.可以配置工作进程里有多少条线程，线程上下文切换的开销比进程上下文切换的开销少得多，因此可以设置到每个进程里有128条线程，有多个线程的作用在于在当前线程需要等待磁盘或网络事件时，可以切换到另外一条线程执行，以提高CPU的利用率；线程间通信通过信号量，不过这里使用的是pthread_cond_signal和pthread_cond_wait,而不是sem_post和sem_wait;</p></p></blockquote>
 ]]></content>
   </entry>
   
