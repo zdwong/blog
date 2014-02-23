@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2014-02-23T11:38:24+08:00</updated>
+  <updated>2014-02-23T12:02:45+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -21,15 +21,15 @@
     <content type="html"><![CDATA[<p>实习期间，课题是openacs的继续开发，由于openacs是Java开发，因此做了两个月的Java开发，稍微总结一下：</p>
 
 
-<p>Java的正则表达式的易用性,在当时的项目里，使用正则表达式处理字符串相当好，一下子就把问题解决了</p>
-
-
 <p>Java的容器Collection类库，String、Array，list，map等，特别是与数据库操作结合在一起的时候，但性能比起直接使用SQL会略差些。但Java的接口如Comparable，serialize等，实现对象的排序和序列化。并且懂得如何将对象序列化保存到数据库，然后再从数据库中读出，也同时使用blob字段保存大容量的数据字段。</p>
 
 
 <blockquote><p><!-- more --></p></blockquote>
 
 <p>Java的servlet技术，request，response，session，cookie等，这些封装了http的对象，不过session是使http具有会话性的，而cookie主要是保存用户的信息。</p>
+
+
+<p>Java的正则表达式的易用性,在当时的项目里，使用正则表达式处理字符串相当好，一下子就把问题解决了</p>
 
 
 <p>Java的JSF使用，不过我比较讨厌控件的使用。因为我不愿意学这些东西。这只是我的借口，这些东西的设计都是比较类似的，学会一个，基本上就会使用其它的一些控件。</p>
