@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2014-02-23T01:37:10+08:00</updated>
+  <updated>2014-02-23T11:38:24+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -18,7 +18,7 @@
     <link href="http://coolbrain.github.com/blog/2013/12/02/newbie-of-java/"/>
     <updated>2013-12-02T20:05:00+08:00</updated>
     <id>http://coolbrain.github.com/blog/2013/12/02/newbie-of-java</id>
-    <content type="html"><![CDATA[<p>做了一个多月的Java的感受：</p>
+    <content type="html"><![CDATA[<p>实习期间，课题是openacs的继续开发，由于openacs是Java开发，因此做了两个月的Java开发，稍微总结一下：</p>
 
 
 <p>Java的正则表达式的易用性,在当时的项目里，使用正则表达式处理字符串相当好，一下子就把问题解决了</p>
