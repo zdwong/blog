@@ -9,8 +9,7 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。
-I/O复用典型应用在下列的网络场合：
+  <meta name="description" content="进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。 I/O复用典型应用在下列的网络场合：
 1.当客户处理多个描述符（ &hellip;">
   
 
@@ -108,12 +107,12 @@ I/O复用典型应用在下列的网络场合：
 
 
 <div class="entry-content"><blockquote><p><p>进程需要一种预先告知内核的能力，使得内核一旦发现进程指定的一个或多个I/O条件就绪（输入已准备好被读取，或描述符已能承接更多的输出），它就通知进程。这个能力称为I/O复用，是由select和poll这两个函数支持。</p>
+<!-- more -->
 <p>I/O复用典型应用在下列的网络场合：</p>
 <p>1.当客户处理多个描述符（通常是交互式输入和网络套接字）时，必须使用I/O 复用。</p>
 <p>2.如果一个TCP服务器既要处理监听套接字，又要处理已连接套接字，一般就要使用I/O复用。</p>
 <p>3.如果一个服务器既要处理TCP，又要处理UDP，一般使用I/O复用。</p>
 <p>4.如果服务器要处理多个服务或者多个协议（inetd守护进程），一般使用I/O复用。</p>
-<!-- more -->
 <p><strong>select函数</strong></p></p></blockquote>
 
 <figure class='code'><figcaption><span>select  </span></figcaption>
