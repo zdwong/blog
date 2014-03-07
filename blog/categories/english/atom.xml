@@ -4,7 +4,7 @@
   <title><![CDATA[Category: English | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/english/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2014-02-23T23:36:40+08:00</updated>
+  <updated>2014-03-07T23:26:28+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -50,28 +50,18 @@
 <!-- more -->
 <p> I am willing to share a saying:"yesterday is history,tomorrow is mystery,but today is gift." So Today is precious  because it would be yesterday's result and decides the tomorrow.Don't let myself be addicted in guilty of yesterday's mistakes.In the meantime, don't let tomorrow's uncertainty upset me.</p>
 <p><strong>Because I am a programmer, this blog is used as the analysis of monetdb,including source code and design architecture.</strong>this is the example of highlighting the code</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>example  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="kt">void</span> <span class="nf">main</span><span class="p">()</span>
-</span><span class='line'><span class="p">{</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Action speak louder than Voice!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="n">printf</span><span class="p">(</span><span class="s">&quot;This could work elegant!&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+{% codeblock example lang:c %}
+void main()
+{</p>
+
+<pre><code>int i=0;
+for(i=0; i&lt; 100; i++)
+    printf("Action speak louder than Voice!\n");
+printf("This could work elegant!");
+</code></pre>
+
+<p>}
+{% endcodeblock %}
 <p>Ok, the things I should have been done will be finished now!</p>
 <p>Luckily, I would show some pictures when were token in climbing Baiyun mountain with brothers.</p>
 <img src="/assets/images/mountain.jpg" alt="&quot;BAT&quot;" />

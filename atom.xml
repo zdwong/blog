@@ -4,7 +4,7 @@
   <title><![CDATA[ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2014-02-23T23:36:40+08:00</updated>
+  <updated>2014-03-07T23:26:02+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -12,6 +12,1112 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[linux防止僵尸进程]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/zombie-process/"/>
+    <updated>2014-03-07T22:37:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/zombie-process</id>
+    <content type="html"><![CDATA[<blockquote><p><p>平时如果不太注意创建子进程的处理，有可能会导致僵尸进程，以至于有一天系统无法创建进程，超过系统允许的最大进程数。如果不捕捉SIGCHLD信号，子进程退出时，系统默认释放进程的内核结构。如果捕捉了，但父进程没有调用wait或waitpid等函数获取子进程的退出状态，那么在父进程还没有退出时，子进程就会成为僵尸进程。另外一种情况，由于linux信号不等待，可能丢失了信号，父进程也没有获取子进程的退出状态。</p>
+<!-- more --></p></blockquote>
+
+<figure class='code'><figcaption><span>linux防止僵尸进程的代码  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;sys/wait.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/types.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;signal.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;errno.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">sig_child</span><span class="p">(</span><span class="kt">int</span> <span class="n">signo</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//解决信号不排队的状况，假如两个子进程同时退出，信号SIGCHLD只有一个，通过while俩防止出现这种情况</span>
+</span><span class='line'>  <span class="k">while</span> <span class="p">((</span><span class="n">pid</span> <span class="o">=</span> <span class="n">waitpid</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Handler reaped child %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">pid</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">ECHILD</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;waitpid error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">return</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">1024</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//建立SIGCHLD信号处理函数，获取子进程的退出状态，防止出现僵尸进程</span>
+</span><span class='line'>  <span class="k">if</span><span class="p">(</span><span class="n">signal</span><span class="p">(</span><span class="n">SIGCHLD</span><span class="p">,</span> <span class="n">sig_child</span><span class="p">)</span> <span class="o">==</span> <span class="n">SIG_ERR</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;signal error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">((</span><span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello from child %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">getpid</span><span class="p">());</span>
+</span><span class='line'>          <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//处理慢系统调用被信号打断的情况</span>
+</span><span class='line'>  <span class="k">while</span> <span class="p">((</span><span class="n">n</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">STDIN_FILENO</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">)))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">EINTR</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;read error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Parent processing input</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[popen函数执行程序]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/popen/"/>
+    <updated>2014-03-07T22:37:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/popen</id>
+    <content type="html"><![CDATA[<blockquote><p><p>使用linux定时器可以定时的处理一些事务或者定时的发出一些信号，如SIGALRM，SIGINT，SIGQUIT等信号。</p>
+<!-- more --></p></blockquote>
+
+<figure class='code'><figcaption><span>popen函数代码  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;errno.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;fcntl.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/wait.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#define  MAX_FD      1024</span>
+</span><span class='line'><span class="k">static</span> <span class="n">pid_t</span> <span class="o">*</span><span class="n">childPid</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">FILE</span> <span class="o">*</span><span class="nf">popen_cmd</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pCmd</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pType</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">pipeFd</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>  <span class="kt">FILE</span> <span class="o">*</span><span class="n">pFile</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">pCmd</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">pType</span> <span class="o">!=</span> <span class="sc">&#39;r&#39;</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">pType</span> <span class="o">!=</span> <span class="sc">&#39;w&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">pType</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">errno</span> <span class="o">=</span> <span class="n">EINVAL</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">childPid</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">childPid</span> <span class="o">=</span> <span class="p">(</span><span class="n">pid_t</span> <span class="o">*</span><span class="p">)</span><span class="n">calloc</span><span class="p">(</span><span class="n">MAX_FD</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">pid_t</span><span class="p">));</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">childPid</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">pipe</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">((</span><span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="c1">//type是对父进程而言，当为&#39;r&#39;时，子进程应该关闭读端.</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pType</span> <span class="o">==</span> <span class="sc">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">close</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'>          <span class="c1">// 把STDOUT_FILENO重定向pipeFd[1]</span>
+</span><span class='line'>          <span class="n">dup2</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">STDOUT_FILENO</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">close</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">close</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span><span class='line'>          <span class="n">dup2</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">STDIN_FILENO</span><span class="p">);</span>
+</span><span class='line'>          <span class="n">close</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">MAX_FD</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">childPid</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="n">close</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/sh&quot;</span><span class="p">,</span> <span class="s">&quot;sh&quot;</span><span class="p">,</span> <span class="s">&quot;-c&quot;</span><span class="p">,</span> <span class="n">pCmd</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">_exit</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">pType</span> <span class="o">==</span> <span class="sc">&#39;r&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">close</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">((</span><span class="n">pFile</span> <span class="o">=</span> <span class="n">fdopen</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pType</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">close</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">((</span><span class="n">pFile</span> <span class="o">=</span> <span class="n">fdopen</span><span class="p">(</span><span class="n">pipeFd</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pType</span><span class="p">))</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">childPid</span><span class="p">[</span><span class="n">fileno</span><span class="p">(</span><span class="n">pFile</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">pFile</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">pclose_cmd</span><span class="p">(</span><span class="kt">FILE</span> <span class="o">*</span><span class="n">pFile</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="n">status</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">childPid</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">pFile</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">goto</span> <span class="n">error</span><span class="p">;</span>
+</span><span class='line'>      
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">fd</span> <span class="o">=</span> <span class="n">fileno</span><span class="p">(</span><span class="n">pFile</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">((</span><span class="n">pid</span> <span class="o">=</span> <span class="n">childPid</span><span class="p">[</span><span class="n">fd</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">goto</span> <span class="n">error</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">childPid</span><span class="p">[</span><span class="n">fd</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">fclose</span><span class="p">(</span><span class="n">pFile</span><span class="p">)</span> <span class="o">==</span> <span class="n">EOF</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">EINTR</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'><span class="nl">error:</span>
+</span><span class='line'>  <span class="n">errno</span> <span class="o">=</span> <span class="n">EINVAL</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">line</span><span class="p">[</span><span class="mi">256</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>  <span class="kt">FILE</span> <span class="o">*</span><span class="n">pFile</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">pFile</span> <span class="o">=</span> <span class="n">popen_cmd</span><span class="p">(</span><span class="s">&quot;ifconfig eth0&quot;</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">pFile</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">while</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="n">pFile</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">pclose_cmd</span><span class="p">(</span><span class="n">pFile</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[linux定时器]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/timer/"/>
+    <updated>2014-03-07T22:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/timer</id>
+    <content type="html"><![CDATA[<blockquote><p><p>使用linux定时器可以定时的处理一些事务或者定时的发出一些信号，如SIGALRM，SIGINT，SIGQUIT等信号。</p>
+<!-- more --></p></blockquote>
+
+<figure class='code'><figcaption><span>linux定时器的代码  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;signal.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;time.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;errno.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/time.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/types.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="cp">#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); } while (0)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">sig_handler</span><span class="p">(</span><span class="kt">int</span> <span class="n">sig</span><span class="p">,</span> <span class="n">siginfo_t</span> <span class="o">*</span><span class="n">si</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">uc</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Caught signal %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span>   <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">timer_t</span> <span class="n">timerid</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">sigevent</span> <span class="n">sev</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">itimerspec</span> <span class="n">its</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigset_t</span> <span class="n">newMask</span><span class="p">,</span> <span class="n">oldMask</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">sigaction</span> <span class="n">sa</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">sa</span><span class="p">.</span><span class="n">sa_flags</span> <span class="o">=</span> <span class="n">SA_SIGINFO</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sa</span><span class="p">.</span><span class="n">sa_sigaction</span> <span class="o">=</span> <span class="n">sig_handler</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sa</span><span class="p">.</span><span class="n">sa_mask</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGINT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sa</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>     <span class="n">errExit</span><span class="p">(</span><span class="s">&quot;sigaction&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMask</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMask</span><span class="p">,</span> <span class="n">SIGINT</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">newMask</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>     <span class="n">errExit</span><span class="p">(</span><span class="s">&quot;sigprocmask&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">sev</span><span class="p">.</span><span class="n">sigev_notify</span> <span class="o">=</span> <span class="n">SIGEV_SIGNAL</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sev</span><span class="p">.</span><span class="n">sigev_signo</span> <span class="o">=</span> <span class="n">SIGINT</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sev</span><span class="p">.</span><span class="n">sigev_value</span><span class="p">.</span><span class="n">sival_ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">timerid</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">timer_create</span><span class="p">(</span><span class="n">CLOCK_REALTIME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">timerid</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>     <span class="n">errExit</span><span class="p">(</span><span class="s">&quot;timer_create&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">its</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">its</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">=</span> <span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">timer_settime</span><span class="p">(</span><span class="n">timerid</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">its</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">errExit</span><span class="p">(</span><span class="s">&quot;timer_settime&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_SETMASK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>     <span class="n">errExit</span><span class="p">(</span><span class="s">&quot;sigprocmask&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[linux信号处理的应用]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/system-sleep/"/>
+    <updated>2014-03-07T22:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/system-sleep</id>
+    <content type="html"><![CDATA[<blockquote><p><p>linux的system和sleep都涉及到信号的处理，以下是关于在实现system函数和sleep所涉及到的原理。</p>
+<p>1.每个进程只有一个闹钟时钟，alarm；且alarm和setitimer共享一个定时器，因此它们会互相干扰。不过通过timer_create和timer_settime可以创建定时器和设置定时器，同时所发送的信号不限定于SIGALRM，可以是其它的SIGINT，SIGQUIT等信号。</p>
+<!-- more -->
+<p>2.sigsuspend(sigset_t *set)阻塞等待不再集合set的信号，并且调用对应的信号处理函数。sigsuspending保留发生的信号；</p>
+<p>3.sigprocmask屏蔽信号集或打开信号集，返回之前的信号集，以用于未来还原到原来的状态。</p>
+<p>4.sigaction设置信号对应的信号处理函数，和返回之前的信号处理函数，以便于未来还原到原来的处理信号处理函数</p>
+<p>5.sleep可以被各种信号打断</p>
+<p>6.信号实现父子进程间的同步，sigsuspend</p>
+<p>7.popen创建管道，fork产生一个子进程，关闭管道的不使用端，执行一个shell以运行命令，然后等待命令结束</p>
+<p>8.pipe(fd)管道是半双工的，socketpair域套接字是全双工的</p></p></blockquote>
+
+<figure class='code'><figcaption><span>system和sleep函数  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cp">#include &lt;signal.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;unistd.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;errno.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdlib.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;stdio.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;string.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;time.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/wait.h&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;sys/time.h&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">sig_alarm</span><span class="p">(</span><span class="kt">int</span> <span class="n">signo</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;catch SIGALRM in sleep_cmd</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="nf">sig_real_alarm</span><span class="p">(</span><span class="kt">int</span> <span class="n">signo</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;catch real SIGALRM</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">system_cmd</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pCmd</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">pid_t</span> <span class="n">pid</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">status</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigset_t</span> <span class="n">newMask</span><span class="p">,</span> <span class="n">oldMask</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">sigaction</span> <span class="n">currAction</span><span class="p">,</span> <span class="n">oldAction</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">pCmd</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">currAction</span><span class="p">.</span><span class="n">sa_handler</span> <span class="o">=</span> <span class="n">SIG_IGN</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">currAction</span><span class="p">.</span><span class="n">sa_flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">currAction</span><span class="p">.</span><span class="n">sa_mask</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGINT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">currAction</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGQUIT</span><span class="p">,</span><span class="o">&amp;</span><span class="n">currAction</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMask</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">oldMask</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMask</span><span class="p">,</span> <span class="n">SIGCHLD</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">newMask</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="n">pid</span> <span class="o">=</span> <span class="n">fork</span><span class="p">())</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">status</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">pid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">sigaction</span><span class="p">(</span><span class="n">SIGINT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">sigaction</span><span class="p">(</span><span class="n">SIGQUIT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_SETMASK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">execl</span><span class="p">(</span><span class="s">&quot;/bin/bash&quot;</span><span class="p">,</span> <span class="s">&quot;sh&quot;</span><span class="p">,</span> <span class="s">&quot;-c&quot;</span><span class="p">,</span> <span class="n">pCmd</span><span class="p">,</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">_exit</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">while</span> <span class="p">(</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">status</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">EINTR</span><span class="p">)</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="n">status</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>              <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGINT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGQUIT</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_SETMASK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="p">(</span><span class="n">status</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//sleep_cmd未处理与以前设置的闹钟的交互作用, 现在的处理会使之前设置的闹钟失效</span>
+</span><span class='line'><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">sleep_cmd</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">nsec</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">sigset_t</span> <span class="n">newMask</span><span class="p">,</span> <span class="n">oldMask</span><span class="p">,</span> <span class="n">suspendMask</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">sigaction</span> <span class="n">newAction</span><span class="p">,</span> <span class="n">oldAction</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">uslept</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">newAction</span><span class="p">.</span><span class="n">sa_handler</span> <span class="o">=</span> <span class="n">sig_alarm</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newAction</span><span class="p">.</span><span class="n">sa_mask</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">newAction</span><span class="p">.</span><span class="n">sa_flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">newAction</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;set SIGALRM new action error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMask</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">newMask</span><span class="p">,</span> <span class="n">SIGALRM</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">newMask</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">alarm</span><span class="p">(</span><span class="n">nsec</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">suspendMask</span> <span class="o">=</span> <span class="n">oldMask</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigdelset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">suspendMask</span><span class="p">,</span> <span class="n">SIGALRM</span><span class="p">);</span>   <span class="c1">//不阻塞SIGALRM</span>
+</span><span class='line'>  <span class="n">sigsuspend</span><span class="p">(</span><span class="o">&amp;</span><span class="n">suspendMask</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">uslept</span> <span class="o">=</span> <span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldAction</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;set SIGALRM old Action error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">sigprocmask</span><span class="p">(</span><span class="n">SIG_SETMASK</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oldMask</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="n">uslept</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">cmdLen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">remainSec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="n">cmdBuff</span><span class="p">[</span><span class="mi">1024</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span><span class='line'>  <span class="c1">//struct itimerval its;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">itimerspec</span> <span class="n">itms</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">sigaction</span> <span class="n">sigAction</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">timer_t</span> <span class="n">timerid</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">struct</span> <span class="n">sigevent</span> <span class="n">sev</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;no cmd of argv</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="n">index</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">sprintf</span><span class="p">(</span><span class="n">cmdBuff</span> <span class="o">+</span> <span class="n">cmdLen</span><span class="p">,</span> <span class="s">&quot;%s &quot;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
+</span><span class='line'>      <span class="n">cmdLen</span> <span class="o">+=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">cmdBuff</span><span class="p">[</span><span class="n">cmdLen</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">cmdBuff</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">system_cmd</span><span class="p">(</span><span class="n">cmdBuff</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">sigAction</span><span class="p">.</span><span class="n">sa_handler</span> <span class="o">=</span> <span class="n">sig_real_alarm</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sigAction</span><span class="p">.</span><span class="n">sa_mask</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">sigAction</span><span class="p">.</span><span class="n">sa_flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sigaction</span><span class="p">(</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sigAction</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/*</span>
+</span><span class='line'><span class="cm"> its.it_value.tv_sec = 1;</span>
+</span><span class='line'><span class="cm"> its.it_value.tv_usec = 0;</span>
+</span><span class='line'><span class="cm"> its.it_interval.tv_sec = 1;</span>
+</span><span class='line'><span class="cm"> its.it_interval.tv_usec = 0;</span>
+</span><span class='line'><span class="cm"> if (setitimer(ITIMER_REAL, &amp;its, NULL)) </span>
+</span><span class='line'><span class="cm"> {</span>
+</span><span class='line'><span class="cm">     printf(&quot;set timer error\n&quot;);</span>
+</span><span class='line'><span class="cm"> }*/</span>
+</span><span class='line'>  <span class="c1">//setitimer 与 alarm共用一个定时器，互相干扰。</span>
+</span><span class='line'>  <span class="c1">//创建定时器，发送的信号为SIGALRM</span>
+</span><span class='line'>  <span class="n">sev</span><span class="p">.</span><span class="n">sigev_notify</span> <span class="o">=</span> <span class="n">SIGEV_SIGNAL</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sev</span><span class="p">.</span><span class="n">sigev_signo</span> <span class="o">=</span> <span class="n">SIGALRM</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">sev</span><span class="p">.</span><span class="n">sigev_value</span><span class="p">.</span><span class="n">sival_ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">timerid</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">timer_create</span><span class="p">(</span><span class="n">CLOCK_REALTIME</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">sev</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">timerid</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;timer_create error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">itms</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">itms</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">itms</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="n">itms</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">itms</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_nsec</span> <span class="o">=</span> <span class="n">itms</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">//设置定时器</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">timer_settime</span><span class="p">(</span><span class="n">timerid</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">itms</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;timer_settime error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">remainSec</span> <span class="o">=</span> <span class="n">sleep_cmd</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span><span class='line'>  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;remain second: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">remainSec</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="cm">/*setitimer(ITIMER_REAL, &amp;its, NULL);*/</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span><span class='line'>      <span class="n">raise</span><span class="p">(</span><span class="n">SIGKILL</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[shell自动打包修改文件]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/get-changed-file/"/>
+    <updated>2014-03-07T22:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/get-changed-file</id>
+    <content type="html"><![CDATA[<blockquote><p><p>每一次写完代码，都需要将代码发给项目负责人合入到svn上。但时间一长，自己就连修改了哪些源文件也不知道了。于是思来想去，还是写一个靠谱的脚本好一些，这样可以减轻脑力的负担，以后这样繁琐的工作就留给脚本去做了，不亦乐哉，所谓穷则思变。</p>
+<!-- more --></p></blockquote>
+
+<figure class='code'><figcaption><span>查找修改的文件  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#查找在一段时间内修改过的.c和.h文件，并把其导出到对应的目录下</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;please input the file which you want to search the modified: &quot;</span>   searchFile
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;please input the file which you want to save: &quot;</span>    modifydir
+</span><span class='line'><span class="nb">read</span> -p <span class="s2">&quot;please input the range day of the file modified: &quot;</span>  withinDay
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$searchFile&quot;</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nv">searchFile</span><span class="o">=</span>linux_bcm9970v1
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$modifydir&quot;</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nv">modifydir</span><span class="o">=</span>linux_work
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$withinDay&quot;</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nv">withinDay</span><span class="o">=</span>2
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">[</span> -d <span class="nv">$modifydir</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="nv">$modifydir</span> <span class="o">&amp;&amp;</span> rm -rf <span class="nv">$modifydir</span>.tar.gz
+</span><span class='line'>mkdir -p <span class="nv">$modifydir</span>
+</span><span class='line'><span class="nv">current_dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">findlist</span><span class="o">=</span><span class="k">$(</span>find <span class="nv">$current_dir</span>/<span class="nv">$searchFile</span> -name <span class="s2">&quot;*\.[ch]&quot;</span> -mtime  -<span class="nv">$withinDay</span> -print<span class="k">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for </span>list in <span class="nv">$findlist</span>
+</span><span class='line'><span class="k">do</span>
+</span><span class='line'><span class="k">  </span><span class="nv">realPath</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="nv">$list</span> | sed s/<span class="nv">$searchFile</span>/<span class="nv">$modifydir</span>/g | sed <span class="s1">&#39;s/\/[a-zA-Z0-9_]*\.[ch]//g&#39;</span> <span class="k">)</span>
+</span><span class='line'>  <span class="o">[</span> -d <span class="nv">$realPath</span> <span class="o">]</span> <span class="o">||</span> mkdir -p <span class="nv">$realPath</span>
+</span><span class='line'>  cp <span class="nv">$list</span> <span class="nv">$realPath</span>
+</span><span class='line'><span class="k">done</span>
+</span><span class='line'>
+</span><span class='line'>tar -zcvf <span class="nv">$modifydir</span>.tar.gz <span class="nv">$modifydir</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[nginx服务器 性能至上]]></title>
@@ -479,723 +1585,6 @@
 <p>国庆第三天是深圳的红树林，闻说里面可以看到比较多的鸟，可谓百鸟争鸣。当我们去到的时候，感觉没什么特别，就是带有海湾的公园。不过，在走之前，买了一个椰子，第一次享受喝椰子汁的快感。接着去了市区的莲花山，从莲花山上鸟瞰深圳的中心，高楼林立，器宇轩昂。之后就在市区中心徘徊，市民中心，深圳书城，少年宫&#8230;</p>
 <p>国庆的第四天送别了故人，就把精力集中于解决自身的问题，首当其冲的就是耳鸣。我说多少个叫自己重视这些问题也无济于事，最紧要自己心理明白，这问题不能忽视，要用心地呵护。发现在医院看书的效果挺好，在这里才会真正感受病是如此地真实，假如再不珍惜，再继续这样下去，只会抱恨终生。所以当自己不想看书的时候，可以到医院去看，相信是一个不错的选择，:)</p>
 <p>晚上又和宿友讨论了下现实和理想之间的差距。主要的观点是：”电影，电视剧，歌曲，只是用来陶冶情操的，而不是用来实现理想的“，因为好多些时候这些都是理想状态，在现实可能到处碰壁，事与愿违。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[锦绣中华 民族风情]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/10/02/splendid-china/"/>
-    <updated>2013-10-02T00:15:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/10/02/splendid-china</id>
-    <content type="html"><![CDATA[<blockquote><p><p>来深圳一段时间，之前去过世界之窗，是各大世界名胜古迹的赝品，觉得还挺好看的。于是决定继续游览深圳，国庆的第一个目标地点就是锦绣中华文化村，其实是分为锦绣中华（中国各个地方的名胜古迹的赝品）和中国民俗文化村，今日的游览路线冥冥之中注定是正确的。向右走，去中国民俗文化村。</p>
-<!-- more -->
-由于无带相机，只能用手机将就，在中国民俗文化村的我。
-<img src="http://coolbrain.github.com/assets/images/splendChina/me.jpg" alt="&quot;me&quot;" />
-<p>去中国民俗文化村的正确所在是能看到各色各样的表演，即各个少数民族的特色的表演。苗族的表演：芦笙场恋歌，讲解了作为苗家准新郎的标准，分别为能喝（酒），多才多艺，能干（挑一百二十斤的担子）；
-附苗家女子的表演：
-<img src="http://coolbrain.github.com/assets/images/splendChina/miao_national.jpg" alt="&quot;miao_national&quot;" />
-<p>摩梭族的表演：独特的母系社会风情，并讲解了走婚；黎族的陀螺表演；看了龙腾天下和走进亚洲之心影片。并看了三场大型的表演，一就是汇聚五十六个民族，展现各个民族风情的大表演；二就是金戈王朝，展现的是真实的历史战争场面，各种马技的表演；
-<img src="http://coolbrain.github.com/assets/images/splendChina/warfield.jpg" alt="&quot;warfield&quot;" />
-<p>三就是龙凤舞中华，大型特效，展现中华的民俗风情。十一去这地方，虽然比较多人，但同时看表演的机会也大大增加，觉得物有所值。</p>
-<p>而另外一个锦绣中华，就觉得有些闷了。从布达拉宫，嘉峪关，莫高窟，黄果树瀑布，秦兵马俑，故宫，中山陵，颐和园，圆明园，西湖，黄鹤楼，云南大理三塔，桂林山水等走出来，觉得之前活生生的表演比这些东西好看多了，因为这些都是赝品，没有宏伟壮观，没有真实的感觉，和在电脑上看照片的效果一样，那就失去了其意义。</p>
-<p>综合来说，这个十一的第一日过得还是相当不错的。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[周星驰不只是一个噱头]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/09/29/funny-hero/"/>
-    <updated>2013-09-29T23:33:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/09/29/funny-hero</id>
-    <content type="html"><![CDATA[<blockquote><p><p>近期这个月都在看周星驰的电影，无厘头的对白有时候令人捧腹大笑；但有时细细体味，有时候又挺沉重。电影“大话西游”之《月光宝盒》和《仙履奇缘》绝对是经典中的经典，上品中的上品。当紫霞仙子临走说：“我的意中人是个盖世英雄，有一天他会踩着七色的云彩来娶我。我猜中了前头，可是我猜不着这结局……“，这怎么不令人心酸呢？女子心中对她的另一半都会充满期待，是一个如唐伯虎的江南才子，玉树临风；或者是会十八般武艺，多才多艺的孙悟空。</p>
-<!-- more -->
-<p>而至尊宝用来骗紫霞仙子的广为流传的一段话：“曾经有一份真挚的感情摆在我的面前，我没有珍惜，等我失去的时候才追悔莫及，人世间最痛苦的事莫过于此。如果上天能给我一次再来一次的机会，我会对那个女孩说三个字：我爱你。如果非要在这份爱上加一个期限，我希望是一万年”，这是海誓山盟，还是骗人伎俩？其实这是无厘头，真挚的感情，当时星仔不屑一顾，而现在又说成追悔莫及，并且最后又夸张到爱你一万年，哈哈哈&#8230;</p>
-<p>白晶晶：省省吧你！改变什么形象，好好地做你山贼这份很有前途的职业去吧！这又是无厘头了，山贼本来是不正当的职业，还加上前途二字，令人哭笑不得。</p>
-<p>从小到大，梁朝伟和周星驰是对好朋友，有一次星仔叫上梁朝伟一起去参加无线演员培训面试，哪知道满腔热血的周星驰落选了，而陪伴的梁朝伟却被选中了。周星驰出来的混的时也只是跑龙套而已。但他能够坚持到最后，最关键的是他能创造出自己无厘头的风格。成龙虽然是武打巨星，拍电影的时候也会经常受伤，但星爷就凭着富有表情的脸和无厘头的笑话，就与成龙齐名了，这就是一个与众不同，力求创新的人的特色。成龙可以说李小龙的延续，因为李小龙开创了在电影中引入武打、功夫等元素，且具有极大的娱乐趣味和观赏性，且凭借这一部《龙争虎斗》就打入了国际舞台，改变了中国人在世界的形象。这些人都是香港人，即是中国人，香港这个弹丸之地，出现这么多优秀的因素有其历史的原因，日本侵华时期，大量华人逃到香港，文化大革命时期，同样许多人潜渡到香港。假如佛山的叶问不是为了逃避日本人，那么李小龙也就学不到真正上乘的功夫，那么根本就不存在李小龙。</p>
-<p>星爷的电影还是比较有特色的：《唐伯虎点秋香》、《喜剧之王》、《功夫》、《赌神》、《赌侠》、《少林足球》等，特别是《喜剧之王》以自己的经历拍成一部无厘头的电影，阐述一路走来的心酸和历程。当时有个镜头是星仔对成龙大哥说的一段话：&#8221;大哥，你从哪学拍戏的啊！怎么学得这么好啊！可不可以教教我啊？“星仔是中国版的史泰龙，史泰龙曾经拿着自编自导的《洛奇》拜访各大好莱坞的电影公司，希望能获得投资，最后功夫不负有心人。星爷从一名演员，逐渐到现在是比高集团的董事长了，并且还自编自导了《西游降魔记》，从而看得出星爷多用心经营自己。香港还有一个演员叫周润发，这个是唯一一个写入教科书的演员，因为其经历从小贫苦，且一路坚持，孝顺父母。香港的票房保证是“双周一龙”，周星驰，周润发，成龙已经是成为香港的招牌。</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[接近尾声 两手空空]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/09/29/train-summary/"/>
-    <updated>2013-09-29T22:57:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/09/29/train-summary</id>
-    <content type="html"><![CDATA[<blockquote><p><p>在TP-Link基础的培训基本结束了，培训的内容都浮于表面，要在工作时候才能真正地深入了解和掌握。在培训期间因为一些简单的问题而浪费时间的操作，在此记录，以此为戒。</p>
-<!-- more -->
-<p>window netsh是一个强大的网络配置工具，如配置IPv4的网络地址，掩码，网关：netsh interface IP addr address &#8220;本地连接“ 192.168.1.2 255.255.255.0 192.168.1.1.配置IPv6同样道理，还可以显示丰富的网络信息，如WLAN，LAN等，显示路由信息router print。相对于linux netstat工具，netsh interface IP show tcpconn 显示了tcp，udp的连接数目和所处的状态。</p>
-<p>linux下配置IP地址，ip addr add 803c::abcd:bcde:efce:1235 dev eth0(网络接口），添加路由表项：ip route add 192.168.1.1 dev eth0, 添加 ipv6的路由表项：route -A inet6 add  &#8230; , 要学会man，且看得懂其命令的解释，了解iptables，iP6tables等。</p>
-<p>虚拟机网络适配器的理解：最简单的是桥接（bridge），与主机同一个网段，使用VMnet0虚拟网卡，相当于虚拟交换机。NAT,与主机共享网络，使用VMnet8虚拟网卡，相当于平时路由器的NAT功能；Host only，与主机同一个网络，但不具备NAT功能，所以不能与主机共享上网，使用的VMnet1，内部可自动分配IP地址，说明虚拟机具有DHCP服务器。</p>
-<p>IPv6的ping:ping -6 fe80::abcd:befe:dc12:3458%5, %后面指的是从计算机哪个网口出去，如果不再同一个网络，就会ping不通。<p>
-<p>无线中应该了解802.11b,g,n的区别；在DSL中了解到pppoe，pppoa，ipoa，static ip，dynamic ip的区别；在ipv6中了解到ipv6的地址的使用范围；在简单的局域网中了解arp的欺骗，arp协议中在以太网中的作用；学习了PPP协议，DHCP协议等协议；学习了NAT的几种类型，及其NAT的穿透；学习了转发规则：DMZ，virtual server, upnp, port trigger的区别。</p>
-<p>编程中学习到动态链接库的操作，共享内存的操作，网络帧的解析（注意网络字节序），函数分工，字节位操作（特别是乘法和除法），switch和if_else的区别，栈溢出的注意，按目录编译Makefile文件。</p></p>
-
-<p><p>这个星期前三天主要是依据TR069的英文文档写中文文档，主要还是翻译，以加强对协议的理解。同时也对TD-8968的对TR069的测试，以进一步了解TD-8968对协议的支持情况，主要是了解其支持的TR098数据模型。</p>
-<p>之后也就是OpenACS，了解了基本操作，同时也有一些问题存在。也看了openACS的代码，</p></p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[pjsip状态机]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/09/26/pjsip-state-machine/"/>
-    <updated>2013-09-26T23:38:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/09/26/pjsip-state-machine</id>
-    <content type="html"><![CDATA[<blockquote><p><p>近期在voip skeleton上增加了一个简单的状态机，分别是当前的状态（current state），事件（event），新的状态（new state），操作（action），使用的是list链表的方式管理，实现动态注册状态的处理。在pjsip 事务（transation state machine）状态机使用的是用数组的方式来实现，数组的下标为状态，内容为操作handle。</p>
-<!-- more -->
-<p>pjsip的事务状态用枚举定义：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>transation状态声明  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * This enumeration represents transaction state.</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="k">typedef</span> <span class="k">enum</span> <span class="n">pjsip_tsx_state_e</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_NULL</span><span class="p">,</span>   <span class="cm">/**&lt; For UAC, before any message is sent.   */</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_CALLING</span><span class="p">,</span>    <span class="cm">/**&lt; For UAC, just after request is sent.   */</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_TRYING</span><span class="p">,</span> <span class="cm">/**&lt; For UAS, just after request is received.*/</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_PROCEEDING</span><span class="p">,</span> <span class="cm">/**&lt; For UAS/UAC, after provisional response.*/</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_COMPLETED</span><span class="p">,</span>  <span class="cm">/**&lt; For UAS/UAC, after final response.     */</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_CONFIRMED</span><span class="p">,</span>  <span class="cm">/**&lt; For UAS, after ACK is received.        */</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_TERMINATED</span><span class="p">,</span> <span class="cm">/**&lt; For UAS/UAC, before it&#39;s destroyed.    */</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_DESTROYED</span><span class="p">,</span>  <span class="cm">/**&lt; For UAS/UAC, will be destroyed now.    */</span>
-</span><span class='line'>    <span class="n">PJSIP_TSX_STATE_MAX</span>        <span class="cm">/**&lt; Number of states.              */</span>
-</span><span class='line'><span class="p">}</span> <span class="n">pjsip_tsx_state_e</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>pjsip状态处理函数的定义：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>transation状态处理函数声明  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_null</span><span class="p">(</span>      <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_calling</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_trying</span><span class="p">(</span>      <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                              <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_proceeding_uas</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_proceeding_uac</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_completed_uas</span><span class="p">(</span>   <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_completed_uac</span><span class="p">(</span>   <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_confirmed</span><span class="p">(</span>   <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_terminated</span><span class="p">(</span>  <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_destroyed</span><span class="p">(</span>   <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                          <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>pjsip状态机的注册：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>transation 状态注册  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cm">/* State handlers for UAC, indexed by state */</span>
-</span><span class='line'><span class="k">static</span> <span class="kt">int</span>  <span class="p">(</span><span class="o">*</span><span class="n">tsx_state_handler_uac</span><span class="p">[</span><span class="n">PJSIP_TSX_STATE_MAX</span><span class="p">])(</span><span class="n">pjsip_transaction</span> <span class="o">*</span><span class="p">,</span>
-</span><span class='line'>                            <span class="n">pjsip_event</span> <span class="o">*</span><span class="p">)</span> <span class="o">=</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_null</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_calling</span><span class="p">,</span>
-</span><span class='line'>    <span class="nb">NULL</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_proceeding_uac</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_completed_uac</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_confirmed</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_terminated</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_destroyed</span><span class="p">,</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="cm">/* State handlers for UAS */</span>
-</span><span class='line'><span class="k">static</span> <span class="kt">int</span>  <span class="p">(</span><span class="o">*</span><span class="n">tsx_state_handler_uas</span><span class="p">[</span><span class="n">PJSIP_TSX_STATE_MAX</span><span class="p">])(</span><span class="n">pjsip_transaction</span> <span class="o">*</span><span class="p">,</span>
-</span><span class='line'>                            <span class="n">pjsip_event</span> <span class="o">*</span><span class="p">)</span> <span class="o">=</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_null</span><span class="p">,</span>
-</span><span class='line'>    <span class="nb">NULL</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_trying</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_proceeding_uas</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_completed_uas</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_confirmed</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_terminated</span><span class="p">,</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">tsx_on_state_destroyed</span><span class="p">,</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>当相应的事件来临时，就调用相应的处理函数handle和改变自身的状态，如ack来临，或者超时重传：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>transation调用相应的处理函数  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-<span class='line-number'>118</span>
-<span class='line-number'>119</span>
-<span class='line-number'>120</span>
-<span class='line-number'>121</span>
-<span class='line-number'>122</span>
-<span class='line-number'>123</span>
-<span class='line-number'>124</span>
-<span class='line-number'>125</span>
-<span class='line-number'>126</span>
-<span class='line-number'>127</span>
-<span class='line-number'>128</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cm">/*</span>
-</span><span class='line'><span class="cm"> * State Calling is for UAC after it sends request but before any responses</span>
-</span><span class='line'><span class="cm"> * is received.</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="k">static</span> <span class="n">pj_status_t</span> <span class="nf">tsx_on_state_calling</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>                       <span class="n">pjsip_event</span> <span class="o">*</span><span class="n">event</span> <span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">pj_assert</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">==</span> <span class="n">PJSIP_TSX_STATE_CALLING</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">pj_assert</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">role</span> <span class="o">==</span> <span class="n">PJSIP_ROLE_UAC</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_EVENT_TIMER</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>  <span class="n">event</span><span class="o">-&gt;</span><span class="n">body</span><span class="p">.</span><span class="n">timer</span><span class="p">.</span><span class="n">entry</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="n">pj_status_t</span> <span class="n">status</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Retransmit the request. */</span>
-</span><span class='line'>        <span class="n">status</span> <span class="o">=</span> <span class="n">tsx_retransmit</span><span class="p">(</span> <span class="n">tsx</span><span class="p">,</span> <span class="mi">1</span> <span class="p">);</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="o">!=</span> <span class="n">PJ_SUCCESS</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_EVENT_TIMER</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>         <span class="n">event</span><span class="o">-&gt;</span><span class="n">body</span><span class="p">.</span><span class="n">timer</span><span class="p">.</span><span class="n">entry</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Cancel retransmission timer. */</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">transport_flag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">TSX_HAS_PENDING_RESCHED</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Set status code */</span>
-</span><span class='line'>  <span class="n">tsx_set_status_code</span><span class="p">(</span><span class="n">tsx</span><span class="p">,</span> <span class="n">PJSIP_SC_TSX_TIMEOUT</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Inform TU. */</span>
-</span><span class='line'>  <span class="n">tsx_set_state</span><span class="p">(</span> <span class="n">tsx</span><span class="p">,</span> <span class="n">PJSIP_TSX_STATE_TERMINATED</span><span class="p">,</span>
-</span><span class='line'>                       <span class="n">PJSIP_EVENT_TIMER</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Transaction is destroyed */</span>
-</span><span class='line'>  <span class="c1">//return PJSIP_ETSXDESTROYED;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">event</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_EVENT_RX_MSG</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">pjsip_msg</span> <span class="o">*</span><span class="n">msg</span><span class="p">;</span>
-</span><span class='line'>  <span class="kt">int</span> <span class="n">code</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Get message instance */</span>
-</span><span class='line'>  <span class="n">msg</span> <span class="o">=</span> <span class="n">event</span><span class="o">-&gt;</span><span class="n">body</span><span class="p">.</span><span class="n">rx_msg</span><span class="p">.</span><span class="n">rdata</span><span class="o">-&gt;</span><span class="n">msg_info</span><span class="p">.</span><span class="n">msg</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Better be a response message. */</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">!=</span> <span class="n">PJSIP_RESPONSE_MSG</span><span class="p">)</span>
-</span><span class='line'>      <span class="k">return</span> <span class="n">PJSIP_ENOTRESPONSEMSG</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">code</span> <span class="o">=</span> <span class="n">msg</span><span class="o">-&gt;</span><span class="n">line</span><span class="p">.</span><span class="n">status</span><span class="p">.</span><span class="n">code</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* If the response is final, cancel both retransmission and timeout</span>
-</span><span class='line'><span class="cm">  * timer.</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">code</span> <span class="o">&gt;=</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">lock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">unlock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="cm">/* Cancel retransmit timer (for non-INVITE transaction, the</span>
-</span><span class='line'><span class="cm">      * retransmit timer will be rescheduled at T2.</span>
-</span><span class='line'><span class="cm">      */</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="cm">/* For provisional response, only cancel retransmit when this</span>
-</span><span class='line'><span class="cm">      * is an INVITE transaction. For non-INVITE, section 17.1.2.1</span>
-</span><span class='line'><span class="cm">      * of RFC 3261 says that:</span>
-</span><span class='line'><span class="cm">      *  - retransmit timer is set to T2</span>
-</span><span class='line'><span class="cm">      *  - timeout timer F is not deleted.</span>
-</span><span class='line'><span class="cm">      */</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">method</span><span class="p">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">PJSIP_INVITE_METHOD</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="cm">/* Cancel timeout timer */</span>
-</span><span class='line'>      <span class="n">lock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">unlock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">is_reliable</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">TIMER_ACTIVE</span><span class="p">;</span>
-</span><span class='line'>          <span class="n">pjsip_endpt_schedule_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span>
-</span><span class='line'>                         <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">retransmit_timer</span><span class="p">,</span>
-</span><span class='line'>                         <span class="o">&amp;</span><span class="n">t2_timer_val</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">transport_flag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">TSX_HAS_PENDING_RESCHED</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Discard retransmission message if it is not INVITE.</span>
-</span><span class='line'><span class="cm">  * The INVITE tdata is needed in case we have to generate ACK for</span>
-</span><span class='line'><span class="cm">  * the final response.</span>
-</span><span class='line'><span class="cm">  */</span>
-</span><span class='line'>  <span class="cm">/* Keep last_tx for authorization. */</span>
-</span><span class='line'>  <span class="c1">//blp: always keep last_tx until transaction is destroyed</span>
-</span><span class='line'>  <span class="c1">//code = msg-&gt;line.status.code;</span>
-</span><span class='line'>  <span class="c1">//if (tsx-&gt;method.id != PJSIP_INVITE_METHOD &amp;&amp; code!=401 &amp;&amp; code!=407) {</span>
-</span><span class='line'>  <span class="c1">//    pjsip_tx_data_dec_ref(tsx-&gt;last_tx);</span>
-</span><span class='line'>  <span class="c1">//    tsx-&gt;last_tx = NULL;</span>
-</span><span class='line'>  <span class="c1">//}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Processing is similar to state Proceeding. */</span>
-</span><span class='line'>  <span class="n">tsx_on_state_proceeding_uac</span><span class="p">(</span> <span class="n">tsx</span><span class="p">,</span> <span class="n">event</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">pj_assert</span><span class="p">(</span><span class="o">!</span><span class="s">&quot;Unexpected event&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">PJ_EBUG</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">return</span> <span class="n">PJ_SUCCESS</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>pjsip 事务相应状态改变函数：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>transation状态改变和改变相应处理函数  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-</pre></td><td class='code'><pre><code class='c'><span class='line'><span class="cm">/*</span>
-</span><span class='line'><span class="cm"> * Set transaction state, and inform TU about the transaction state change.</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="k">static</span> <span class="kt">void</span> <span class="nf">tsx_set_state</span><span class="p">(</span> <span class="n">pjsip_transaction</span> <span class="o">*</span><span class="n">tsx</span><span class="p">,</span>
-</span><span class='line'>             <span class="n">pjsip_tsx_state_e</span> <span class="n">state</span><span class="p">,</span>
-</span><span class='line'>             <span class="n">pjsip_event_id_e</span> <span class="n">event_src_type</span><span class="p">,</span>
-</span><span class='line'>                           <span class="kt">void</span> <span class="o">*</span><span class="n">event_src</span> <span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">pjsip_tsx_state_e</span> <span class="n">prev_state</span> <span class="o">=</span> <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* New state must be greater than previous state */</span>
-</span><span class='line'>    <span class="n">pj_assert</span><span class="p">(</span><span class="n">state</span> <span class="o">&gt;=</span> <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">PJ_LOG</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">obj_name</span><span class="p">,</span> <span class="s">&quot;State changed from %s to %s, event=%s&quot;</span><span class="p">,</span>
-</span><span class='line'>         <span class="n">state_str</span><span class="p">[</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state</span><span class="p">],</span> <span class="n">state_str</span><span class="p">[</span><span class="n">state</span><span class="p">],</span>
-</span><span class='line'>               <span class="n">pjsip_event_str</span><span class="p">(</span><span class="n">event_src_type</span><span class="p">)));</span>
-</span><span class='line'>    <span class="n">pj_log_push_indent</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* Change state. */</span>
-</span><span class='line'>    <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* Update the state handlers. */</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">role</span> <span class="o">==</span> <span class="n">PJSIP_ROLE_UAC</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state_handler</span> <span class="o">=</span> <span class="n">tsx_state_handler_uac</span><span class="p">[</span><span class="n">state</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">state_handler</span> <span class="o">=</span> <span class="n">tsx_state_handler_uas</span><span class="p">[</span><span class="n">state</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* Before informing TU about state changed, inform TU about</span>
-</span><span class='line'><span class="cm">     * rx event.</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">event_src_type</span><span class="o">==</span><span class="n">PJSIP_EVENT_RX_MSG</span> <span class="o">&amp;&amp;</span> <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">tsx_user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">pjsip_rx_data</span> <span class="o">*</span><span class="n">rdata</span> <span class="o">=</span> <span class="p">(</span><span class="n">pjsip_rx_data</span><span class="o">*</span><span class="p">)</span> <span class="n">event_src</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">pj_assert</span><span class="p">(</span><span class="n">rdata</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">rdata</span><span class="o">-&gt;</span><span class="n">msg_info</span><span class="p">.</span><span class="n">msg</span><span class="o">-&gt;</span><span class="n">type</span> <span class="o">==</span> <span class="n">PJSIP_RESPONSE_MSG</span> <span class="o">&amp;&amp;</span>
-</span><span class='line'>         <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">tsx_user</span><span class="o">-&gt;</span><span class="n">on_rx_response</span><span class="p">)</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>      <span class="p">(</span><span class="o">*</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">tsx_user</span><span class="o">-&gt;</span><span class="n">on_rx_response</span><span class="p">)(</span><span class="n">rdata</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* Inform TU about state changed. */</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">tsx_user</span> <span class="o">&amp;&amp;</span> <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">tsx_user</span><span class="o">-&gt;</span><span class="n">on_tsx_state</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">pjsip_event</span> <span class="n">e</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">PJSIP_EVENT_INIT_TSX_STATE</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">tsx</span><span class="p">,</span> <span class="n">event_src_type</span><span class="p">,</span> <span class="n">event_src</span><span class="p">,</span>
-</span><span class='line'>                 <span class="n">prev_state</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">(</span><span class="o">*</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">tsx_user</span><span class="o">-&gt;</span><span class="n">on_tsx_state</span><span class="p">)(</span><span class="n">tsx</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">e</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="cm">/* When the transaction is terminated, release transport, and free the</span>
-</span><span class='line'><span class="cm">     * saved last transmitted message.</span>
-</span><span class='line'><span class="cm">     */</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="n">PJSIP_TSX_STATE_TERMINATED</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="n">pj_time_val</span> <span class="n">timeout</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* If we&#39;re still waiting for a message to be sent.. */</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">transport_flag</span> <span class="o">&amp;</span> <span class="n">TSX_HAS_PENDING_TRANSPORT</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="cm">/* Disassociate ourselves from the outstanding transmit data</span>
-</span><span class='line'><span class="cm">      * so that when the send callback is called we will be able</span>
-</span><span class='line'><span class="cm">      * to ignore that (otherwise we&#39;ll get assertion, see</span>
-</span><span class='line'><span class="cm">      * http://trac.pjsip.org/repos/ticket/1033)</span>
-</span><span class='line'><span class="cm">      */</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">pending_tx</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">pending_tx</span><span class="o">-&gt;</span><span class="n">mod_data</span><span class="p">[</span><span class="n">mod_tsx_layer</span><span class="p">.</span><span class="n">mod</span><span class="p">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">pending_tx</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">transport_flag</span> <span class="o">&amp;=</span> <span class="o">~</span><span class="p">(</span><span class="n">TSX_HAS_PENDING_TRANSPORT</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">lock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Cancel timeout timer. */</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="n">pjsip_endpt_cancel_timer</span><span class="p">(</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">);</span>
-</span><span class='line'>      <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">TIMER_ACTIVE</span><span class="p">;</span>
-</span><span class='line'>  <span class="n">pjsip_endpt_schedule_timer</span><span class="p">(</span> <span class="n">tsx</span><span class="o">-&gt;</span><span class="n">endpt</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tsx</span><span class="o">-&gt;</span><span class="n">timeout_timer</span><span class="p">,</span>
-</span><span class='line'>                  <span class="o">&amp;</span><span class="n">timeout</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">unlock_timer</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">state</span> <span class="o">==</span> <span class="n">PJSIP_TSX_STATE_DESTROYED</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Unregister transaction. */</span>
-</span><span class='line'>  <span class="n">mod_tsx_layer_unregister_tsx</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="cm">/* Destroy transaction. */</span>
-</span><span class='line'>  <span class="n">tsx_destroy</span><span class="p">(</span><span class="n">tsx</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">pj_log_pop_indent</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[正则表达式]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/09/26/regular-expression/"/>
-    <updated>2013-09-26T22:44:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/09/26/regular-expression</id>
-    <content type="html"><![CDATA[<blockquote><p><p>由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换，在Linux下的命令为：</p>
-<!-- more --></p></blockquote>
-
-<figure class='code'><figcaption><span>批量替换  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;*.[c|h]&quot;</span> | xargs perl -pi -e <span class="s2">&quot;s|PJ_DEF\(([^\(]*)\)|$1|g&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p>批量地找c和h文件，替换PJ_DEF宏，但保留参数不变。掌握正则表达式，对提高工作效率有比较大的帮助。</p>
-<p>掌握正则表达式，并且配合grep，sed，awk，perl，python等工具一起使用，对于文本处理，威力就无穷大了。</p></p></blockquote>
-
-<figure class='code'><figcaption><span>一般的正则表达式匹配：  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>.代表的是任意字符，*代表的是多个，<span class="o">[</span>a-z|A-Z<span class="o">]</span>代表的是字母，^<span class="o">[</span>list<span class="o">]</span>代表的是以list开头，
-</span><span class='line'><span class="o">[</span>^list<span class="o">]</span>代表的是不是list的，<span class="o">[</span>list<span class="o">]</span><span class="nv">$代</span>表的是以list为结尾，匹配一些特殊符号需要转义，
-</span><span class='line'>如<span class="se">\(</span>, <span class="se">\t</span>;<span class="se">\{</span>1,15<span class="se">\}</span>代表的是1-15个。
-</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><p>匹配host的IP地址的方式：</p></p></blockquote>
-
-<figure class='code'><figcaption><span>匹配host的IP地址的方式：  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/http:\/\/([\d.]*):[\d]*\/\S*/&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">&#39;http://192.168.1.100:8080/tr069&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">result</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="nx">ip</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

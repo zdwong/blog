@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | ForgeBrain]]></title>
   <link href="http://coolbrain.github.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://coolbrain.github.com/"/>
-  <updated>2014-02-23T23:36:40+08:00</updated>
+  <updated>2014-03-07T23:26:28+08:00</updated>
   <id>http://coolbrain.github.com/</id>
   <author>
     <name><![CDATA[ForgeBrain]]></name>
@@ -14,338 +14,670 @@
 
   
   <entry>
-    <title type="html"><![CDATA[nginx服务器 性能至上]]></title>
-    <link href="http://coolbrain.github.com/blog/2014/02/23/nginx-web-server/"/>
-    <updated>2014-02-23T11:31:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2014/02/23/nginx-web-server</id>
-    <content type="html"><![CDATA[<blockquote><p><p>nginx是高性能的代理服务器，可支持web和mail两种代理，多进程多线程的模块化的服务端设计。</p>
+    <title type="html"><![CDATA[linux防止僵尸进程]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/zombie-process/"/>
+    <updated>2014-03-07T22:37:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/zombie-process</id>
+    <content type="html"><![CDATA[<blockquote><p><p>平时如果不太注意创建子进程的处理，有可能会导致僵尸进程，以至于有一天系统无法创建进程，超过系统允许的最大进程数。如果不捕捉SIGCHLD信号，子进程退出时，系统默认释放进程的内核结构。如果捕捉了，但父进程没有调用wait或waitpid等函数获取子进程的退出状态，那么在父进程还没有退出时，子进程就会成为僵尸进程。另外一种情况，由于linux信号不等待，可能丢失了信号，父进程也没有获取子进程的退出状态。</p>
 <!-- more -->
-<p>1.nginx的主进程与工作进程的通信方式，域套接字；</p>
-<p>2.采用的是事件驱动模型，epoll模型，包括网络事件和时钟事件；</p>
-<p>3.对http请求的处理类似于管道的处理，模块拓展性好；</p>
-<p>4.配置文件通过命令解析，存储到对应的结构体，且配置文件有分层的配置，http，server，location的配置，在不同的情况下，使用不同的
-处理方式，配置文件如同指示牌，控制着程序的执行流程和一些属性。</p>
-<p>5.基于有多少个CPU核，配置多少个工作进程，以免在Linux抢占式方式下，导致进程上下文切换，导致性能的降低；</p>
-<p>6.可以配置工作进程里有多少条线程，线程上下文切换的开销比进程上下文切换的开销少得多，因此可以设置到每个进程里有128条线程，有多个线程的作用在于在当前线程需要等待磁盘或网络事件时，可以切换到另外一条线程执行，以提高CPU的利用率；线程间通信通过信号量，不过这里使用的是pthread_cond_signal和pthread_cond_wait,而不是sem_post和sem_wait;</p></p></blockquote>
+{% codeblock linux防止僵尸进程的代码 lang:c %}</p>
+
+<h1>include &lt;sys/wait.h></h1>
+
+<h1>include &lt;sys/types.h></h1>
+
+<h1>include &lt;signal.h></h1>
+
+<h1>include &lt;unistd.h></h1>
+
+<h1>include &lt;stdlib.h></h1>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>include &lt;errno.h></h1></blockquote>
+
+<p>void sig_child(int signo)
+{</p>
+
+<pre><code>pid_t pid;
+</code></pre>
+
+<p>//解决信号不排队的状况，假如两个子进程同时退出，信号SIGCHLD只有一个，通过while俩防止出现这种情况</p>
+
+<pre><code>while ((pid = waitpid(-1, NULL, 0)) &gt; 0)
+{
+    printf("Handler reaped child %d\n", (int)pid);
+}
+
+if (errno != ECHILD)
+{
+    printf("waitpid error\n");
+}
+sleep(2);
+
+return;
+</code></pre>
+
+<p>}</p>
+
+<p>int main(int argc, char **argv)
+{</p>
+
+<pre><code>int index, n;
+char buf[1024];
+pid_t pid;
+</code></pre>
+
+<p>//建立SIGCHLD信号处理函数，获取子进程的退出状态，防止出现僵尸进程</p>
+
+<pre><code>if(signal(SIGCHLD, sig_child) == SIG_ERR)
+{
+    printf("signal error\n");
+}
+
+for (index = 0; index &lt; 3; index++)
+{
+    if((pid = fork()) == 0)
+    {
+        printf("Hello from child %d\n", (int)getpid());
+        sleep(1);
+        exit(0);
+    }
+}
+</code></pre>
+
+<p>//处理慢系统调用被信号打断的情况</p>
+
+<pre><code>while ((n = read(STDIN_FILENO, buf, sizeof(buf))) &lt; 0)
+{
+    if (errno != EINTR)
+    {
+        printf("read error\n");
+
+    }
+}
+
+printf("Parent processing input\n");
+
+while (1);
+exit(0);
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[iptables 瑞士军刀]]></title>
-    <link href="http://coolbrain.github.com/blog/2014/02/23/iptables-firewall/"/>
-    <updated>2014-02-23T11:30:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2014/02/23/iptables-firewall</id>
-    <content type="html"><![CDATA[<blockquote><p><p>netfilter/iptables可以配置有状态的防火墙。iptables设置filter过滤表，nat转发表，mangle修改数据包的表。</p>
+    <title type="html"><![CDATA[popen函数执行程序]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/popen/"/>
+    <updated>2014-03-07T22:37:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/popen</id>
+    <content type="html"><![CDATA[<blockquote><p><p>使用linux定时器可以定时的处理一些事务或者定时的发出一些信号，如SIGALRM，SIGINT，SIGQUIT等信号。</p>
 <!-- more -->
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>iptables设置的防火墙规则  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;! /bin/bash&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;1.输入相关参数&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;EXTIF<span class="o">=</span><span class="s2">&quot;eth0&quot;</span>
-</span><span class='line'><span class="nv">INIF</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-</span><span class='line'><span class="nv">INNET</span><span class="o">=</span><span class="s2">&quot;&quot;</span>&lt;/p&gt;&lt;/blockquote&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;export EXTIF INIF INNET&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;2.设置内核的网络功能&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;echo <span class="s2">&quot;1&quot;</span> &gt; /proc/sys/net/ipv4/tcp_syncookies
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;1&quot;</span> &gt; /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;3.清除规则，设置默认策略和开放lo&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;iptables -F
-</span><span class='line'>iptables -X
-</span><span class='line'>iptables -Z
-</span><span class='line'>iptables -P INPUT DROP
-</span><span class='line'>iptables -P OUTPUT ACCEPT
-</span><span class='line'>iptables -P FORWARD ACCEPT
-</span><span class='line'>iptables -A INPUT -i lo -j ACCEPT
-</span><span class='line'>iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;4.启动额外的防火墙script模块&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;if <span class="o">[</span> -f /usr/local/iptables/iptables.deny <span class="o">]</span> ; <span class="k">then</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;sh /usr/local/iptables/iptables.deny
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;fi&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;5.允许其它类型的icmp包进入&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;AICMP<span class="o">=</span><span class="s2">&quot;0 3 3/4 4 11 12 14 16 18&quot;</span>
-</span><span class='line'><span class="k">for </span>typeicmp in <span class="nv">$AICMP</span>
-</span><span class='line'><span class="k">do</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;iptables -A INPUT -i <span class="nv">$EXTIF</span> -p icmp --icmp-type <span class="nv">$typeicmp</span> -j ACCEPT
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;done&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;6.允许某些服务进入&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 21 --sport 1024:65535 -j ACCEPT  <span class="c">#FTP</span>
-</span><span class='line'>iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 22 --sport 1024:65535 -j ACCEPT  <span class="c">#SSH</span>
-</span><span class='line'>iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 25 --sport 1024:65535 -j ACCEPT  <span class="c">#SMTP</span>
-</span><span class='line'>iptables -A INPUT -p UDP -i <span class="nv">$EXTIF</span> --dport 53 --sport 1024:65535 -j ACCEPT  <span class="c">#DNS</span>
-</span><span class='line'>iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 53 --sport 1024:65535 -j ACCEPT  <span class="c">#DNS</span>
-</span><span class='line'>iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 80 --sport 1024:65535 -j ACCEPT  <span class="c">#WWW</span>
-</span><span class='line'>iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 110 --sport 1024:65535 -j ACCEPT  <span class="c">#POP3</span>
-</span><span class='line'>iptables -A INPUT -p TCP -i <span class="nv">$EXTIF</span> --dport 443 --sport 1024:65535 -j ACCEPT  <span class="c">#HTTPS&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;7.先加载有用的模块&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;modules<span class="o">=</span><span class="s2">&quot;ip_tables iptable_nat ip_nat_ftp ip_nat_irc ip_conntrack ip_conntrack_ftp ip_conntrack_irc&quot;</span>
-</span><span class='line'><span class="k">for </span>mod in <span class="nv">$modules</span>
-</span><span class='line'><span class="k">do</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;testmod<span class="o">=</span><span class="sb">`</span>lsmod | grep <span class="s2">&quot;^${mod}&quot;</span> | awk <span class="s1">&#39;{print $1}&#39;</span><span class="sb">`</span>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$testmod&quot;</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">    </span>modprobe <span class="nv">$mod</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;done&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;8.清除nat table的规则&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;iptables -F -t nat
-</span><span class='line'>iptables -X -t nat
-</span><span class='line'>iptables -Z -t nat
-</span><span class='line'>iptables -t nat -P PREROUTING ACCEPT
-</span><span class='line'>iptables -t nat -P POSTROUTING ACCEPT
-</span><span class='line'>iptables -t nat -P OUTPUT ACCEPT&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;9.若有内部接口的存在（双网卡）开放成为路由器，且为ip分享器&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;if <span class="o">[</span> <span class="s2">&quot;$INIF&quot;</span> !<span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span> ; <span class="k">then</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;pre&gt;&lt;code&gt;iptables -A INPUT -i <span class="nv">$INIF</span> -j ACCEPT
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;1&quot;</span> &amp;gt;  /proc/sys/net/ipv4/ip_forward
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$INNET&quot;</span> !<span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="o">]</span> ; <span class="k">then</span>
-</span><span class='line'><span class="k">    for </span>innet in <span class="nv">$INNET</span>
-</span><span class='line'>    <span class="k">do</span>
-</span><span class='line'><span class="k">        </span>iptables -t nat -A POSTROUTING -s <span class="nv">$innet</span> -o <span class="nv">$EXTIF</span> -j MASQUERADE
-</span><span class='line'>    <span class="k">done</span>
-</span><span class='line'><span class="k">fi</span>
-</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;fi
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock popen函数代码 lang:c %}</p>
+
+<h1>include &lt;stdlib.h></h1>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>include &lt;errno.h></h1>
+
+<h1>include &lt;fcntl.h></h1>
+
+<h1>include &lt;unistd.h></h1>
+
+<h1>include &lt;sys/wait.h></h1></blockquote>
+
+<h1>define     MAX_FD      1024</h1>
+
+<p>static pid_t *childPid = NULL;</p>
+
+<p>FILE <em>popen_cmd(const char </em>pCmd, const char *pType)
+{</p>
+
+<pre><code>int index;
+pid_t pid;
+int pipeFd[2];
+FILE *pFile;
+
+if (pCmd != NULL &amp;&amp; *pType != 'r' &amp;&amp; *pType != 'w' &amp;&amp; pType[1] != '\0')
+{
+    errno = EINVAL;
+    return NULL;
+}
+
+if (childPid == NULL)
+{
+    childPid = (pid_t *)calloc(MAX_FD, sizeof(pid_t));
+    if (childPid == NULL)
+    {
+        return NULL;
+    }
+}
+
+if (pipe(pipeFd) &lt; 0)
+{
+    return NULL;
+}
+
+if ((pid = fork()) &lt; 0)
+{
+    return NULL;
+}
+else if (pid == 0)
+{
+    //type是对父进程而言，当为'r'时，子进程应该关闭读端.
+    if (*pType == 'r')
+    {
+        close(pipeFd[0]);
+        // 把STDOUT_FILENO重定向pipeFd[1]
+        dup2(pipeFd[1], STDOUT_FILENO);
+        close(pipeFd[1]);
+    }
+    else 
+    {
+        close(pipeFd[1]);
+        dup2(pipeFd[0], STDIN_FILENO);
+        close(pipeFd[0]);
+    }
+
+    for (index = 0; index &lt; MAX_FD; index++)
+    {
+        if (childPid[index] &gt; 0)
+        {
+            close(index);
+        }
+    }
+
+    execl("/bin/sh", "sh", "-c", pCmd, (char *)0);
+    _exit(127);
+}
+else
+{
+    if (*pType == 'r')
+    {
+        close(pipeFd[1]);
+        if ((pFile = fdopen(pipeFd[0], pType)) == NULL)
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        close(pipeFd[0]);
+        if ((pFile = fdopen(pipeFd[1], pType)) == NULL)
+        {
+            return NULL;
+        }
+    }
+}
+childPid[fileno(pFile)] = pid;
+
+return pFile;
+</code></pre>
+
+<p>}</p>
+
+<p>int pclose_cmd(FILE *pFile)
+{</p>
+
+<pre><code>int fd, status;
+pid_t pid;
+
+if (childPid == NULL || pFile == NULL)
+{
+    goto error;
+
+}
+
+fd = fileno(pFile);
+if ((pid = childPid[fd]) == 0)
+{
+    goto error;
+}
+
+childPid[fd] = 0;
+if (fclose(pFile) == EOF)
+{
+    return -1;
+}
+
+while (waitpid(pid, &amp;status, 0) &lt; 0)
+{
+    if (errno != EINTR)
+    {
+        return -1;
+    }
+}
+</code></pre>
+
+<p>error:</p>
+
+<pre><code>errno = EINVAL;
+return -1;
+</code></pre>
+
+<p>}</p>
+
+<p>int main(int argc, char **argv)
+{</p>
+
+<pre><code>char line[256] = {0};
+FILE *pFile;
+
+pFile = popen_cmd("ifconfig eth0", "r");
+if (pFile != NULL)
+{
+    while (fgets(line, 256, pFile) != NULL)
+    {
+        printf("%s", line);
+    }
+    pclose_cmd(pFile);
+}
+return 0;
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[初入门规 shell编程]]></title>
-    <link href="http://coolbrain.github.com/blog/2014/02/23/shell-programme/"/>
-    <updated>2014-02-23T11:29:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2014/02/23/shell-programme</id>
-    <content type="html"><![CDATA[<blockquote><p><p>shell脚本在工作中可以大大提高工作的效率。因此学习shell是非常有必要的。</p>
+    <title type="html"><![CDATA[linux定时器]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/timer/"/>
+    <updated>2014-03-07T22:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/timer</id>
+    <content type="html"><![CDATA[<blockquote><p><p>使用linux定时器可以定时的处理一些事务或者定时的发出一些信号，如SIGALRM，SIGINT，SIGQUIT等信号。</p>
 <!-- more -->
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>常见的linux命令  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;! /bin/bash&lt;/h1&gt;&lt;/blockquote&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;find / -name *.sh -exec wc -c <span class="o">{}</span> <span class="se">\;</span>&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;-exec 执行简单的命令，最好还是使用xargs来代替&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;find . -type f -perm 664 -exec ls -l <span class="o">{}</span> <span class="se">\;</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;find . -type f -print | xargs grep <span class="s2">&quot;module&quot;</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;find . -size +1000000c -print&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;获取ipv4和ipv6的ip地址&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;ifconfig eth0 | grep inet | sed <span class="s1">&#39;s/&lt;sup&gt;.*&lt;/sup&gt; addr://g&#39;</span> | sed <span class="s1">&#39;s/Bcast.&lt;em&gt;$//g&#39;</span> | sed <span class="s1">&#39;s/Scope.&lt;/em&gt;$//g&#39;</span> | sed <span class="s1">&#39;s/&lt;sup&gt;[&lt;/sup&gt; ]*//g&#39;</span>&lt;/p&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;h1&gt;获取ipv4的地址&lt;/h1&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;p&gt;ifconfig eth0 | grep <span class="s2">&quot;inet addr:&quot;</span> | awk <span class="s1">&#39;{ print $2 }&#39;</span> | cut -c 6- | sed <span class="s1">&#39;s/[0-9|.]*/ipv4 addr:\n&amp;amp;/g&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock linux定时器的代码 lang:c %}</p></blockquote>
+
+<h1>include &lt;stdlib.h></h1>
+
+<h1>include &lt;unistd.h></h1>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>include &lt;signal.h></h1>
+
+<h1>include &lt;time.h></h1>
+
+<h1>include &lt;errno.h></h1>
+
+<h1>include &lt;sys/time.h></h1>
+
+<h1>include &lt;sys/types.h></h1>
+
+<h1>define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); } while (0)</h1>
+
+<p>static void sig_handler(int sig, siginfo_t <em>si, void </em>uc)
+{</p>
+
+<pre><code>printf("Caught signal %d\n", sig);
+</code></pre>
+
+<p>}</p>
+
+<p>int main(int argc, char *argv[])
+{</p>
+
+<pre><code>timer_t timerid;
+struct sigevent sev;
+struct itimerspec its;
+sigset_t newMask, oldMask;
+struct sigaction sa;
+
+sa.sa_flags = SA_SIGINFO;
+sa.sa_sigaction = sig_handler;
+sigemptyset(&amp;sa.sa_mask);
+if (sigaction(SIGINT, &amp;sa, NULL) == -1)
+{
+   errExit("sigaction");
+}
+
+sigemptyset(&amp;newMask);
+sigaddset(&amp;newMask, SIGINT);
+if (sigprocmask(SIG_BLOCK, &amp;newMask, &amp;oldMask) == -1)
+{
+   errExit("sigprocmask");
+}
+
+sev.sigev_notify = SIGEV_SIGNAL;
+sev.sigev_signo = SIGINT;
+sev.sigev_value.sival_ptr = &amp;timerid;
+if (timer_create(CLOCK_REALTIME, &amp;sev, &amp;timerid) == -1)
+{
+   errExit("timer_create");
+}
+
+its.it_value.tv_sec = 1;
+its.it_value.tv_nsec = 0;
+its.it_interval.tv_sec = its.it_value.tv_sec;
+its.it_interval.tv_nsec = its.it_value.tv_nsec;
+
+if (timer_settime(timerid, 0, &amp;its, NULL) == -1)
+{
+    errExit("timer_settime");
+}
+
+if (sigprocmask(SIG_SETMASK, &amp;oldMask, NULL) == -1)
+{
+   errExit("sigprocmask");
+}
+while(1)
+{
+    sleep(10);
+}
+return 0;
+</code></pre>
+
+<p>}</p>
+
+<p>{% endcodeblock %}</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[正则表达式]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/09/26/regular-expression/"/>
-    <updated>2013-09-26T22:44:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/09/26/regular-expression</id>
-    <content type="html"><![CDATA[<blockquote><p><p>由于pjsip函数的返回值用宏定义，Source Insight工具无法识别为函数，因此在阅读代码的时候难以找到函数的定义，给理解代码带来一定的麻烦。这正是考验自己的时候，其实遇到这样的问题很平常，解决也很简单，只是没碰到过，所以觉得无法入手。使用正则表达式，很好的解决这个问题，把宏替换，在Linux下的命令为：</p>
+    <title type="html"><![CDATA[linux信号处理的应用]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/system-sleep/"/>
+    <updated>2014-03-07T22:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/system-sleep</id>
+    <content type="html"><![CDATA[<blockquote><p><p>linux的system和sleep都涉及到信号的处理，以下是关于在实现system函数和sleep所涉及到的原理。</p>
+<p>1.每个进程只有一个闹钟时钟，alarm；且alarm和setitimer共享一个定时器，因此它们会互相干扰。不过通过timer_create和timer_settime可以创建定时器和设置定时器，同时所发送的信号不限定于SIGALRM，可以是其它的SIGINT，SIGQUIT等信号。</p>
 <!-- more -->
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>批量替换  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>find . -name <span class="s2">&quot;&lt;em&gt;.[c|h]&quot;</span> | xargs perl -pi -e <span class="s2">&quot;s|PJ_DEF(([&lt;sup&gt;(]*))|$1|g&quot;</span>&lt;/sup&gt;
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-批量地找c和h文件，替换PJ_DEF宏，但保留参数不变。掌握正则表达式，对提高工作效率有比较大的帮助。</p>
-<p>掌握正则表达式，并且配合grep，sed，awk，perl，python等工具一起使用，对于文本处理，威力就无穷大了。</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>一般的正则表达式匹配：  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>.代表的是任意字符，&lt;/em&gt;代表的是多个，<span class="o">[</span>a-z|A-Z<span class="o">]</span>代表的是字母，&lt;sup&gt;<span class="o">[</span>list<span class="o">]</span>代表的是以list开头，&lt;/sup&gt;
-</span><span class='line'><span class="o">[</span>&lt;sup&gt;list<span class="o">]</span>代表的是不是list的，<span class="o">[</span>list<span class="o">]</span><span class="nv">$代</span>表的是以list为结尾，匹配一些特殊符号需要转义，&lt;/sup&gt;
-</span><span class='line'>如<span class="o">(</span>, <span class="se">\t</span>;<span class="o">{</span>1,15<span class="o">}</span>代表的是1-15个。
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>匹配host的IP地址的方式：</p>
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>匹配host的IP地址的方式：  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;/http:\/\/([\d.]&lt;em&gt;):[\d]&lt;/em&gt;\/\S*/&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">&#39;http://192.168.1.100:8080/tr069&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">url</span><span class="p">);</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">result</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">ip</span> <span class="o">=</span> <span class="nx">result</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p></blockquote>
+<p>2.sigsuspend(sigset_t *set)阻塞等待不再集合set的信号，并且调用对应的信号处理函数。sigsuspending保留发生的信号；</p>
+<p>3.sigprocmask屏蔽信号集或打开信号集，返回之前的信号集，以用于未来还原到原来的状态。</p>
+<p>4.sigaction设置信号对应的信号处理函数，和返回之前的信号处理函数，以便于未来还原到原来的处理信号处理函数</p>
+<p>5.sleep可以被各种信号打断</p>
+<p>6.信号实现父子进程间的同步，sigsuspend</p>
+<p>7.popen创建管道，fork产生一个子进程，关闭管道的不使用端，执行一个shell以运行命令，然后等待命令结束</p>
+<p>8.pipe(fd)管道是半双工的，socketpair域套接字是全双工的</p>
+{% codeblock system和sleep函数 lang:c %}</p>
+
+<h1>include &lt;signal.h></h1>
+
+<h1>include &lt;unistd.h></h1>
+
+<h1>include &lt;errno.h></h1>
+
+<h1>include &lt;stdlib.h></h1>
+
+<h1>include &lt;stdio.h></h1>
+
+<h1>include &lt;string.h></h1>
+
+<h1>include &lt;time.h></h1>
+
+<h1>include &lt;sys/wait.h></h1>
+
+<h1>include &lt;sys/time.h></h1></blockquote>
+
+<p>void sig_alarm(int signo)
+{</p>
+
+<pre><code>printf("catch SIGALRM in sleep_cmd\n");
+</code></pre>
+
+<p>}</p>
+
+<p>void sig_real_alarm(int signo)
+{</p>
+
+<pre><code>printf("catch real SIGALRM\n");
+</code></pre>
+
+<p>}</p>
+
+<p>int system_cmd(const char *pCmd)
+{</p>
+
+<pre><code>pid_t pid;
+int status;
+sigset_t newMask, oldMask;
+struct sigaction currAction, oldAction;
+
+if (pCmd == NULL)
+{
+    return 1;
+}
+currAction.sa_handler = SIG_IGN;
+currAction.sa_flags = 0;
+sigemptyset(&amp;currAction.sa_mask);
+
+if (sigaction(SIGINT, &amp;currAction, &amp;oldAction) &lt; 0)
+{
+    return (-1);
+}
+if (sigaction(SIGQUIT,&amp;currAction, &amp;oldAction) &lt; 0)
+{
+    return (-1);
+}
+
+sigemptyset(&amp;newMask);
+sigemptyset(&amp;oldMask);
+sigaddset(&amp;newMask, SIGCHLD);
+if (sigprocmask(SIG_BLOCK, &amp;newMask, &amp;oldMask) &lt; 0)
+{
+    return (-1);
+}
+
+if ( (pid = fork()) &lt; 0)
+{
+    status = -1;
+}
+else if (pid == 0)
+{
+    sigaction(SIGINT, &amp;oldAction, NULL);
+    sigaction(SIGQUIT, &amp;oldAction, NULL);
+    sigprocmask(SIG_SETMASK, &amp;oldMask, NULL);
+    execl("/bin/bash", "sh", "-c", pCmd, (char*)0);
+    _exit(127);
+}
+else 
+{
+    while (waitpid(pid, &amp;status, 0) &lt; 0)
+    {
+        if (errno != EINTR)
+        {
+            status = -1;
+            break;
+        }
+    }
+}
+
+if (sigaction(SIGINT, &amp;oldAction, NULL) &lt; 0)
+{
+    return (-1);
+}
+if (sigaction(SIGQUIT, &amp;oldAction, NULL) &lt; 0)
+{
+    return (-1);
+}
+if (sigprocmask(SIG_SETMASK, &amp;oldMask, NULL) &lt; 0)
+{
+    return (-1);
+}
+return (status);
+</code></pre>
+
+<p>}</p>
+
+<p>//sleep_cmd未处理与以前设置的闹钟的交互作用, 现在的处理会使之前设置的闹钟失效
+unsigned int sleep_cmd(unsigned int nsec)
+{</p>
+
+<pre><code>sigset_t newMask, oldMask, suspendMask;
+struct sigaction newAction, oldAction;
+unsigned int uslept;
+
+newAction.sa_handler = sig_alarm;
+sigemptyset(&amp;newAction.sa_mask);
+newAction.sa_flags = 0;
+if (sigaction(SIGALRM, &amp;newAction, &amp;oldAction) &lt; 0)
+{
+    printf("set SIGALRM new action error\n");
+}
+
+sigemptyset(&amp;newMask);
+sigaddset(&amp;newMask, SIGALRM);
+sigprocmask(SIG_BLOCK, &amp;newMask, &amp;oldMask);
+
+alarm(nsec);
+
+suspendMask = oldMask;
+sigdelset(&amp;suspendMask, SIGALRM);   //不阻塞SIGALRM
+sigsuspend(&amp;suspendMask);
+
+uslept = alarm(0);
+
+if (sigaction(SIGALRM, &amp;oldAction, NULL) &lt; 0)
+{
+    printf("set SIGALRM old Action error\n");
+}
+sigprocmask(SIG_SETMASK, &amp;oldMask, NULL);
+
+return uslept;
+</code></pre>
+
+<p>}</p>
+
+<p>int main(int argc, char **argv)
+{</p>
+
+<pre><code>int index = 1;
+int cmdLen = 0;
+unsigned int remainSec = 0;
+char cmdBuff[1024] = {0};
+//struct itimerval its;
+struct itimerspec itms;
+struct sigaction sigAction;
+timer_t timerid;
+struct sigevent sev;
+
+if (argc &lt;= 1)
+{
+    printf("no cmd of argv\n");
+    return 0;
+}
+for (index = 1; index &lt; argc; index++)
+{
+    sprintf(cmdBuff + cmdLen, "%s ", argv[index]);
+    cmdLen += strlen(argv[index]) + 1;
+}
+cmdBuff[cmdLen] = '\0';
+printf("%s\n", cmdBuff);
+
+system_cmd(cmdBuff);
+
+sigAction.sa_handler = sig_real_alarm;
+sigemptyset(&amp;sigAction.sa_mask);
+sigAction.sa_flags = 0;
+sigaction(SIGALRM, &amp;sigAction, NULL);
+
+/*
+its.it_value.tv_sec = 1;
+its.it_value.tv_usec = 0;
+its.it_interval.tv_sec = 1;
+its.it_interval.tv_usec = 0;
+if (setitimer(ITIMER_REAL, &amp;its, NULL)) 
+{
+    printf("set timer error\n");
+}*/
+//setitimer 与 alarm共用一个定时器，互相干扰。
+//创建定时器，发送的信号为SIGALRM
+sev.sigev_notify = SIGEV_SIGNAL;
+sev.sigev_signo = SIGALRM;
+sev.sigev_value.sival_ptr = &amp;timerid;
+if (timer_create(CLOCK_REALTIME, &amp;sev, &amp;timerid) == -1)
+{
+   printf("timer_create error\n");
+}
+
+itms.it_value.tv_sec = 1;
+itms.it_value.tv_nsec = 0;
+itms.it_interval.tv_sec = itms.it_value.tv_sec;
+itms.it_interval.tv_nsec = itms.it_value.tv_nsec;
+
+//设置定时器
+if (timer_settime(timerid, 0, &amp;itms, NULL) == -1)
+{
+    printf("timer_settime error\n");
+}
+
+remainSec = sleep_cmd(5);
+printf("remain second: %d\n", remainSec);
+
+/*setitimer(ITIMER_REAL, &amp;its, NULL);*/
+
+while(1)
+{
+    sleep(10);
+    raise(SIGKILL);
+}
+return 0;
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[何为系统 何为人生]]></title>
-    <link href="http://coolbrain.github.com/blog/2013/07/21/processor-architecture/"/>
-    <updated>2013-07-21T23:53:00+08:00</updated>
-    <id>http://coolbrain.github.com/blog/2013/07/21/processor-architecture</id>
-    <content type="html"><![CDATA[<blockquote><p><p>今天看了《深入了解计算机系统》的处理器体系结构，这一章完成了一个Y86简单处理器的设计。从指令的执行开始说起，一个指令的执行需要几个阶段：取指、译码、执行、访存、写回和更新PC。还详细分析了rmmovl,subl,pushl,popl,je,call和ret指令这五个阶段执行的分解操作。之后讲到SEQ硬件结构、时序和实现。最后讲到的SEQ流水线的实现和对流水线固有问题的解决。如用暂停和转发来避免数据冒险。还说到流水线控制逻辑：1.处理ret；2.加载/使用冒险；3.预测错误的分支；4.异常。同时指出Y86处理器未完成的实现：1.多周期指令；2.与存储系统的接口。</p>
+    <title type="html"><![CDATA[shell自动打包修改文件]]></title>
+    <link href="http://coolbrain.github.com/blog/2014/03/07/get-changed-file/"/>
+    <updated>2014-03-07T22:36:00+08:00</updated>
+    <id>http://coolbrain.github.com/blog/2014/03/07/get-changed-file</id>
+    <content type="html"><![CDATA[<blockquote><p><p>每一次写完代码，都需要将代码发给项目负责人合入到svn上。但时间一长，自己就连修改了哪些源文件也不知道了。于是思来想去，还是写一个靠谱的脚本好一些，这样可以减轻脑力的负担，以后这样繁琐的工作就留给脚本去做了，不亦乐哉，所谓穷则思变。</p>
 <!-- more -->
-<p>大概看了这一章，我问自己，何为系统？如现实的处理器就是很复杂的系统，有其基本执行的流程，如加法、乘法，也有提高其吞吐量的流水线管道，但同时也有其反馈机制和异常处理，保证其正确地执行和反应真实的运行情况。如初中生物学到人体的八大系统，有其正常的运作，也有其反馈机制和与其它系统沟通的接口。系统，我觉得是一个由内部机制控制运行的物体，同时提供与外部交流的接口。</p>
-<p>今天还去表姨妈家里吃饭，虽然没有请教她什么问题，但可以体验一下城市人的生活，让我这样的乡巴佬见识下，但不要认为自己丢脸，乡巴佬又怎会有脸皮的？豁出去吧！</p></p></blockquote>
+{% codeblock 查找修改的文件 lang:bash %}</p>
+
+<h1>!/bin/bash</h1></blockquote>
+
+<h1>查找在一段时间内修改过的.c和.h文件，并把其导出到对应的目录下</h1>
+
+<p>read -p "please input the file which you want to search the modified: "   searchFile
+read -p "please input the file which you want to save: "    modifydir
+read -p "please input the range day of the file modified: "  withinDay</p>
+
+<p>if [ "$searchFile" == "" ]; then</p>
+
+<pre><code>searchFile=linux_bcm9970v1
+</code></pre>
+
+<p>fi</p>
+
+<p>if [ "$modifydir" == "" ]; then</p>
+
+<pre><code>modifydir=linux_work
+</code></pre>
+
+<p>fi</p>
+
+<p>if [ "$withinDay" == "" ]; then</p>
+
+<pre><code>withinDay=2
+</code></pre>
+
+<p>fi</p>
+
+<p>[ -d $modifydir ] &amp;&amp; rm -rf $modifydir &amp;&amp; rm -rf $modifydir.tar.gz
+mkdir -p $modifydir
+current_dir=$(pwd)</p>
+
+<p>findlist=$(find $current_dir/$searchFile -name "*.[ch]" -mtime  -$withinDay -print)</p>
+
+<p>for list in $findlist
+do</p>
+
+<pre><code>realPath=$(echo $list | sed s/$searchFile/$modifydir/g | sed 's/\/[a-zA-Z0-9_]*\.[ch]//g' )
+[ -d $realPath ] || mkdir -p $realPath
+cp $list $realPath
+</code></pre>
+
+<p>done</p>
+
+<p>tar -zcvf $modifydir.tar.gz $modifydir
+{% endcodeblock %}</p>
 ]]></content>
   </entry>
   

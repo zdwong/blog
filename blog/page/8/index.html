@@ -9,8 +9,8 @@
   <meta name="author" content="ForgeBrain">
 
   
-  <meta name="description" content="总体概览
-MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境。这样的环境特征是大仓库，常用于被查询来进行商业智能的抉择。它们也会经常出现在科学领域上，大仓库的科学观察数据可以用来进一步的科学分析。设计关注于大量的处理是不可能的。针对有效地利用硬件的最大处理能力。 &hellip;">
+  <meta name="description" content="写完程序，接下来测试，尽可能地去发现程序中的bugs。我负责一个解析终端协议模块，与同事的业务模块合并在一起。之前，我们就进行过不少的测试，出现最多的的是段错误，SIGSEGV信号，即无效的内存引用。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +80,207 @@ MonetDB 类属于数据库管理系统，被设计首要用于数据仓库环境
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/10/bugs/">代码的Bugs(臭虫)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-10T21:36:00+08:00" pubdate data-updated="true">Apr 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>写完程序，接下来测试，尽可能地去发现程序中的bugs。我负责一个解析终端协议模块，与同事的业务模块合并在一起。之前，我们就进行过不少的测试，出现最多的的是段错误，SIGSEGV信号，即无效的内存引用。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/04/10/bugs/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/29/monetdbs-memory/">MonetDB 内存映射mmap</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-29T23:47:00+08:00" pubdate data-updated="true">Mar 29<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>在学计算机组成原理时，了解到为了平衡CPU的高速与内存慢速，在CPU与内存之间增加了L1 cache，L2 cache，以加快CPU对内存数据的访问。但同时了解到进程可以使用一系列相邻的虚拟地址来访问物理内存中不相邻的大内存缓冲区和访问大于可用物理内存地址的缓冲区（可与磁盘之间切换）。虚拟地址通过TLB转化为物理地址，若物理地址属于内存空间，即直接访问，若不在，即需要进行磁盘切换。层级的内存架构图：</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/29/monetdbs-memory/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/28/catch-signal-in-monetdb/">MonetDB 捕捉信号</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-28T23:24:00+08:00" pubdate data-updated="true">Mar 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>MonetDB运行在Unix系统上，就需要进行一些系统的捕捉和处理。下列是常见的几种信号：</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/28/catch-signal-in-monetdb/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/27/sip-introduction/">SIP 协议</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-27T23:58:00+08:00" pubdate data-updated="true">Mar 27<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p>实习期间，接触到SIP，对其略有所闻。SIP（Session Initiation Protocol) 协议是类似于http的基于文本的协议，应用层的信令控制协议。用于创建，修改和释放一个或多个参与者的会话。主要用于IP电话,视频等。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/27/sip-introduction/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/22/monetdb-main-features/">MonetDB 主要特征</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-03-22T22:37:00+08:00" pubdate data-updated="true">Mar 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote><p><p><strong>以列存储数据库内核</strong></p>
+<p>MonetDB是建立在规范的以列存储的数据库关系表示。它们是相当大的实体，达到几百兆，通过操作系统交换到内存，实现的时候使用的mmap文件内存映射，这对于一个内存能装满整个数据库的系统来说，速度非常地快，如果数据库非常的庞大，那就会导致系统不断地换页，甚至抖动。有必要时，压缩存回磁盘，压缩的效率也很好，因为以列存储，相似程度很高，压缩率自然会高，这需要CPU的时间，但同时节省磁盘的空间，时间换空间，<strong>这有待商议</strong>。</p>
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/03/22/monetdb-main-features/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -263,7 +464,7 @@ MALBLK is used as the MonetDB Assembly language Block which store the instructio
 
 <section>
 <h1>Tags</h1>
-<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 109.47368421052632%'>English</a>  <a href='/blog/categories/entertainment' style='font-size: 109.47368421052632%'>Entertainment</a>  <a href='/blog/categories/health' style='font-size: 103.15789473684211%'>Health</a>  <a href='/blog/categories/intern' style='font-size: 106.3157894736842%'>Intern</a>  <a href='/blog/categories/java' style='font-size: 103.15789473684211%'>Java</a>  <a href='/blog/categories/journey' style='font-size: 109.47368421052632%'>Journey</a>  <a href='/blog/categories/library' style='font-size: 106.3157894736842%'>Library</a>  <a href='/blog/categories/life' style='font-size: 128.42105263157896%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 131.57894736842104%'>Linux</a>  <a href='/blog/categories/literature' style='font-size: 106.3157894736842%'>Literature</a>  <a href='/blog/categories/monetdb' style='font-size: 128.42105263157896%'>Monetdb</a>  <a href='/blog/categories/pjsip' style='font-size: 106.3157894736842%'>Pjsip</a>  <a href='/blog/categories/psychology' style='font-size: 106.3157894736842%'>Psychology</a>  <a href='/blog/categories/socket' style='font-size: 106.3157894736842%'>Socket</a>  <a href='/blog/categories/sql' style='font-size: 106.3157894736842%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.15789473684211%'>Window</a> </span>
+<span class='categories_tag'> <a href='/blog/categories/english' style='font-size: 109.47368421052632%'>English</a>  <a href='/blog/categories/entertainment' style='font-size: 109.47368421052632%'>Entertainment</a>  <a href='/blog/categories/health' style='font-size: 103.15789473684211%'>Health</a>  <a href='/blog/categories/intern' style='font-size: 106.3157894736842%'>Intern</a>  <a href='/blog/categories/java' style='font-size: 103.15789473684211%'>Java</a>  <a href='/blog/categories/journey' style='font-size: 109.47368421052632%'>Journey</a>  <a href='/blog/categories/library' style='font-size: 106.3157894736842%'>Library</a>  <a href='/blog/categories/life' style='font-size: 128.42105263157896%'>Life</a>  <a href='/blog/categories/linux' style='font-size: 147.3684210526316%'>Linux</a>  <a href='/blog/categories/literature' style='font-size: 106.3157894736842%'>Literature</a>  <a href='/blog/categories/monetdb' style='font-size: 128.42105263157896%'>Monetdb</a>  <a href='/blog/categories/pjsip' style='font-size: 106.3157894736842%'>Pjsip</a>  <a href='/blog/categories/psychology' style='font-size: 106.3157894736842%'>Psychology</a>  <a href='/blog/categories/socket' style='font-size: 106.3157894736842%'>Socket</a>  <a href='/blog/categories/sql' style='font-size: 106.3157894736842%'>Sql</a>  <a href='/blog/categories/tp-link' style='font-size: 160.0%'>Tp-link</a>  <a href='/blog/categories/window' style='font-size: 103.15789473684211%'>Window</a> </span>
 </section>
 
 <section>
@@ -271,23 +472,23 @@ MALBLK is used as the MonetDB Assembly language Block which store the instructio
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2014/02/23/nginx-web-server/">nginx服务器 性能至上</a>
+        <a href="/blog/2014/03/07/zombie-process/">linux防止僵尸进程</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/23/iptables-firewall/">iptables 瑞士军刀</a>
+        <a href="/blog/2014/03/07/popen/">popen函数执行程序</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/23/shell-programme/">初入门规 shell编程</a>
+        <a href="/blog/2014/03/07/timer/">linux定时器</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2014/02/23/2014-new-year-plan/">龙马精神 马到功成</a>
+        <a href="/blog/2014/03/07/system-sleep/">linux信号处理的应用</a>
       </li>
     
       <li class="post">
-        <a href="/blog/2013/12/12/end-of-period/">长亭外 古道边 芳草碧连天</a>
+        <a href="/blog/2014/03/07/get-changed-file/">shell自动打包修改文件</a>
       </li>
     
   </ul>
